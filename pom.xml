@@ -21,7 +21,7 @@
 
     <modules>
         <module>common</module>
-        <module>eureka</module>
+        <module>discovery</module>
         <module>gateway</module>
         <module>auth</module>
         <module>modules</module>

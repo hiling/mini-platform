@@ -18,7 +18,7 @@ public class QueueTests {
     public static ConcurrentHashMap<Integer,Integer> map = new ConcurrentHashMap<>();
     private ConcurrentLinkedQueue<Integer> queue = new ConcurrentLinkedQueue<>();
 
-    final int totalTest=10000000;
+    final int totalTest=1000;
     AtomicInteger count = new AtomicInteger(0);
     final CountDownLatch latch = new CountDownLatch(totalTest);
 

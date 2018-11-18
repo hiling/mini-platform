@@ -8,7 +8,7 @@ public class ServiceNames {
     private ServiceNames() {
     }
 
-    public static final String AUTH_SERVICE = "auth-service";
+    public static final String AUTH_SERVICE = "oauth-service";
     public static final String GATEWAY_SERVICE = "gateway-service";
     public static final String USER_SERVICE = "user-service";
     public static final String ITEM_SERVICE = "item-service";
