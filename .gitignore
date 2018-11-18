@@ -15,7 +15,7 @@ target/
 *.ipr
 *.cmd
 */target/
-*-prd.properties
+*-prd*.properties
 
 ### NetBeans ###
 nbproject/private/
