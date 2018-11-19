@@ -10,10 +10,10 @@ cp ./target/gateway-0.0.1-SNAPSHOT.jar ./target/gateway.jar
 scp ./target/gateway.jar root@47.104.109.40:///opt/miniapi/gateway
 
 cd ..
-cd auth
+cd oauth
 mvn clean package -Dmaven.test.skip=true
-cp ./target/auth-0.0.1-SNAPSHOT.jar ./target/auth.jar
-scp ./target/auth.jar root@47.104.109.40:///opt/miniapi/auth
+cp ./target/oauth-0.0.1-SNAPSHOT.jar ./target/oauth.jar
+scp ./target/oauth.jar root@47.104.109.40:///opt/miniapi/oauth
 
 cd ..
 cd modules/user
