@@ -22,20 +22,22 @@ CREATE TABLE `oauth_access_token` (
 	`access_token` CHAR(32) NOT NULL,
 	`jwt_token` VARCHAR(500) NOT NULL DEFAULT '',
 	`refresh_token` VARCHAR(32) NOT NULL DEFAULT '',
-	`expires` INT(11) NOT NULL DEFAULT 0,
-	`scope` VARCHAR(200) NOT NULL DEFAULT '',
+	`expires_in` INT(11) NOT NULL DEFAULT 0,
 	`create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (`id`),
 	INDEX `ix_client_id` (`client_id`),
 	INDEX `ix_access_token` (`access_token`)
 ) COLLATE='utf8_bin' ENGINE=InnoDB;
 
+
 CREATE TABLE `oauth_refresh_token` (
-  `id` BIGINT(20) NOT NULL AUTO_INCREMENT,
-  `token_id` BIGINT(20) NOT NULL,
-  `refresh_token` CHAR(32) NOT NULL,
-  `expires` INT(11) NOT NULL DEFAULT 0,
+	`id` BIGINT(20) NOT NULL AUTO_INCREMENT,
+	`client_id` VARCHAR(16) NOT NULL,
+	`user_id` VARCHAR(16) NOT NULL,
+	`refresh_token` CHAR(32) NOT NULL,
+	`expires_in` INT(11) NOT NULL DEFAULT '0',
   `create_time` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `last_used_time` DATETIME(3) NOT NULL DEFAULT '',
 	PRIMARY KEY (`id`),
 	INDEX `ix_refresh_token` (`refresh_token`)
 ) COLLATE='utf8_bin' ENGINE=InnoDB;

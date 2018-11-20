@@ -9,12 +9,23 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/user")
 public class UserController extends BaseController {
     @Resource
     private UserMapper mapper;
+
+    /**
+     * 测试高可用
+     * @param request
+     * @return
+     */
+    @GetMapping("/url")
+    public String getHost(HttpServletRequest request) {
+        return ">>>>>" + "Host:" + request.getRemoteHost() + "  Port:" + request.getServerPort() + " Path:" + request.getRequestURI();
+    }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> get(@PathVariable Integer id) {

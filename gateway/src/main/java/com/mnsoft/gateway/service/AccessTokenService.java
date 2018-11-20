@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  * Author by hiling, Email admin@mn-soft.com, Date on 10/14/2018.
  */
-@FeignClient(name = ServiceNames.AUTH_SERVICE,fallback = AccessTokenServiceImpl.class)
+@FeignClient(name = ServiceNames.OAUTH_SERVICE,fallback = AccessTokenServiceImpl.class)
 public interface AccessTokenService {
 
     @GetMapping("/token")
