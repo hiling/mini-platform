@@ -1,3 +1,4 @@
+#!/bin/bash
 cd oauth
 mvn clean package -Dmaven.test.skip=true
 cp ./target/oauth-0.0.1-SNAPSHOT.jar ./target/oauth.jar

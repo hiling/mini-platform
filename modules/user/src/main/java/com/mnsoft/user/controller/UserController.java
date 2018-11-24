@@ -1,6 +1,8 @@
 package com.mnsoft.user.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.ctrip.framework.apollo.Config;
+import com.ctrip.framework.apollo.ConfigService;
 import com.mnsoft.common.exception.BusinessException;
 import com.mnsoft.common.web.BaseController;
 import com.mnsoft.user.mapper.UserMapper;
@@ -10,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.util.Set;
 
 @RestController
 @RequestMapping("/user")
@@ -24,7 +27,22 @@ public class UserController extends BaseController {
      */
     @GetMapping("/url")
     public String getHost(HttpServletRequest request) {
-        return ">>>>>" + "Host:" + request.getRemoteHost() + "  Port:" + request.getServerPort() + " Path:" + request.getRequestURI();
+
+        Config config = ConfigService.getAppConfig(); //config instance is singleton for each namespace and is never null
+        String someKey = "timeout";
+        String someDefaultValue = "100";
+        String value = config.getProperty(someKey, someDefaultValue);
+
+        Set<String> names = config.getPropertyNames();
+        StringBuilder sb = new StringBuilder();
+        for (String name : names) {
+            sb.append(name + "/");
+        }
+
+        return ">>>>>" + "Host:" + request.getRemoteHost() + "  Port:" + request.getServerPort()
+                + " Path:" + request.getRequestURI()
+                + " Names: " + sb.toString()
+                + " Timeout: " + value;
     }
 
     @GetMapping("/{id}")
