@@ -34,8 +34,8 @@ public class PostFilter  extends ZuulFilter {
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
-        log.error("------------------->post");
-        log.error("------------------->post：request:{}",request.getRequestURI());
+        log.debug("------------------->post");
+        log.debug("------------------->post：request:{}",request.getRequestURI());
         return null;
     }
 }

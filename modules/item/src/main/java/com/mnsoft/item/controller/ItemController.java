@@ -1,5 +1,7 @@
 package com.mnsoft.item.controller;
 
+import com.ctrip.framework.apollo.Config;
+import com.ctrip.framework.apollo.ConfigService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -20,6 +22,13 @@ public class ItemController {
      */
     @GetMapping("url")
     public String get(HttpServletRequest request) {
-        return ">>>>>" + "Host:" + request.getRemoteHost() + "  Port:" + request.getServerPort() + " Path:" + request.getRequestURI();
+        Config config = ConfigService.getAppConfig(); //config instance is singleton for each namespace and is never null
+        String someKey = "timeout";
+        String someDefaultValue = "100";
+        String value = config.getProperty(someKey, someDefaultValue);
+
+        return ">>>>>" + "Host:" + request.getRemoteHost() + "  Port: 【" + request.getServerPort()
+                + "】 Path:" + request.getRequestURI()
+                + " Timeout: " + value;
     }
 }

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mnsoft.common.exception.BusinessException;
 import com.mnsoft.common.exception.ExceptionResult;
+import com.mnsoft.gateway.helper.ZuulBusinessException;
 import com.netflix.zuul.context.RequestContext;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
@@ -39,16 +40,25 @@ public class ErrorHandlerController implements ErrorController {
         if (throwable instanceof FeignException) {
             ctx.setResponseStatusCode(((FeignException) throwable).status());
             String message = throwable.getMessage();
-            return message.substring(message.indexOf("{"), message.indexOf("}") + 1);
+            String json = message.substring(message.indexOf("{"), message.indexOf("}") + 1);
+            return json;
         }
 
         ExceptionResult result = new ExceptionResult();
         try {
-            if (throwable instanceof BusinessException) {
-                result.setCode(((BusinessException) throwable).getCode());
+
+            if (throwable instanceof ZuulBusinessException) {
+                result.setCode(((ZuulBusinessException) throwable).getCode());
                 result.setStatus(HttpStatus.BAD_REQUEST.value());
+                result.setPath(((ZuulBusinessException) throwable).getUri());
             }  else {
-                result.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                if (throwable instanceof BusinessException) {
+                    result.setCode(((BusinessException) throwable).getCode());
+                    result.setStatus(HttpStatus.BAD_REQUEST.value());
+                }  else {
+                    result.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                }
+                result.setPath(ctx.getRequest().getRequestURI());
             }
             result.setMessage(throwable.getMessage());
 
@@ -61,7 +71,6 @@ public class ErrorHandlerController implements ErrorController {
                 }
             }
             result.setError(sbStackTrace.toString());
-            result.setPath(ctx.getRequest().getRequestURI());
             result.setTimestamp(new Date());
 
             ctx.setResponseStatusCode(result.getStatus());

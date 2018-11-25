@@ -1,6 +1,6 @@
 package com.mnsoft.common.exception;
 
-public class BusinessException extends RuntimeException  {
+public class BusinessException extends RuntimeException {
     public BusinessException(Throwable cause) {
         super(cause);
     }
@@ -14,12 +14,12 @@ public class BusinessException extends RuntimeException  {
         this.code = message.value();
     }
 
-    public BusinessException(Integer code,String message) {
+    public BusinessException(Integer code, String message) {
         super(message);
         this.code = code;
     }
 
-    public BusinessException(Integer code,String message, Throwable cause) {
+    public BusinessException(Integer code, String message, Throwable cause) {
         super(message, cause);
         this.code = code;
     }

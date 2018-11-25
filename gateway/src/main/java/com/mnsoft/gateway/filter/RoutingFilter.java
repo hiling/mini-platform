@@ -34,8 +34,8 @@ public class RoutingFilter extends ZuulFilter {
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
-        log.error("------------------->routing");
-        log.error("------------------->routing：request:{}",request.getRequestURI());
+        log.debug("------------------->routing");
+        log.debug("------------------->routing：request:{}",request.getRequestURI());
         return null;
     }
 }

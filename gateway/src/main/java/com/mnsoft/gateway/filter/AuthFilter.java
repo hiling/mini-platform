@@ -1,8 +1,8 @@
 package com.mnsoft.gateway.filter;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mnsoft.common.exception.BusinessException;
 import com.mnsoft.gateway.helper.ErrorMessage;
+import com.mnsoft.gateway.helper.ZuulBusinessException;
 import com.mnsoft.gateway.service.AccessTokenService;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
@@ -23,9 +23,6 @@ import javax.servlet.http.HttpServletRequest;
 public class AuthFilter extends ZuulFilter {
     @Autowired
     AccessTokenService tokenService;
-
-    @Autowired
-    private ObjectMapper objectMapper;
 
     @Override
     public String filterType() {
@@ -48,19 +45,19 @@ public class AuthFilter extends ZuulFilter {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
 
-        log.error("------------------->pre");
-        log.error("------------------->pre：request:{}",request.getRequestURI());
+        log.debug("------------------->pre");
+        log.debug("------------------->pre：request:{}", request.getRequestURI());
 
         String uri = request.getRequestURI();
         String method = request.getMethod();
 
         if (uri.contains("/token")) {
             //创建token
-            if ("POST".equalsIgnoreCase(method)){
+            if ("POST".equalsIgnoreCase(method)) {
                 //获取access token时，必须有Authorization
                 String authorization = request.getHeader("Authorization");
                 if (authorization == null || !authorization.startsWith("Basic ")) {
-                    throw new BusinessException(ErrorMessage.AUTHORIZATION_ERROR);
+                    throw new ZuulBusinessException(ErrorMessage.AUTHORIZATION_ERROR, uri);
                 }
                 String clientId, clientSecret;
                 try {
@@ -69,24 +66,30 @@ public class AuthFilter extends ZuulFilter {
                     clientId = accounts[0];
                     clientSecret = accounts[1];
                 } catch (Exception e) {
-                    throw new BusinessException(ErrorMessage.AUTHORIZATION_ERROR);
+                    throw new ZuulBusinessException(ErrorMessage.AUTHORIZATION_ERROR, uri);
                 }
 
                 ctx.addZuulRequestHeader("clientId", clientId);
                 ctx.addZuulRequestHeader("clientSecret", clientSecret);
-            }else {
+            } else {
                 //通过access_token获取jwtToken
                 String accessToken = request.getParameter("access_token");
                 if (StringUtils.isEmpty(accessToken)) {
-                    throw new BusinessException(ErrorMessage.ACCESS_TOKEN_ERROR);
+                    throw new ZuulBusinessException(ErrorMessage.ACCESS_TOKEN_ERROR, uri);
                 }
             }
         } else {
             //使用access_token换取jwtToken后传递给后方服务
             String accessToken = request.getParameter("access_token");
-            String jwtToken = tokenService.getJwtToken(accessToken);
+            String jwtToken;
+            try {
+                jwtToken = tokenService.getJwtToken(accessToken);
+            } catch (BusinessException e) {
+                throw new ZuulBusinessException(e.getCode(),e.getMessage(),uri);
+            }
+
             if (StringUtils.isEmpty(jwtToken)) {
-                throw new BusinessException(ErrorMessage.ACCESS_TOKEN_ERROR);
+                throw new ZuulBusinessException(ErrorMessage.ACCESS_TOKEN_ERROR, uri);
             }
             ctx.addZuulRequestHeader("jwtToken", jwtToken);
         }
