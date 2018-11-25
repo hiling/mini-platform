@@ -20,3 +20,24 @@
 - 为了更好的掌控与易用，OAuth采用自研实现。
 - GrantType支持password、client_credentials、refresh_token。
 - Token支持延迟吊销、滑动过期与绝对过期。
+
+
+## 其他技术介绍
+- Lombok 是一种 Java™ 实用工具，可用来帮助开发人员消除 Java 的冗长，
+尤其是对于简单的 Java 对象（POJO）。它通过注解实现这一目的。
+
+项目地址：https://www.projectlombok.org/
+
+中文介绍：https://blog.csdn.net/motui/article/details/79012846
+
+- MyBatis-Plus（简称 MP）是一个 MyBatis 的增强工具，
+在 MyBatis 的基础上只做增强不做改变，为简化开发、提高效率而生。
+项目地址：http://mp.baomidou.com/
+
+
+- 使用Spring Boot Maven Plugin & Apache Maven Dependency Plugin将外部依赖jar与项目分离，
+解决发布包过大问题。部署时可以将外部依赖包先上传至服务器，启动时需要使用参数-Dloader.path="lib/"加载外部依赖的jar包，
+当依赖的外部jar包未更新时，不需要每次给服务器上传。
+项目地址：
+https://docs.spring.io/spring-boot/docs/current/maven-plugin/
+http://maven.apache.org/components/plugins/maven-dependency-plugin/
