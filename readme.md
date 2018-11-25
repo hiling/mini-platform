@@ -1,4 +1,4 @@
-#Mini-Platform轻量级微服务治理平台
+# Mini-Platform轻量级微服务治理平台
 
 - Mini-Platform致力于打造更简洁易用的轻量级微服务治理平台，更易于使用与运维；
 - 核心技术：SpringBoot、Spring Cloud、Apollo、OAuth（自研）、MyBatis、Redis、MySQL；
