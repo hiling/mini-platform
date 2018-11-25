@@ -4,11 +4,11 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.mn-soft</groupId>
-    <artifactId>mini-api</artifactId>
+    <artifactId>mini-platform</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>mini-api</name>
+    <name>mini-platform</name>
     <description></description>
 
     <parent>

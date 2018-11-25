@@ -13,7 +13,7 @@
     <description>common</description>
 
     <parent>
-        <artifactId>mini-api</artifactId>
+        <artifactId>mini-platform</artifactId>
         <groupId>com.mn-soft</groupId>
         <version>0.0.1-SNAPSHOT</version>
         <relativePath>../pom.xml</relativePath>
