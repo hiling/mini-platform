@@ -8,6 +8,7 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.netflix.zuul.filters.route.RibbonRoutingFilter;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Base64Utils;
@@ -45,8 +46,8 @@ public class AuthFilter extends ZuulFilter {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
 
-        log.debug("------------------->pre");
-        log.debug("------------------->pre：request:{}", request.getRequestURI());
+        log.info("------------------->pre");
+        log.info("------------------->pre：request:{}", request.getRequestURI());
 
         String uri = request.getRequestURI();
         String method = request.getMethod();

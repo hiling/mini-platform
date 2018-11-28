@@ -3,6 +3,7 @@ package com.mnsoft.gateway.filter;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cloud.netflix.ribbon.RibbonLoadBalancedRetryFactory;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.stereotype.Component;
 
@@ -34,8 +35,10 @@ public class RoutingFilter extends ZuulFilter {
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
-        log.debug("------------------->routing");
-        log.debug("------------------->routing：request:{}",request.getRequestURI());
+        //重试类
+        //RibbonLoadBalancedRetryFactory
+        log.info("------------------->routing");
+        log.info("------------------->routing：request:{}",request.getRequestURI());
         return null;
     }
 }

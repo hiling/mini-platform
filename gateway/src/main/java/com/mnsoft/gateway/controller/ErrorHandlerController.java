@@ -35,7 +35,10 @@ public class ErrorHandlerController implements ErrorController {
     @RequestMapping("/error")
     public Object error() {
         RequestContext ctx = RequestContext.getCurrentContext();
-        Throwable throwable = ctx.getThrowable().getCause();
+        Throwable throwable = getOriginException(ctx.getThrowable());
+        if (throwable==null){
+            log.error("-----------------> /error 未获取到异常！<-------");
+        }
 
         if (throwable instanceof FeignException) {
             ctx.setResponseStatusCode(((FeignException) throwable).status());
@@ -84,5 +87,13 @@ public class ErrorHandlerController implements ErrorController {
             log.error(ex.getMessage());
         }
         return null;
+    }
+
+    private Throwable getOriginException(Throwable e){
+        e = e.getCause();
+        while(e.getCause() != null){
+            e = e.getCause();
+        }
+        return e;
     }
 }
