@@ -38,7 +38,6 @@ public class JacksonConfigure {
         module.addSerializer(LocalDateTime.class, new LocalDateTimeSerializer());
         objectMapper.registerModule(module);
 
-
         return objectMapper;
     }
 

@@ -1,14 +1,9 @@
 package com.mnsoft.oauth.model;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 
@@ -23,10 +18,8 @@ import java.time.LocalDateTime;
  */
 @Data
 @Accessors(chain = true)
-@TableName("oauth_access_token")
-public class AccessToken extends Model<AccessToken> {
+public class AccessToken {
 
-    @TableId(type = IdType.AUTO)
     @JsonIgnore
     private Long id;
 
@@ -48,8 +41,4 @@ public class AccessToken extends Model<AccessToken> {
     //@JsonIgnore
     private LocalDateTime createTime;
 
-    @Override
-    protected Serializable pkVal() {
-        return id;
-    }
 }

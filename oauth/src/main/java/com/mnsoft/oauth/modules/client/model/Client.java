@@ -1,19 +1,15 @@
-package com.mnsoft.oauth.model;
+package com.mnsoft.oauth.modules.client.model;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
 import javax.validation.constraints.*;
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 @Data
 @Accessors(chain = true)
-@TableName("oauth_client")
-public class Client extends Model<Client> {
+public class Client {
 
     //@NotEmpty(message = "客户编号不能为空。")
     @Size(min = 4, max = 16, message = "客户编号长度必须为3至16位")
@@ -30,11 +26,7 @@ public class Client extends Model<Client> {
     private String ipWhitelist;
     private String redirectUri;
 
-    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8", locale = "zh")
+//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8", locale = "zh")
     private LocalDateTime createTime;
 
-    @Override
-    protected Serializable pkVal() {
-        return clientId;
-    }
 }

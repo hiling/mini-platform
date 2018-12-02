@@ -1,14 +1,12 @@
 package com.mnsoft.gateway.controller;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mnsoft.common.exception.BusinessException;
 import com.mnsoft.common.exception.ExceptionResult;
+import com.mnsoft.common.utils.json.JsonUtils;
 import com.mnsoft.gateway.helper.ZuulBusinessException;
 import com.netflix.zuul.context.RequestContext;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,9 +22,6 @@ import java.util.Date;
 @RestController
 public class ErrorHandlerController implements ErrorController {
 
-    @Autowired
-    private ObjectMapper objectMapper;
-
     @Override
     public String getErrorPath() {
         return "/error";
@@ -34,9 +29,10 @@ public class ErrorHandlerController implements ErrorController {
 
     @RequestMapping("/error")
     public Object error() {
+        log.error("-----------------> /error ");
         RequestContext ctx = RequestContext.getCurrentContext();
         Throwable throwable = getOriginException(ctx.getThrowable());
-        if (throwable==null){
+        if (throwable == null) {
             log.error("-----------------> /error 未获取到异常！<-------");
         }
 
@@ -48,45 +44,39 @@ public class ErrorHandlerController implements ErrorController {
         }
 
         ExceptionResult result = new ExceptionResult();
-        try {
 
-            if (throwable instanceof ZuulBusinessException) {
-                result.setCode(((ZuulBusinessException) throwable).getCode());
+        if (throwable instanceof ZuulBusinessException) {
+            result.setCode(((ZuulBusinessException) throwable).getCode());
+            result.setStatus(HttpStatus.BAD_REQUEST.value());
+            result.setPath(((ZuulBusinessException) throwable).getUri());
+        } else {
+            if (throwable instanceof BusinessException) {
+                result.setCode(((BusinessException) throwable).getCode());
                 result.setStatus(HttpStatus.BAD_REQUEST.value());
-                result.setPath(((ZuulBusinessException) throwable).getUri());
-            }  else {
-                if (throwable instanceof BusinessException) {
-                    result.setCode(((BusinessException) throwable).getCode());
-                    result.setStatus(HttpStatus.BAD_REQUEST.value());
-                }  else {
-                    result.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-                }
-                result.setPath(ctx.getRequest().getRequestURI());
+            } else {
+                result.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
             }
-            result.setMessage(throwable.getMessage());
-
-            StringBuilder sbStackTrace = new StringBuilder();
-            //堆栈信息
-            if (throwable.getStackTrace() != null && throwable.getStackTrace().length > 0) {
-                for (StackTraceElement trace : throwable.getStackTrace()) {
-                    sbStackTrace.append(trace.toString());
-                    break;
-                }
-            }
-            result.setError(sbStackTrace.toString());
-            result.setTimestamp(new Date());
-
-            ctx.setResponseStatusCode(result.getStatus());
-            ctx.getResponse().setContentType("application/json;charset=UTF-8");
-
-            String json = objectMapper.writeValueAsString(result);
-            ctx.setResponseBody(json);
-            return json;
-
-        } catch (JsonProcessingException ex) {
-            log.error(ex.getMessage());
+            result.setPath(ctx.getRequest().getRequestURI());
         }
-        return null;
+        result.setMessage(throwable.getMessage());
+
+        StringBuilder sbStackTrace = new StringBuilder();
+        //堆栈信息
+        if (throwable.getStackTrace() != null && throwable.getStackTrace().length > 0) {
+            for (StackTraceElement trace : throwable.getStackTrace()) {
+                sbStackTrace.append(trace.toString());
+                break;
+            }
+        }
+        result.setError(sbStackTrace.toString());
+        result.setTimestamp(new Date());
+
+        ctx.setResponseStatusCode(result.getStatus());
+        ctx.getResponse().setContentType("application/json;charset=UTF-8");
+
+        String json = JsonUtils.toJson(result);
+        ctx.setResponseBody(json);
+        return json;
     }
 
     private Throwable getOriginException(Throwable e){

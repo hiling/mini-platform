@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mnsoft.oauth.modules.client.mapper.ClientMapper">
+
+    <select id="get" resultType="com.mnsoft.oauth.modules.client.model.Client">
+select
+	`client_id` as clientId,
+	`client_name` as clientName,
+	`client_secret` as clientSecret,
+	`grant_types` as grantTypes,
+	`ip_whitelist` as ipWhitelist,
+	`redirect_uri` as redirectUri,
+	`create_time` as createTime
+from oauth_client
+where client_id = #{clientId} and client_secret =  #{clientSecret}
+</select>
+
+</mapper>

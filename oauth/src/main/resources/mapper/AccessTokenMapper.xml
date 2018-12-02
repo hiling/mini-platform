@@ -3,14 +3,15 @@
 <mapper namespace="com.mnsoft.oauth.mapper.AccessTokenMapper">
 
     <select id="getRefreshToken" resultType="String">
-        select refresh_token
+        select refresh_token as refreshToken
         from oauth_access_token
         where access_token = #{accessToken}
     </select>
 
     <select id="getRevokeAccessToken" resultType="String">
         <foreach collection="list" item="item" index="index" separator="union all">
-            select access_token from oauth_access_token
+            select access_token as accessToken
+            from oauth_access_token
             where client_id = #{item.clientId}
             <if test="item.userId != null">
                 and user_id = #{item.userId}
@@ -18,6 +19,29 @@
             and create_time <![CDATA[ < ]]> #{item.time}
         </foreach>
     </select>
+
+    <insert id="insert" parameterType="com.mnsoft.oauth.model.AccessToken" keyProperty="id">
+        insert into oauth_access_token
+        (
+           `client_id`,
+            `user_id`,
+            `access_token` ,
+            `jwt_token`,
+            `refresh_token`,
+            `expires_in` ,
+            `create_time`
+        )
+        values
+        (
+            #{clientId},
+            #{userId},
+            #{accessToken},
+            #{jwtToken},
+            #{refreshToken},
+            #{expiresIn},
+            #{createTime}
+        )
+    </insert>
 
     <delete id="batchDeleteByAccessToken">
       delete from oauth_access_token where access_token in

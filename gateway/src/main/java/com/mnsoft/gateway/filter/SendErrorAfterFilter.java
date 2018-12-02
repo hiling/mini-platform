@@ -26,17 +26,19 @@ public class SendErrorAfterFilter extends ZuulFilter {
     @Override
     public int filterOrder() {
         //需要在默认的 SendErrorFilter 之后
-       // SendErrorFilter
+//        SendErrorFilter
         return 1;
     }
 
     @Override
     public boolean shouldFilter() {
+        log.info("------------------->error after.shouldFilter");
         return RequestContext.getCurrentContext().containsKey("throwable");
     }
 
     @Override
     public Object run() {
+        log.info("------------------->error before.run");
         try {
             RequestContext ctx = RequestContext.getCurrentContext();
             Object e = ctx.get("throwable");

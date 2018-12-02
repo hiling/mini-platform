@@ -19,7 +19,7 @@ public class DateSerializer  extends JsonSerializer<Date> {
     private static final String pattern = "yyyy-MM-dd";
 
     @Override
-    public void serialize(Date date, JsonGenerator jgen, SerializerProvider provider) throws JsonProcessingException {
+    public void serialize(Date date, JsonGenerator jgen, SerializerProvider provider) {
         try {
             DateFormat dateFormat = new SimpleDateFormat(pattern);
             jgen.writeString(dateFormat.format(date));

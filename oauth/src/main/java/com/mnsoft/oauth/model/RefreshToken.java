@@ -1,13 +1,8 @@
 package com.mnsoft.oauth.model;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.activerecord.Model;
 import lombok.Data;
 import lombok.experimental.Accessors;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 
 /**
@@ -15,10 +10,8 @@ import java.time.LocalDateTime;
  */
 @Data
 @Accessors(chain = true)
-@TableName("oauth_refresh_token")
-public class RefreshToken extends Model<RefreshToken> {
+public class RefreshToken {
 
-    @TableId(type = IdType.AUTO)
     private Long id;
 
     private String clientId;
@@ -33,8 +26,4 @@ public class RefreshToken extends Model<RefreshToken> {
 
     private LocalDateTime lastUsedTime;
 
-    @Override
-    protected Serializable pkVal() {
-        return id;
-    }
 }

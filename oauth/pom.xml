@@ -54,13 +54,6 @@
             <version>2.6.0</version>
         </dependency>
 
-        <!-- MyBatis 增强 http://mp.baomidou.com/ -->
-        <dependency>
-            <groupId>com.baomidou</groupId>
-            <artifactId>mybatis-plus-boot-starter</artifactId>
-            <version>3.0.4</version>
-        </dependency>
-
         <!-- lombok集成，提供编码效率 -->
         <dependency>
             <groupId>org.projectlombok</groupId>

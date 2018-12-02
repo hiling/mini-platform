@@ -1,7 +1,5 @@
 package com.mnsoft.oauth.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mnsoft.oauth.constant.ErrorMessage;
 import com.mnsoft.oauth.constant.GrantType;
 import com.mnsoft.oauth.constant.RedisNamespaces;
@@ -10,9 +8,10 @@ import com.mnsoft.oauth.listener.RefreshTokenRevokeThread;
 import com.mnsoft.oauth.mapper.AccessTokenMapper;
 import com.mnsoft.oauth.mapper.RefreshTokenMapper;
 import com.mnsoft.oauth.model.*;
-import com.mnsoft.oauth.service.ClientService;
+import com.mnsoft.oauth.modules.client.mapper.ClientMapper;
+import com.mnsoft.oauth.modules.client.model.Client;
 import com.mnsoft.oauth.service.AccessTokenService;
-import com.mnsoft.oauth.service.UserService;
+import com.mnsoft.oauth.modules.user.service.UserService;
 import com.mnsoft.common.exception.BusinessException;
 import com.mnsoft.common.utils.UuidUtils;
 import com.mnsoft.common.utils.jwtUtils;
@@ -32,7 +31,7 @@ import java.util.concurrent.TimeUnit;
  * Author by hiling, Email admin@mn-soft.com, Date on 10/9/2018.
  */
 @Service
-public class AccessTokenServiceImpl extends ServiceImpl<AccessTokenMapper,AccessToken> implements AccessTokenService {
+public class AccessTokenServiceImpl implements AccessTokenService {
 
     @Resource
     private AccessTokenMapper accessTokenMapper;
@@ -40,8 +39,8 @@ public class AccessTokenServiceImpl extends ServiceImpl<AccessTokenMapper,Access
     @Resource
     private RefreshTokenMapper refreshTokenMapper;
 
-    @Autowired
-    private ClientService clientService;
+    @Resource
+    private ClientMapper clientMapper;
 
     @Autowired
     private UserService userService;
@@ -91,9 +90,7 @@ public class AccessTokenServiceImpl extends ServiceImpl<AccessTokenMapper,Access
         }
 
         //验证Client&Secret是否正确
-        Client client = clientService.getOne(new QueryWrapper<Client>().lambda()
-                .eq(Client::getClientId, clientId)
-                .eq(Client::getClientSecret, clientSecret));
+        Client client = clientMapper.get(clientId, clientSecret);
 
         if (client == null) {
             throw new BusinessException(ErrorMessage.TOKEN_CLIENT_ERROR);
@@ -110,9 +107,7 @@ public class AccessTokenServiceImpl extends ServiceImpl<AccessTokenMapper,Access
             }
 
             //获取该refresh token的信息
-            RefreshToken refreshTokenFromDB = refreshTokenMapper.selectOne(
-                    new QueryWrapper<RefreshToken>().lambda()
-                            .eq(RefreshToken::getRefreshToken, refreshToken));
+            RefreshToken refreshTokenFromDB = refreshTokenMapper.getByRefreshToken( refreshToken);
 
             if (refreshTokenFromDB == null) {
                 throw new BusinessException(ErrorMessage.TOKEN_REFRESH_TOKEN_ERROR);
@@ -137,13 +132,13 @@ public class AccessTokenServiceImpl extends ServiceImpl<AccessTokenMapper,Access
                 }
             }
             //使用refresh token模式时，需更新oauth_refresh_token表中的last_used_time字段
-            refreshTokenMapper.updateById(new RefreshToken().setId(refreshTokenFromDB.getId()).setLastUsedTime(now));
+            refreshTokenMapper.updateLastUsedTimeById(refreshTokenFromDB.getId(),now);
 
             username = refreshTokenFromDB.getUserId();
 
         } else if (type == GrantType.PASSWORD) {
             //password模式，需要验证用户名密码，且生成refresh token
-            Account account = userService.getByAccount(username, password);
+            Account account = userService.login(username, password);
             if (account == null) {
                 throw new BusinessException(ErrorMessage.TOKEN_USER_ERROR);
             }
@@ -169,7 +164,7 @@ public class AccessTokenServiceImpl extends ServiceImpl<AccessTokenMapper,Access
         token.setExpiresIn(accessTokenExpiration);
         token.setCreateTime(now);
 
-        int accessTokenId = accessTokenMapper.insert(token);
+        Long accessTokenId = accessTokenMapper.insert(token);
         if (accessTokenId > 0) {
 
             //password模式时，需添加refreshToken到oauth_refresh_token表

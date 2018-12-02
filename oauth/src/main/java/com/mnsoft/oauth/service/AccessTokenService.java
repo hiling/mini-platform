@@ -1,6 +1,5 @@
 package com.mnsoft.oauth.service;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.mnsoft.oauth.model.AccessToken;
 import com.mnsoft.oauth.model.RevokeToken;
 
@@ -9,7 +8,7 @@ import java.util.List;
 /**
  * Author by hiling, Email admin@mn-soft.com, Date on 10/9/2018.
  */
-public interface AccessTokenService extends IService<AccessToken> {
+public interface AccessTokenService{
 
     String getJwtToken(String accessToken);
 

@@ -1,21 +1,13 @@
 package com.mnsoft.gateway.filter;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.mnsoft.common.utils.json.JsonUtils;
-import com.mnsoft.gateway.helper.ZuulBusinessException;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import com.netflix.zuul.exception.ZuulException;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -46,6 +38,7 @@ public class SendErrorBeforeFilter extends ZuulFilter {
 
     @Override
     public Object run() {
+        log.info("------------------->error before");
         try {
             RequestContext ctx = RequestContext.getCurrentContext();
             Throwable throwable = ctx.getThrowable();
