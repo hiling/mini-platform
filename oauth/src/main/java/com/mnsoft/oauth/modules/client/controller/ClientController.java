@@ -1,6 +1,5 @@
 package com.mnsoft.oauth.modules.client.controller;
 
-import com.mnsoft.oauth.modules.client.mapper.ClientMapper;
 import com.mnsoft.oauth.modules.client.model.Client;
 import com.mnsoft.oauth.modules.client.service.ClientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,4 +20,6 @@ public class ClientController {
     public Client get(String clientId, String clientSecret) {
         return clientService.get(clientId,clientSecret);
     }
+
+
 }

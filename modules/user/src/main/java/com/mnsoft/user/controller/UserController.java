@@ -33,16 +33,13 @@ public class UserController extends BaseController {
         String someDefaultValue = "100";
         String value = config.getProperty(someKey, someDefaultValue);
 
-        Set<String> names = config.getPropertyNames();
-        StringBuilder sb = new StringBuilder();
-        for (String name : names) {
-            sb.append(name + "/");
-        }
+        String loginUserId = getUserId();
 
-        return ">>>>>" + "Host:" + request.getRemoteHost() + "  Port:" + request.getServerPort()
-                + " Path:" + request.getRequestURI()
-                + " Names: " + sb.toString()
-                + " Timeout: " + value;
+        return "Host:" + request.getRemoteHost()+ System.getProperty("line.separator", "\n")
+                + "  Port:" + request.getServerPort() + System.getProperty("line.separator", "\n")
+                + " Path:" + request.getRequestURI() + System.getProperty("line.separator", "\n")
+                + " Timeout: " + value + System.getProperty("line.separator", "\n")
+                + " Login UserId: " + loginUserId;
     }
 
     @GetMapping("/{id}")
@@ -52,7 +49,6 @@ public class UserController extends BaseController {
             throw new BusinessException(110001,"用户不存在");
             //return ResponseEntity.notFound().build();
         }
-        user.setPassword(getUserId());
         return ResponseEntity.ok(user);
     }
 

@@ -31,6 +31,7 @@ public enum ErrorMessage implements ExceptionMessage {
     TOKEN_REFRESH_CLIENT_ID_NOT_MATCH(111008, "clientId与经过授权的clientId不匹配。"),
     CLIENT_ID_EXIST(111101, "clientId已存在。"),
     CLIENT_NAME_EXIST(111102, "clientName已存在。"),
+    USER_LOGIN_URL_EMPTY(111201, "用户认证的RUL为空。"),
     UnknownError(111199, "未知异常");
 
     private final int value;

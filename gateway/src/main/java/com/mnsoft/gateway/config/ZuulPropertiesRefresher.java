@@ -14,6 +14,7 @@ import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 
 /**
+ * 动态路由配置
  * Author by hiling, Email admin@mn-soft.com, Date on 11/25/2018.
  */
 @Component

@@ -2,13 +2,11 @@ package com.mnsoft.gateway.filter;
 
 import com.mnsoft.common.exception.BusinessException;
 import com.mnsoft.gateway.helper.ErrorMessage;
-import com.mnsoft.gateway.helper.ZuulBusinessException;
 import com.mnsoft.gateway.service.AccessTokenService;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.netflix.zuul.filters.route.RibbonRoutingFilter;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Base64Utils;
@@ -58,7 +56,7 @@ public class AuthFilter extends ZuulFilter {
                 //获取access token时，必须有Authorization
                 String authorization = request.getHeader("Authorization");
                 if (authorization == null || !authorization.startsWith("Basic ")) {
-                    throw new ZuulBusinessException(ErrorMessage.AUTHORIZATION_ERROR, uri);
+                    throw new BusinessException(ErrorMessage.AUTHORIZATION_ERROR);
                 }
                 String clientId, clientSecret;
                 try {
@@ -67,7 +65,7 @@ public class AuthFilter extends ZuulFilter {
                     clientId = accounts[0];
                     clientSecret = accounts[1];
                 } catch (Exception e) {
-                    throw new ZuulBusinessException(ErrorMessage.AUTHORIZATION_ERROR, uri);
+                    throw new BusinessException(ErrorMessage.AUTHORIZATION_ERROR);
                 }
 
                 ctx.addZuulRequestHeader("clientId", clientId);
@@ -76,7 +74,7 @@ public class AuthFilter extends ZuulFilter {
                 //通过access_token获取jwtToken
                 String accessToken = request.getParameter("access_token");
                 if (StringUtils.isEmpty(accessToken)) {
-                    throw new ZuulBusinessException(ErrorMessage.ACCESS_TOKEN_ERROR, uri);
+                    throw new BusinessException(ErrorMessage.ACCESS_TOKEN_ERROR);
                 }
             }
         } else {
@@ -86,11 +84,11 @@ public class AuthFilter extends ZuulFilter {
             try {
                 jwtToken = tokenService.getJwtToken(accessToken);
             } catch (BusinessException e) {
-                throw new ZuulBusinessException(e.getCode(),e.getMessage(),uri);
+                throw new BusinessException(e.getCode(), e.getMessage());
             }
 
             if (StringUtils.isEmpty(jwtToken)) {
-                throw new ZuulBusinessException(ErrorMessage.ACCESS_TOKEN_ERROR, uri);
+                throw new BusinessException(ErrorMessage.ACCESS_TOKEN_ERROR);
             }
             ctx.addZuulRequestHeader("jwtToken", jwtToken);
         }

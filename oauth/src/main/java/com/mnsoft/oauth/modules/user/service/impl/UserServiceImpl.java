@@ -18,7 +18,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     UserMapper userMapper;
 
-    @Value("${datasource.user.sql.login}")
+    @Value("${user.login.sql:}")
     String loginSql;
 
     @Override

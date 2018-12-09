@@ -24,6 +24,7 @@
 - 为了更好的掌控与易用，OAuth采用自研实现。
 - GrantType支持password、client_credentials、refresh_token。
 - Token支持延迟吊销、滑动过期和绝对过期。
+- 用户名密码验证支持直连数据库验证和调用远程服务验证。
 
 ---
 ## 其他技术介绍

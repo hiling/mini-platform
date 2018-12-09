@@ -3,8 +3,8 @@ package com.mnsoft.gateway.controller;
 import com.mnsoft.common.exception.BusinessException;
 import com.mnsoft.common.exception.ExceptionResult;
 import com.mnsoft.common.utils.json.JsonUtils;
-import com.mnsoft.gateway.helper.ZuulBusinessException;
 import com.netflix.zuul.context.RequestContext;
+import com.netflix.zuul.http.HttpServletRequestWrapper;
 import feign.FeignException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -22,19 +22,22 @@ import java.util.Date;
 @RestController
 public class ErrorHandlerController implements ErrorController {
 
+    final static String errorPath = "/error";
+
     @Override
     public String getErrorPath() {
-        return "/error";
+        return errorPath;
     }
 
-    @RequestMapping("/error")
+    @RequestMapping(errorPath)
     public Object error() {
         log.error("-----------------> /error ");
         RequestContext ctx = RequestContext.getCurrentContext();
-        Throwable throwable = getOriginException(ctx.getThrowable());
-        if (throwable == null) {
+        if (ctx.getThrowable() == null) {
             log.error("-----------------> /error 未获取到异常！<-------");
         }
+
+        Throwable throwable = getOriginException(ctx.getThrowable());
 
         if (throwable instanceof FeignException) {
             ctx.setResponseStatusCode(((FeignException) throwable).status());
@@ -45,20 +48,24 @@ public class ErrorHandlerController implements ErrorController {
 
         ExceptionResult result = new ExceptionResult();
 
-        if (throwable instanceof ZuulBusinessException) {
-            result.setCode(((ZuulBusinessException) throwable).getCode());
+        if (throwable instanceof BusinessException) {
+            result.setCode(((BusinessException) throwable).getCode());
             result.setStatus(HttpStatus.BAD_REQUEST.value());
-            result.setPath(((ZuulBusinessException) throwable).getUri());
+            result.setMessage(throwable.getMessage());
         } else {
-            if (throwable instanceof BusinessException) {
-                result.setCode(((BusinessException) throwable).getCode());
-                result.setStatus(HttpStatus.BAD_REQUEST.value());
-            } else {
-                result.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-            }
-            result.setPath(ctx.getRequest().getRequestURI());
+            result.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+            result.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+
+            result.setMessage(throwable.toString());
         }
-        result.setMessage(throwable.getMessage());
+
+        String errorUri = ctx.getRequest().getRequestURI();
+
+        if (errorUri.startsWith(errorPath)) {
+            //获取源uri
+            errorUri = ((HttpServletRequestWrapper) ctx.getRequest()).getRequest().getRequestURI();
+        }
+        result.setPath(errorUri);
 
         StringBuilder sbStackTrace = new StringBuilder();
         //堆栈信息
@@ -79,9 +86,9 @@ public class ErrorHandlerController implements ErrorController {
         return json;
     }
 
-    private Throwable getOriginException(Throwable e){
+    private Throwable getOriginException(Throwable e) {
         e = e.getCause();
-        while(e.getCause() != null){
+        while (e.getCause() != null) {
             e = e.getCause();
         }
         return e;

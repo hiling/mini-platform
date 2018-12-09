@@ -11,10 +11,10 @@ import com.mnsoft.oauth.model.*;
 import com.mnsoft.oauth.modules.client.mapper.ClientMapper;
 import com.mnsoft.oauth.modules.client.model.Client;
 import com.mnsoft.oauth.service.AccessTokenService;
-import com.mnsoft.oauth.modules.user.service.UserService;
 import com.mnsoft.common.exception.BusinessException;
 import com.mnsoft.common.utils.UuidUtils;
 import com.mnsoft.common.utils.jwtUtils;
+import com.mnsoft.oauth.service.AccountService;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -43,7 +43,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
     private ClientMapper clientMapper;
 
     @Autowired
-    private UserService userService;
+    private AccountService accountService;
 
     @Autowired
     StringRedisTemplate stringRedisTemplate;
@@ -66,11 +66,10 @@ public class AccessTokenServiceImpl implements AccessTokenService {
     @Value("${oauth.refresh-token.absolute-expiration:604800}")
     Integer refreshTokenAbsoluteExpiration;
 
-
     public String getJwtToken(String accessToken) {
-        if (StringUtils.isNotEmpty(accessToken)){
-            String jwtToken = stringRedisTemplate.opsForValue().get(RedisNamespaces.ACCESS_TOKEN+accessToken);
-            if (StringUtils.isNotEmpty(jwtToken)){
+        if (StringUtils.isNotEmpty(accessToken)) {
+            String jwtToken = stringRedisTemplate.opsForValue().get(RedisNamespaces.ACCESS_TOKEN + accessToken);
+            if (StringUtils.isNotEmpty(jwtToken)) {
                 return jwtToken;
             }
         }
@@ -78,7 +77,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
         return null;
     }
 
-    public AccessToken createAccessToken(String clientId,String clientSecret, String grantType, String username, String password, String refreshToken) {
+    public AccessToken createAccessToken(String clientId, String clientSecret, String grantType, String username, String password, String refreshToken) {
 
         GrantType type;
         if (grantType.equals(GrantType.PASSWORD.toString())
@@ -107,7 +106,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
             }
 
             //获取该refresh token的信息
-            RefreshToken refreshTokenFromDB = refreshTokenMapper.getByRefreshToken( refreshToken);
+            RefreshToken refreshTokenFromDB = refreshTokenMapper.getByRefreshToken(refreshToken);
 
             if (refreshTokenFromDB == null) {
                 throw new BusinessException(ErrorMessage.TOKEN_REFRESH_TOKEN_ERROR);
@@ -132,13 +131,13 @@ public class AccessTokenServiceImpl implements AccessTokenService {
                 }
             }
             //使用refresh token模式时，需更新oauth_refresh_token表中的last_used_time字段
-            refreshTokenMapper.updateLastUsedTimeById(refreshTokenFromDB.getId(),now);
+            refreshTokenMapper.updateLastUsedTimeById(refreshTokenFromDB.getId(), now);
 
             username = refreshTokenFromDB.getUserId();
 
         } else if (type == GrantType.PASSWORD) {
             //password模式，需要验证用户名密码，且生成refresh token
-            Account account = userService.login(username, password);
+            Account account = accountService.login(username, password);
             if (account == null) {
                 throw new BusinessException(ErrorMessage.TOKEN_USER_ERROR);
             }
@@ -206,19 +205,19 @@ public class AccessTokenServiceImpl implements AccessTokenService {
         return true;
     }
 
-    public List<String> getRevokeAccessToken(List<RevokeToken> list){
-        if (list.isEmpty()){
+    public List<String> getRevokeAccessToken(List<RevokeToken> list) {
+        if (list.isEmpty()) {
             return Arrays.asList();
         }
         return accessTokenMapper.getRevokeAccessToken(list);
     }
 
-    public void deleteExpiredAccessToken(){
+    public void deleteExpiredAccessToken() {
         accessTokenMapper.deleteExpiredAccessToken();
     }
 
     public void batchDeleteByAccessToken(List<String> accessTokenList) {
-        if (accessTokenList.isEmpty()){
+        if (accessTokenList.isEmpty()) {
             return;
         }
         accessTokenMapper.batchDeleteByAccessToken(accessTokenList);
