@@ -121,7 +121,7 @@ public class JsonMapper {
             return null;
         }
 
-        JavaType javaType = mapper.getTypeFactory().constructParametrizedType(ArrayList.class,ArrayList.class, elementType);
+        JavaType javaType = mapper.getTypeFactory().constructParametricType(ArrayList.class, elementType);
         return toObject(jsonString, javaType);
     }
 

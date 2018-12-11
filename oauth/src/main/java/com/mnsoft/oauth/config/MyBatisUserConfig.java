@@ -31,7 +31,7 @@ public class MyBatisUserConfig {
     public SqlSessionFactory sqlSessionFactoryBeanForUser(@Qualifier("dataSourceUser") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean factory = new SqlSessionFactoryBean();
         factory.setDataSource(dataSource);
-        factory.setTypeAliasesPackage("com.mnsoft.oauth.model");
+        factory.setTypeAliasesPackage("com.mnsoft.oauth.modules.user.model");
 
         ResourcePatternResolver resolver = new PathMatchingResourcePatternResolver();
         factory.setMapperLocations(resolver.getResources("classpath:mapper/*.xml"));

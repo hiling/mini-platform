@@ -12,6 +12,7 @@ import java.util.Date;
 public class ExceptionResult {
 
     public ExceptionResult() {
+        this.timestamp = new Date();
     }
 
     public ExceptionResult(Integer code, String message, Integer status, String error, String path) {
@@ -52,7 +53,5 @@ public class ExceptionResult {
      */
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date timestamp;
-
-
 
 }

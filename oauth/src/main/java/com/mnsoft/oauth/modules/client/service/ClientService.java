@@ -7,4 +7,8 @@ import com.mnsoft.oauth.modules.client.model.Client;
  */
 public interface ClientService {
     Client get(String clientId, String clientSecret);
+
+    int insert(Client client);
+
+    String refreshSecret(String clientId, String clientSecret);
 }

@@ -32,6 +32,7 @@ public enum ErrorMessage implements ExceptionMessage {
     TOKEN_IP_WHITELIST_ERROR(111009, "获取Token的IP地址不在白名单中。"),
     CLIENT_ID_EXIST(111101, "clientId已存在。"),
     CLIENT_NAME_EXIST(111102, "clientName已存在。"),
+    CLIENT_REFRESH_SECRET_ERROR(111103, "clientId或currentSecret不存在。"),
     USER_LOGIN_URL_EMPTY(111201, "用户认证的RUL为空。"),
     UnknownError(111199, "未知异常");
 

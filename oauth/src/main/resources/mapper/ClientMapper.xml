@@ -15,6 +15,11 @@
 	where client_id = #{clientId} and client_secret =  #{clientSecret}
 	</select>
 
+	<update id="refreshSecret">
+		update oauth_client set client_secret = #{newSecret}
+		where client_id = #{clientId} and client_secret = #{currentSecret}
+	</update>
+
 	<insert id="insert" parameterType="com.mnsoft.oauth.modules.client.model.Client" keyProperty="client_id">
         insert into oauth_client
         (

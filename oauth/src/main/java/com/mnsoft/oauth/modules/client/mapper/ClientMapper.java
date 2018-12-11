@@ -11,5 +11,7 @@ import org.springframework.stereotype.Repository;
 public interface ClientMapper {
     Client get(@Param("clientId") String clientId, @Param("clientSecret") String clientSecret);
 
-    int updateSecret(@Param("clientId") String clientId, @Param("clientSecret")String clientSecret);
+    int refreshSecret(@Param("clientId") String clientId, @Param("currentSecret") String currentSecret, @Param("newSecret") String newSecret);
+
+    int insert(Client client);
 }
