@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
+import com.mnsoft.common.utils.NetUtils;
+
 @Slf4j
 @RestController
 @RequestMapping
@@ -63,7 +65,9 @@ public class TokenController {
         String clientId = request.getHeader("clientId");
         String clientSecret = request.getHeader("clientSecret");
 
-        AccessToken accessToken = accessTokenService.createAccessToken(clientId,clientSecret, grantType, username, password, refreshToken);
+        String accessIp = NetUtils.getIpAddress(request);
+
+        AccessToken accessToken = accessTokenService.createAccessToken(accessIp,clientId, clientSecret, grantType, username, password, refreshToken);
         if (accessToken != null) {
             return ResponseEntity.ok(accessToken);
         }

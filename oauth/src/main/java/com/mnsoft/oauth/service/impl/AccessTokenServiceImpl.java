@@ -15,7 +15,7 @@ import com.mnsoft.common.exception.BusinessException;
 import com.mnsoft.common.utils.UuidUtils;
 import com.mnsoft.common.utils.jwtUtils;
 import com.mnsoft.oauth.service.AccountService;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -77,7 +77,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
         return null;
     }
 
-    public AccessToken createAccessToken(String clientId, String clientSecret, String grantType, String username, String password, String refreshToken) {
+    public AccessToken createAccessToken(String accessIp, String clientId, String clientSecret, String grantType, String username, String password, String refreshToken) {
 
         GrantType type;
         if (grantType.equals(GrantType.PASSWORD.toString())
@@ -93,6 +93,13 @@ public class AccessTokenServiceImpl implements AccessTokenService {
 
         if (client == null) {
             throw new BusinessException(ErrorMessage.TOKEN_CLIENT_ERROR);
+        }
+
+        //验证来访IP是否授权
+        if (StringUtils.isNotEmpty(client.getIpWhitelist())) {
+            if (!StringUtils.contains(client.getIpWhitelist(), accessIp)) {
+                throw new BusinessException(ErrorMessage.TOKEN_IP_WHITELIST_ERROR);
+            }
         }
 
         AccessToken token = new AccessToken();

@@ -20,6 +20,6 @@ public interface AccessTokenService{
 
     void batchDeleteByAccessToken(List<String> accessTokenList);
 
-    AccessToken createAccessToken(String clientId,String clientSecret, String grantType, String username, String password, String refreshToken);
+    AccessToken createAccessToken(String accessIp,String clientId,String clientSecret, String grantType, String username, String password, String refreshToken);
 
 }

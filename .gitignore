@@ -15,6 +15,17 @@ target/
 *.ipr
 *.cmd
 */target/
+
+# Development Properties
+*-dev.properties
+
+# Feature Acceptance Test Properties
+*-fat*.properties
+
+# User Acceptance Test Properties
+*-uat*.properties
+
+# Production Properties
 *-prd*.properties
 
 ### NetBeans ###
