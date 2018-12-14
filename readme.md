@@ -34,18 +34,28 @@
 
 ---
 ## 其他技术介绍
-- Lombok 是一种 Java™ 实用工具，可用来帮助开发人员消除 Java 的冗长，
+- **Lombok** 是一种 Java™ 实用工具，可用来帮助开发人员消除 Java 的冗长，
 尤其是对于简单的 Java 对象（POJO）。它通过注解实现这一目的。
-  - 项目地址：https://www.projectlombok.org/ <br>
+  - 官网地址：https://www.projectlombok.org/ 
+  - 项目地址：https://github.com/rzwitserloot/lombok
   - 中文介绍：https://blog.csdn.net/motui/article/details/79012846
 
-- MyBatis-Plus（简称 MP）是一个 MyBatis 的增强工具，
+- **MyBatis-Plus**（简称 MP）是一个 MyBatis 的增强工具，
 在 MyBatis 的基础上只做增强不做改变，为简化开发、提高效率而生。
-   - 项目地址：http://mp.baomidou.com/
+   - 官网地址：http://mp.baomidou.com/
+   - 项目地址：https://github.com/baomidou/mybatis-plus
+   
+- **Apollo**（阿波罗）是携程框架部门研发的分布式配置中心，能够集中化管理应用不同环境、不同集群的配置，配置修改后能够实时推送到应用端，并且具备规范的权限、流程治理等特性，适用于微服务配置管理场景。 
+  - 项目地址：https://github.com/ctripcorp/apollo
 
-- Prometheus 是一套开源的新一代Metrics系统监控报警框架，是CNCF中重要的一员，它将所有信息都存储为时间序列数据；因此实现一种Profiling监控方式，实时分析系统运行的状态、执行时间、调用次数等，以找到系统的热点，为性能优化提供依据。可对核心业务指标、应用指标、系统指标等做高效的监控，可与Grafana结合打造出优秀的监控平台。
+- **Prometheus** 是一套开源的新一代Metrics系统监控报警框架，是CNCF中重要的一员，它将所有信息都存储为时间序列数据；因此实现一种Profiling监控方式，实时分析系统运行的状态、执行时间、调用次数等，以找到系统的热点，为性能优化提供依据。可对核心业务指标、应用指标、系统指标等做高效的监控，可与Grafana结合打造出优秀的监控平台。
+   - 官网地址：https://prometheus.io/
+   - 项目地址：https://github.com/prometheus
 
-- 使用Spring Boot Maven Plugin & Apache Maven Dependency Plugin将外部依赖jar与项目分离，
+- **Druid** 是阿里巴巴数据库事业部出品，为监控而生的数据库连接池。
+  - 项目地址：https://github.com/alibaba/druid
+
+- **Spring Boot Maven Plugin & Apache Maven Dependency Plugin** 可以将外部依赖jar与项目分离，
 解决发布包过大问题。部署时可以将外部依赖包先上传至服务器，启动时需要使用参数-Dloader.path="lib/"加载外部依赖的jar包，
 当依赖的外部jar包未更新时，不需要每次给服务器上传。
 项目地址：
