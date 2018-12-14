@@ -51,7 +51,7 @@ public class RefreshTokenRevokeThread extends TokenRevokeThread {
     }
 
     public static boolean addRefreshTokenToRevokeQueue(String clientId, String userId, LocalDateTime time) {
-        log.error("addRefreshTokenToRevokeQueue({}, {},{})",clientId,userId,time);
+        log.debug("addRefreshTokenToRevokeQueue({}, {},{})",clientId,userId,time);
         return revokeRefreshTokenQueue.offer(RevokeToken.builder().clientId(clientId).userId(userId).time(time).build());
     }
 

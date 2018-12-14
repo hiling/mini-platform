@@ -34,6 +34,10 @@ public class AccountServiceImpl implements AccountService {
     String loginUrl;
 
     public Account login(String username, String password) {
+        if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
+            return null;
+        }
+
         if ("sql".equalsIgnoreCase(loginType)) {
             return userService.login(username, password);
         } else {

@@ -22,10 +22,27 @@ public class Client {
     //@NotEmpty(message = "密钥不能为空")
     private String clientSecret;
 
+    /**
+     * 该客户端能够获取授权的IP白名单
+     */
     private String ipWhitelist;
-    private String redirectUri;
 
-//    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8", locale = "zh")
+    /**
+     * 该客户端的授权范围，用逗号分隔
+     */
+    private String scope;
+
+    /**
+     * 1:启用，0:禁用
+     */
+    private Integer status;
+
+    //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8", locale = "zh")
+    private String createUser;
     private LocalDateTime createTime;
 
+    private String updateUser;
+    private LocalDateTime updateTime;
+
+    private String remark;
 }

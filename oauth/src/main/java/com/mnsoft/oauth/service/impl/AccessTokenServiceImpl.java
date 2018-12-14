@@ -13,7 +13,7 @@ import com.mnsoft.oauth.modules.client.model.Client;
 import com.mnsoft.oauth.service.AccessTokenService;
 import com.mnsoft.common.exception.BusinessException;
 import com.mnsoft.common.utils.UuidUtils;
-import com.mnsoft.common.utils.jwtUtils;
+import com.mnsoft.common.utils.JwtUtils;
 import com.mnsoft.oauth.service.AccountService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,7 +89,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
         }
 
         //验证Client&Secret是否正确
-        Client client = clientMapper.get(clientId, clientSecret);
+        Client client = clientMapper.getForVerify(clientId, clientSecret);
 
         if (client == null) {
             throw new BusinessException(ErrorMessage.TOKEN_CLIENT_ERROR);
@@ -148,19 +148,18 @@ public class AccessTokenServiceImpl implements AccessTokenService {
             if (account == null) {
                 throw new BusinessException(ErrorMessage.TOKEN_USER_ERROR);
             }
-
             refreshToken = UuidUtils.getUUID();
         } else {
-            //客户端模式时，不需要userId和refresh token。
-            username = null;
-            refreshToken = null;
+            //客户端模式时，不需要userId
+            username = "";
+            refreshToken = UuidUtils.getUUID();
         }
 
         //创建Access Token(单机器的UUID的TPS在10万级别，随机数产生依赖与unix的/dev/random文件，因此增加线程不能提高生成效率)
         String accessToken = UuidUtils.getUUID();
 
         //生成jwtToken
-        String jwtToken = jwtUtils.createJavaWebToken("oauth", username, clientId, now.plusSeconds(accessTokenExpiration), now);
+        String jwtToken = JwtUtils.createJavaWebToken(username, clientId, client.getScope(), now.plusSeconds(accessTokenExpiration), now);
 
         token.setClientId(clientId);
         token.setUserId(username);
@@ -174,7 +173,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
         if (accessTokenId > 0) {
 
             //password模式时，需添加refreshToken到oauth_refresh_token表
-            if (type == GrantType.PASSWORD) {
+            if (type == GrantType.PASSWORD || type == GrantType.CLIENT_CREDENTIALS) {
                 refreshTokenMapper.insert(
                         new RefreshToken()
                                 .setClientId(token.getClientId())

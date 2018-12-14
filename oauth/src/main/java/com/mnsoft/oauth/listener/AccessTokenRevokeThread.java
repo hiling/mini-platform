@@ -62,7 +62,7 @@ public class AccessTokenRevokeThread extends TokenRevokeThread {
     }
 
     public static boolean addAccessTokenToRevokeQueue(String clientId, String userId, LocalDateTime time) {
-        log.info("addAccessTokenToRevokeQueue({}, {},{})", clientId, userId, time);
+        log.debug("addAccessTokenToRevokeQueue({}, {},{})", clientId, userId, time);
         return revokeAccessTokenQueue.offer(RevokeToken.builder().clientId(clientId).userId(userId).time(time).build());
     }
 

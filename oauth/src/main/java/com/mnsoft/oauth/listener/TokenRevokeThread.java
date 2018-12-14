@@ -43,7 +43,7 @@ public abstract class TokenRevokeThread extends Thread {
                 e.printStackTrace();
                 log.error(e.getMessage());
             }
-            log.info("{}: queue isEmpty():{}", this.getName(), revokeTokens.isEmpty());
+            log.debug("{}: queue isEmpty():{}", this.getName(), revokeTokens.isEmpty());
             ArrayList<RevokeToken> expiredList = getRevokeToken();
             removeRevokeAndExpiredToken(expiredList);
         }
@@ -59,18 +59,18 @@ public abstract class TokenRevokeThread extends Thread {
                 RevokeToken token = this.revokeTokens.peek(); //查询最早一个
                 //没有Token或是最近几秒内的token，则不再执行（由于是队列，先进先出，下一个token在该token后插入，因此肯定也在5秒内）。revoke
                 if (token == null) {
-                    log.info("{}: 准备清除：token is null！", this.getName());
+                    log.debug("{}: 准备清除：token is null！", this.getName());
                     break;
                 }
 
                 if (token.getTime().isAfter(LocalDateTime.now().minusSeconds(this.reserveTime))) {
-                    log.info("{}: 准备清除：过期时间未到！ clientId:{}, UserId:{}，过期时间：{}", this.getName(), token.getClientId(), token.getUserId(), token.getTime().toString());
+                    log.debug("{}: 准备清除：过期时间未到！ clientId:{}, UserId:{}，过期时间：{}", this.getName(), token.getClientId(), token.getUserId(), token.getTime().toString());
                     break;
                 }
 
                 expiredList.add(token);
                 this.revokeTokens.poll();  //查询并移除最早一个，如果没有查到，则返回Null
-                log.info("{}: 即将清除：clientId:{}, UserId:{}，过期时间：{}", this.getName(), token.getClientId(), token.getUserId(), token.getTime().toString());
+                log.debug("{}: 即将清除：clientId:{}, UserId:{}，过期时间：{}", this.getName(), token.getClientId(), token.getUserId(), token.getTime().toString());
             }
         } catch (Exception e) {
             e.printStackTrace();

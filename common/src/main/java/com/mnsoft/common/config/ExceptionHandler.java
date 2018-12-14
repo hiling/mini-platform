@@ -3,7 +3,6 @@ package com.mnsoft.common.config;
 import com.mnsoft.common.exception.BusinessException;
 import com.mnsoft.common.exception.ExceptionResult;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -11,6 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 import javax.servlet.http.HttpServletRequest;
+import java.net.ConnectException;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -26,6 +26,17 @@ public class ExceptionHandler {
         String stackTrace = getStackTrace(e.getStackTrace());
         writeLog(uri, e.getMessage(), stackTrace);
         return new ExceptionResult(e.getCode(), e.getMessage(), HttpStatus.BAD_REQUEST.value(), stackTrace, uri);
+    }
+
+    @ResponseBody
+    @org.springframework.web.bind.annotation.ExceptionHandler(value = ConnectException.class)
+    public ExceptionResult connectException(HttpServletRequest request, ConnectException e) {
+        String uri = getUri(request);
+        String stackTrace = getStackTrace(e.getStackTrace());
+        Integer code = HttpStatus.GATEWAY_TIMEOUT.value();
+
+        writeLog(uri, "无法连接到远程服务器。", stackTrace);
+        return new ExceptionResult(code, "无法连接到远程服务器。", code, stackTrace, uri);
     }
 
     @ResponseBody

@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
 
 //        String sql = "select id as userId,username, password from user where username=#{username};";
         String sql = StringUtils.replace(loginSql, "{", "#{");
-        log.info("login sql: " + sql);
+        log.debug("login sql: " + sql);
         Account user = userMapper.login(sql, username, password);
         return user;
     }

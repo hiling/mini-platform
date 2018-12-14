@@ -4,8 +4,10 @@ import com.mnsoft.common.exception.ExceptionMessage;
 
 /**
  * Author by hiling, Email admin@mn-soft.com, Date on 10/10/2018.
- * 规范：6位数字组成，每2位1段，分别代表，模块[2位]-功能[2位]-错误码[2位]
+ *
  * 错误码分两类，公共错误和业务逻辑错误，公共错误码前面为100000，后两位从01开始，如：100000001
+ * 业务错误规范：6位数字组成，每两位一段，分别代表，模块[2位]--功能[2位]--错误码[2位]
+ * 公共错误规范：6位数字组成，每三位一段，分别代表，模块[业务模块2位后面补零]--错误码[3位，以HttpStatus码为准]
  * 模块：
  *  gateway: 10
  *  oauth:  11
@@ -17,7 +19,7 @@ import com.mnsoft.common.exception.ExceptionMessage;
  *
  *  user:   20
  *  item:   21
- *TOKEN_REFRESH_CLIENT_ID_not_Match
+ *TOKEN_REFRESH_CLIENT_ID_NOT_MATCH
  */
 public enum ErrorMessage implements ExceptionMessage {
 
@@ -32,9 +34,11 @@ public enum ErrorMessage implements ExceptionMessage {
     TOKEN_IP_WHITELIST_ERROR(111009, "获取Token的IP地址不在白名单中。"),
     CLIENT_ID_EXIST(111101, "clientId已存在。"),
     CLIENT_NAME_EXIST(111102, "clientName已存在。"),
-    CLIENT_REFRESH_SECRET_ERROR(111103, "clientId或currentSecret不存在。"),
-    USER_LOGIN_URL_EMPTY(111201, "用户认证的RUL为空。"),
-    UnknownError(111199, "未知异常");
+    CLIENT_REFRESH_SECRET_ERROR(111103, "clientId或currentSecret不正确。"),
+    CLIENT_UPDATE_STATUS_ERROR(111104, "更新状态信息错误，请稍后重试。"),
+    USER_LOGIN_URL_EMPTY(111201, "用户认证服务地址为空。"),
+    UNAUTHORIZED_ERROR(110401, "您没有该授权。"),
+    UNKNOWN_ERROR(110500, "未知异常。");
 
     private final int value;
     private final String message;

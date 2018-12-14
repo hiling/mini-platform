@@ -13,7 +13,7 @@ import com.mnsoft.common.utils.NetUtils;
 
 @Slf4j
 @RestController
-@RequestMapping
+@RequestMapping("/token")
 public class TokenController {
 
     @Autowired
@@ -29,7 +29,7 @@ public class TokenController {
      *
      * @return 返回jwtToken，如果token不存在或已过期，返回Null
      */
-    @GetMapping("/token")
+    @GetMapping()
     public ResponseEntity<String> getToken(@RequestParam(name = "access_token") String accessToken) {
         //如果没有找到，返回token过期或token非法，客户端需要通过refreshToken重新来获取accessToken
         String jwtToken = accessTokenService.getJwtToken(accessToken);
@@ -52,7 +52,7 @@ public class TokenController {
      * @param refreshToken 当grant_type=refresh_token时，该参数有效
      * @return
      */
-    @PostMapping("/token")
+    @PostMapping()
     public ResponseEntity<AccessToken> postToken(
 //            @RequestHeader("client_id") String clientId,
 //            @RequestHeader("client_secret") String clientSecret,
@@ -79,7 +79,7 @@ public class TokenController {
      *
      * @return
      */
-    @DeleteMapping("/token")
+    @DeleteMapping()
     public ResponseEntity<Boolean> revoke(@RequestParam(name = "access_token") String accessToken) {
         //如果没有找到，返回token过期或token非法，客户端需要通过refreshToken重新来获取accessToken
         Boolean result = accessTokenService.deleteToken(accessToken);

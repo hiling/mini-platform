@@ -1,18 +1,17 @@
 package com.mnsoft.gateway.filter;
 
+import com.mnsoft.common.exception.BusinessException;
 import com.mnsoft.common.exception.ExceptionResult;
-import com.mnsoft.common.utils.ExceptionUtils;
 import com.mnsoft.common.utils.json.JsonUtils;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
-import com.netflix.zuul.exception.ZuulException;
-import com.netflix.zuul.http.HttpServletRequestWrapper;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -58,8 +57,8 @@ public class ErrorFilter extends ZuulFilter {
             }
             log.debug(sb.toString());
 
-            Throwable throwable = ExceptionUtils.getOriginException(ctx.getThrowable());
-            ExceptionResult result = ExceptionUtils.getExceptionResult(ctx.getRequest(), throwable);
+            Throwable throwable = getOriginException(ctx.getThrowable());
+            ExceptionResult result = getExceptionResult(ctx.getRequest(), throwable);
 
             ctx.setSendZuulResponse(false);
 
@@ -79,11 +78,57 @@ public class ErrorFilter extends ZuulFilter {
                     writer.close();
                 }
             }
-
         } catch (Exception ex) {
             log.error("-------------->Exception filtering in custom error filter", ex);
             ReflectionUtils.rethrowRuntimeException(ex);
         }
         return null;
+    }
+
+    private ExceptionResult getExceptionResult(HttpServletRequest request, Throwable throwable) {
+
+        ExceptionResult result = new ExceptionResult();
+        result.setPath(getUri(request));
+
+        if (throwable instanceof BusinessException) {
+            result.setCode(((BusinessException) throwable).getCode());
+            result.setStatus(HttpStatus.BAD_REQUEST.value());
+            result.setMessage(throwable.getMessage());
+        } else {
+            if (throwable instanceof ConnectException) {
+                result.setCode(HttpStatus.REQUEST_TIMEOUT.value());
+                result.setStatus(HttpStatus.REQUEST_TIMEOUT.value());
+                result.setMessage("请求后端服务超时。");
+            } else {
+                result.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                result.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
+                result.setMessage(throwable.toString());
+            }
+        }
+
+        StringBuilder sbStackTrace = new StringBuilder();
+        //堆栈信息
+        if (throwable.getStackTrace() != null && throwable.getStackTrace().length > 0) {
+            for (StackTraceElement trace : throwable.getStackTrace()) {
+                sbStackTrace.append(trace.toString());
+                break;
+            }
+        }
+        result.setError(sbStackTrace.toString());
+        return result;
+    }
+
+    Throwable getOriginException(Throwable e) {
+        e = e.getCause();
+        while (e.getCause() != null) {
+            log.debug("===========> error info: {}", e.toString());
+            e = e.getCause();
+        }
+        return e;
+    }
+
+    private String getUri(HttpServletRequest request) {
+        String queryString = request.getQueryString();
+        return request.getMethod() + ":" + request.getRequestURI() + (queryString.isEmpty() ? "" : ("?" + queryString));
     }
 }

@@ -1,6 +1,7 @@
 package com.mnsoft.gateway.filter;
 
 import com.mnsoft.common.exception.BusinessException;
+import com.mnsoft.common.utils.StringUtils;
 import com.mnsoft.gateway.helper.ErrorMessage;
 import com.mnsoft.gateway.service.AccessTokenService;
 import com.netflix.zuul.ZuulFilter;
@@ -10,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.stereotype.Component;
 import org.springframework.util.Base64Utils;
-import org.springframework.util.StringUtils;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -44,8 +44,8 @@ public class AuthFilter extends ZuulFilter {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
 
-        log.info("------------------->pre");
-        log.info("------------------->pre：request:{}", request.getRequestURI());
+        log.debug("------------------->pre");
+        log.debug("------------------->pre：request:{}", request.getRequestURI());
 
         String uri = request.getRequestURI();
         String method = request.getMethod();
@@ -80,6 +80,10 @@ public class AuthFilter extends ZuulFilter {
         } else {
             //使用access_token换取jwtToken后传递给后方服务
             String accessToken = request.getParameter("access_token");
+            if (StringUtils.isEmpty(accessToken)){
+                throw new BusinessException(ErrorMessage.ACCESS_TOKEN_ERROR);
+            }
+
             String jwtToken;
             try {
                 jwtToken = tokenService.getJwtToken(accessToken);
