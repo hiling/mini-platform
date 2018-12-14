@@ -27,6 +27,12 @@
 - 用户名密码验证支持直连数据库验证和调用远程服务验证。
 
 ---
+## OAuth-Client
+- 使用OAuth的客户端使用；
+- 客户端引用后，只需要继承BaseController便可方便的获取用户信息；
+- 参考示例：[UserController.java](https://github.com/hiling/mini-platform/blob/master/modules/user/src/main/java/com/mnsoft/user/controller/UserController.java)
+
+---
 ## 其他技术介绍
 - Lombok 是一种 Java™ 实用工具，可用来帮助开发人员消除 Java 的冗长，
 尤其是对于简单的 Java 对象（POJO）。它通过注解实现这一目的。
