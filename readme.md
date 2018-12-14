@@ -1,7 +1,7 @@
 # Mini-Platform轻量级微服务治理平台
 
 - Mini-Platform致力于打造更简洁易用的轻量级微服务治理平台，更易于使用与运维；
-- 核心技术：SpringBoot、Spring Cloud、Apollo、OAuth（自研）、MyBatis、Redis、MySQL；
+- 核心技术：SpringBoot、Spring Cloud、Apollo、OAuth2（自研）、MyBatis、Redis、MySQL；
 - 核心功能：服务注册与发现、服务网关、负载均衡、统一认证、配置中心、异常处理等；
 
 ---
@@ -43,6 +43,7 @@
 在 MyBatis 的基础上只做增强不做改变，为简化开发、提高效率而生。
    - 项目地址：http://mp.baomidou.com/
 
+- Prometheus 是一套开源的新一代Metrics系统监控报警框架，是CNCF中重要的一员，它将所有信息都存储为时间序列数据；因此实现一种Profiling监控方式，实时分析系统运行的状态、执行时间、调用次数等，以找到系统的热点，为性能优化提供依据。可对核心业务指标、应用指标、系统指标等做高效的监控，可与Grafana结合打造出优秀的监控平台。
 
 - 使用Spring Boot Maven Plugin & Apache Maven Dependency Plugin将外部依赖jar与项目分离，
 解决发布包过大问题。部署时可以将外部依赖包先上传至服务器，启动时需要使用参数-Dloader.path="lib/"加载外部依赖的jar包，
