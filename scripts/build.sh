@@ -1,4 +1,5 @@
 #!/bin/bash
+cd ..
 cd discovery
 mvn clean package -Dmaven.test.skip=true
 cp ./target/discovery-0.0.1-SNAPSHOT.jar ./target/discovery.jar
