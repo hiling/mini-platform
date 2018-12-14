@@ -78,13 +78,20 @@ public class AuthFilter extends ZuulFilter {
                 }
             }
         } else {
-            //使用access_token换取jwtToken后传递给后方服务
+
+            //内部应用通过jwt_token访问后端服务
+            String jwtToken = request.getHeader("jwt_token");
+            if (StringUtils.isNotEmpty(jwtToken)) {
+                return null;
+            }
+
+            //外部应用通过access_token访问后端服务,需要使用access_token在OAuth Server上换取jwtToken后传递给后方服务
             String accessToken = request.getParameter("access_token");
-            if (StringUtils.isEmpty(accessToken)){
+
+            if (StringUtils.isEmpty(accessToken)) {
                 throw new BusinessException(ErrorMessage.ACCESS_TOKEN_ERROR);
             }
 
-            String jwtToken;
             try {
                 jwtToken = tokenService.getJwtToken(accessToken);
             } catch (BusinessException e) {

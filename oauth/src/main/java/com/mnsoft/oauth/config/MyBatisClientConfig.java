@@ -1,6 +1,5 @@
 package com.mnsoft.oauth.config;
 
-import com.alibaba.druid.pool.DruidDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
@@ -21,11 +20,11 @@ import javax.sql.DataSource;
 @Configuration
 @MapperScan(basePackages =  "com.mnsoft.oauth.modules.client.mapper", sqlSessionFactoryRef = "sqlSessionFactoryBeanForClient")
 public class MyBatisClientConfig {
+
     @Bean(name = "dataSourceClient")
     @ConfigurationProperties(prefix = "spring.datasource.client")
     public DataSource dataSourceUser() {
-        return new DruidDataSource();
-//        return DataSourceBuilder.create().build();
+        return DataSourceBuilder.create().build();
     }
 
     @Bean

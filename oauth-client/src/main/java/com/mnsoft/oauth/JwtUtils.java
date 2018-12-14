@@ -9,12 +9,14 @@ import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
 import java.util.Date;
 import java.util.Map;
+import java.util.logging.Logger;
 
 /**
  * Author by hiling, Email admin@mn-soft.com, Date on 12/14/2018.
  */
 public class JwtUtils {
 
+    static Logger log = Logger.getLogger("com.mnsoft.oauth.JwtUtils");
     /**
      * 用户编号：sub = Subject, JWT面向的用户
      */
@@ -28,8 +30,7 @@ public class JwtUtils {
     /**
      * 授权范围，自定义属性
      */
-    public static final String SCOPE_ID_KEY = "scope";
-
+    public static final String SCOPE_KEY = "scp";
 
     /**
      * 使用HS256签名算法和生成的signingKey最终的Token,claims中是有效载荷
@@ -54,16 +55,16 @@ public class JwtUtils {
                                             Date expiration, Date issuedAt) {
 
         Claims claims = Jwts.claims();
-        claims.put(USER_ID_KEY,userId );
+        claims.put(USER_ID_KEY, userId);
         claims.put(CLIENT_ID_KEY, clientId);
-        claims.put(SCOPE_ID_KEY, scope);
+        claims.put(SCOPE_KEY, scope);
 
         String token = Jwts.builder()
-                //JWT的签发者
-                .setIssuer("oauth")
                 .setClaims(claims)
-//                .setSubject(userId)
-//                .setAudience(clientId)
+                //JWT的签发者
+                //.setIssuer("oauth")
+                //.setSubject(userId)
+                //.setAudience(clientId)
                 .setExpiration(expiration)
                 .setIssuedAt(issuedAt)
                 .signWith(SignatureAlgorithm.HS256, getKeyInstance())
@@ -91,7 +92,7 @@ public class JwtUtils {
             Map<String, Object> jwtClaims = Jwts.parser().setSigningKey(getKeyInstance()).parseClaimsJws(jwt).getBody();
             return jwtClaims;
         } catch (Exception e) {
-            //log.error("json web token verify failed. error message:" + e.getMessage());
+            log.warning("json web token verify failed. error message:" + e.getMessage());
             return null;
         }
     }

@@ -28,7 +28,7 @@ public class BaseController {
     }
 
     public List<String> getScopeList() {
-        String scope = getByClaimsKey(JwtUtils.SCOPE_ID_KEY);
+        String scope = getByClaimsKey(JwtUtils.SCOPE_KEY);
         return stringToList(scope);
     }
 
@@ -39,7 +39,7 @@ public class BaseController {
             UserInfo userInfo = new UserInfo();
             userInfo.setUserId(claims.get(JwtUtils.USER_ID_KEY).toString());
             userInfo.setClientId(claims.get(JwtUtils.CLIENT_ID_KEY).toString());
-            userInfo.setScopeList(stringToList(claims.get(JwtUtils.SCOPE_ID_KEY).toString()));
+            userInfo.setScopeList(stringToList(claims.get(JwtUtils.SCOPE_KEY).toString()));
             return userInfo;
         }
         return null;

@@ -1,6 +1,5 @@
 package com.mnsoft.oauth.config;
 
-import com.alibaba.druid.pool.DruidDataSource;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.annotation.MapperScan;
@@ -25,8 +24,7 @@ public class MyBatisUserConfig {
     @Bean(name = "dataSourceUser")
     @ConfigurationProperties(prefix = "spring.datasource.user")
     public DataSource dataSourceUser() {
-        return new DruidDataSource();
-//        return DataSourceBuilder.create().build();
+        return DataSourceBuilder.create().build();
     }
 
     @Bean
