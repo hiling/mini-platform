@@ -25,6 +25,7 @@
         <module>gateway</module>
         <module>oauth</module>
         <module>modules</module>
+        <module>oauth-client</module>
     </modules>
 
     <properties>

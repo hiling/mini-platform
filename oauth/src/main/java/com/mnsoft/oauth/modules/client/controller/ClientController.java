@@ -1,10 +1,11 @@
 package com.mnsoft.oauth.modules.client.controller;
 
 import com.mnsoft.common.exception.BusinessException;
-import com.mnsoft.common.web.BaseController;
 import com.mnsoft.oauth.constant.ErrorMessage;
 import com.mnsoft.oauth.modules.client.model.Client;
 import com.mnsoft.oauth.modules.client.service.ClientService;
+import com.mnsoft.oauth.client.web.BaseController;
+import com.mnsoft.oauth.client.web.UserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

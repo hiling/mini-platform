@@ -1,5 +1,7 @@
 package com.mnsoft.oauth.service.impl;
 
+import com.mnsoft.common.utils.DateTimeUtils;
+import com.mnsoft.oauth.JwtUtils;
 import com.mnsoft.oauth.constant.ErrorMessage;
 import com.mnsoft.oauth.constant.GrantType;
 import com.mnsoft.oauth.constant.RedisNamespaces;
@@ -13,7 +15,6 @@ import com.mnsoft.oauth.modules.client.model.Client;
 import com.mnsoft.oauth.service.AccessTokenService;
 import com.mnsoft.common.exception.BusinessException;
 import com.mnsoft.common.utils.UuidUtils;
-import com.mnsoft.common.utils.JwtUtils;
 import com.mnsoft.oauth.service.AccountService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -159,7 +160,9 @@ public class AccessTokenServiceImpl implements AccessTokenService {
         String accessToken = UuidUtils.getUUID();
 
         //生成jwtToken
-        String jwtToken = JwtUtils.createJavaWebToken(username, clientId, client.getScope(), now.plusSeconds(accessTokenExpiration), now);
+        String jwtToken = JwtUtils.createJavaWebToken(username, clientId, client.getScope(),
+                DateTimeUtils.localDateTimeToDate(now.plusSeconds(accessTokenExpiration)),
+                DateTimeUtils.localDateTimeToDate(now));
 
         token.setClientId(clientId);
         token.setUserId(username);

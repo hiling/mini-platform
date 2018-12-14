@@ -1,21 +1,16 @@
-package com.mnsoft.common.web;
+package com.mnsoft.oauth.client.web;
 
-import com.mnsoft.common.utils.JwtUtils;
-import com.mnsoft.common.utils.StringUtils;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.extern.slf4j.Slf4j;
-
+import com.mnsoft.oauth.JwtUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
 /**
- * Author by hiling, Email admin@mn-soft.com, Date on 10/17/2018.
+ * Author by hiling, Email admin@mn-soft.com, Date on 12/14/2018.
  */
-@Slf4j
 public class BaseController {
     @Autowired
     private HttpServletRequest request;
@@ -34,7 +29,7 @@ public class BaseController {
 
     public List<String> getScopeList() {
         String scope = getByClaimsKey(JwtUtils.SCOPE_ID_KEY);
-        return StringUtils.stringToList(scope);
+        return stringToList(scope);
     }
 
     public UserInfo getUserInfo() {
@@ -44,7 +39,7 @@ public class BaseController {
             UserInfo userInfo = new UserInfo();
             userInfo.setUserId(claims.get(JwtUtils.USER_ID_KEY).toString());
             userInfo.setClientId(claims.get(JwtUtils.CLIENT_ID_KEY).toString());
-            userInfo.setScopeList(StringUtils.stringToList(claims.get(JwtUtils.SCOPE_ID_KEY).toString()));
+            userInfo.setScopeList(stringToList(claims.get(JwtUtils.SCOPE_ID_KEY).toString()));
             return userInfo;
         }
         return null;
@@ -59,11 +54,13 @@ public class BaseController {
         return null;
     }
 
-    @Setter
-    @Getter
-    public class UserInfo {
-        String userId;
-        String clientId;
-        List<String> scopeList;
+    private List<String> stringToList(String string) {
+
+        String[] scopes = org.apache.commons.lang3.StringUtils.split(string, ",");
+        if (scopes == null) {
+            return null;
+        }
+        List<String> scopeList = Arrays.asList(scopes);
+        return scopeList;
     }
 }

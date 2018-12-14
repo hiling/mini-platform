@@ -4,7 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.ctrip.framework.apollo.Config;
 import com.ctrip.framework.apollo.ConfigService;
 import com.mnsoft.common.exception.BusinessException;
-import com.mnsoft.common.web.BaseController;
+import com.mnsoft.oauth.client.web.BaseController;
 import com.mnsoft.user.mapper.UserMapper;
 import com.mnsoft.user.model.User;
 import org.springframework.http.ResponseEntity;
@@ -12,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
-import java.util.Set;
 
 @RestController
 @RequestMapping("/user")

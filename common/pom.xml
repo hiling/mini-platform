@@ -44,11 +44,5 @@
             <scope>compile</scope>
         </dependency>
 
-        <!-- 生成jwt token依赖包 -->
-        <dependency>
-            <groupId>io.jsonwebtoken</groupId>
-            <artifactId>jjwt</artifactId>
-            <version>0.9.1</version>
-        </dependency>
     </dependencies>
 </project>

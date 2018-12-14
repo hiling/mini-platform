@@ -1,20 +1,18 @@
-package com.mnsoft.common.utils;
+package com.mnsoft.oauth;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.extern.slf4j.Slf4j;
 
 import javax.crypto.spec.SecretKeySpec;
 import javax.xml.bind.DatatypeConverter;
 import java.security.Key;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.Date;
+import java.util.Map;
 
 /**
- * Author by hiling, Email admin@mn-soft.com, Date on 10/7/2018.
+ * Author by hiling, Email admin@mn-soft.com, Date on 12/14/2018.
  */
-@Slf4j
 public class JwtUtils {
 
     /**
@@ -53,7 +51,7 @@ public class JwtUtils {
      * @return
      */
     public static String createJavaWebToken(String userId, String clientId, String scope,
-                                            LocalDateTime expiration, LocalDateTime issuedAt) {
+                                            Date expiration, Date issuedAt) {
 
         Claims claims = Jwts.claims();
         claims.put(USER_ID_KEY,userId );
@@ -66,8 +64,8 @@ public class JwtUtils {
                 .setClaims(claims)
 //                .setSubject(userId)
 //                .setAudience(clientId)
-                .setExpiration(DateTimeUtils.localDateTimeToDate(expiration))
-                .setIssuedAt(DateTimeUtils.localDateTimeToDate(issuedAt))
+                .setExpiration(expiration)
+                .setIssuedAt(issuedAt)
                 .signWith(SignatureAlgorithm.HS256, getKeyInstance())
                 .compact();
         return token;
@@ -93,7 +91,7 @@ public class JwtUtils {
             Map<String, Object> jwtClaims = Jwts.parser().setSigningKey(getKeyInstance()).parseClaimsJws(jwt).getBody();
             return jwtClaims;
         } catch (Exception e) {
-            log.error("json web token verify failed. error message:" + e.getMessage());
+            //log.error("json web token verify failed. error message:" + e.getMessage());
             return null;
         }
     }
@@ -110,5 +108,4 @@ public class JwtUtils {
         Key signingKey = new SecretKeySpec(apiKeySecretBytes, signatureAlgorithm.getJcaName());
         return signingKey;
     }
-
 }
