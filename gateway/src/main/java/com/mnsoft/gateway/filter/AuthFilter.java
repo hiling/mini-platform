@@ -2,15 +2,14 @@ package com.mnsoft.gateway.filter;
 
 import com.mnsoft.common.exception.BusinessException;
 import com.mnsoft.common.utils.StringUtils;
-import com.mnsoft.gateway.helper.ErrorMessage;
-import com.mnsoft.gateway.service.AccessTokenService;
+import com.mnsoft.gateway.modules.oauth.constant.ErrorMessage;
+import com.mnsoft.gateway.modules.oauth.service.AccessTokenService;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Base64Utils;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -44,65 +43,35 @@ public class AuthFilter extends ZuulFilter {
         RequestContext ctx = RequestContext.getCurrentContext();
         HttpServletRequest request = ctx.getRequest();
 
-        log.debug("------------------->pre");
-        log.debug("------------------->pre：request:{}", request.getRequestURI());
-
         String uri = request.getRequestURI();
         String method = request.getMethod();
 
-        if (uri.contains("/token")) {
-            //创建token
-            if ("POST".equalsIgnoreCase(method)) {
-                //获取access token时，必须有Authorization
-                String authorization = request.getHeader("Authorization");
-                if (authorization == null || !authorization.startsWith("Basic ")) {
-                    throw new BusinessException(ErrorMessage.AUTHORIZATION_ERROR);
-                }
-                String clientId, clientSecret;
-                try {
-                    String authDecode = new String(Base64Utils.decodeFromString(authorization.substring(6)));
-                    String[] accounts = authDecode.split(":");
-                    clientId = accounts[0];
-                    clientSecret = accounts[1];
-                } catch (Exception e) {
-                    throw new BusinessException(ErrorMessage.AUTHORIZATION_ERROR);
-                }
+        log.debug("------------------->pre Request:{}:{}",method, uri);
 
-                ctx.addZuulRequestHeader("clientId", clientId);
-                ctx.addZuulRequestHeader("clientSecret", clientSecret);
-            } else {
-                //通过access_token获取jwtToken
-                String accessToken = request.getParameter("access_token");
-                if (StringUtils.isEmpty(accessToken)) {
-                    throw new BusinessException(ErrorMessage.ACCESS_TOKEN_ERROR);
-                }
-            }
-        } else {
-
-            //内部应用通过jwt_token访问后端服务
-            String jwtToken = request.getHeader("jwt_token");
-            if (StringUtils.isNotEmpty(jwtToken)) {
-                return null;
-            }
-
-            //外部应用通过access_token访问后端服务,需要使用access_token在OAuth Server上换取jwtToken后传递给后方服务
-            String accessToken = request.getParameter("access_token");
-
-            if (StringUtils.isEmpty(accessToken)) {
-                throw new BusinessException(ErrorMessage.ACCESS_TOKEN_ERROR);
-            }
-
-            try {
-                jwtToken = tokenService.getJwtToken(accessToken);
-            } catch (BusinessException e) {
-                throw new BusinessException(e.getCode(), e.getMessage());
-            }
-
-            if (StringUtils.isEmpty(jwtToken)) {
-                throw new BusinessException(ErrorMessage.ACCESS_TOKEN_ERROR);
-            }
-            ctx.addZuulRequestHeader("jwtToken", jwtToken);
+        //内部应用通过jwt_token访问后端服务
+        String jwtToken = request.getHeader("jwt_token");
+        if (StringUtils.isNotEmpty(jwtToken)) {
+            return null;
         }
+
+        //外部应用通过access_token访问后端服务,需要使用access_token在OAuth Server上换取jwtToken后传递给后方服务
+        String accessToken = request.getParameter("access_token");
+
+        if (StringUtils.isEmpty(accessToken)) {
+            throw new BusinessException(ErrorMessage.ACCESS_TOKEN_ERROR);
+        }
+
+        try {
+            jwtToken = tokenService.getJwtToken(accessToken);
+        } catch (BusinessException e) {
+            throw new BusinessException(e.getCode(), e.getMessage());
+        }
+
+        if (StringUtils.isEmpty(jwtToken)) {
+            throw new BusinessException(ErrorMessage.ACCESS_TOKEN_ERROR);
+        }
+        ctx.addZuulRequestHeader("jwtToken", jwtToken);
+
         return null;
     }
 }

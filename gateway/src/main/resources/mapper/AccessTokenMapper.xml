@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.mnsoft.gateway.modules.oauth.mapper.AccessTokenMapper">
+
+    <select id="getRefreshToken" resultType="String">
+        select refresh_token as refreshToken
+        from oauth_access_token
+        where access_token = #{accessToken}
+    </select>
+
+    <select id="getRevokeAccessToken" resultType="String">
+        <foreach collection="list" item="item" index="index" separator="union all">
+            select access_token as accessToken
+            from oauth_access_token
+            where client_id = #{item.clientId}
+            <if test="item.userId != null">
+                and user_id = #{item.userId}
+            </if>
+            and create_time <![CDATA[ < ]]> #{item.time}
+        </foreach>
+    </select>
+
+    <insert id="insert" parameterType="com.mnsoft.gateway.modules.oauth.model.AccessToken" keyProperty="id">
+        insert into oauth_access_token
+        (
+           `client_id`,
+            `user_id`,
+            `access_token` ,
+            `jwt_token`,
+            `refresh_token`,
+            `expires_in` ,
+            `create_time`
+        )
+        values
+        (
+            #{clientId},
+            #{userId},
+            #{accessToken},
+            #{jwtToken},
+            #{refreshToken},
+            #{expiresIn},
+            #{createTime}
+        )
+    </insert>
+
+    <delete id="batchDeleteByAccessToken">
+      delete from oauth_access_token where access_token in
+        <foreach item="accessToken" index="index" collection="accessTokenList"
+                 open="(" separator="," close=")">
+            #{accessToken}
+        </foreach>
+    </delete>
+
+    <delete id="deleteExpiredAccessToken">
+        delete from oauth_access_token
+        where create_time <![CDATA[ < ]]> date_sub(now(), INTERVAL expires_in second)
+    </delete>
+
+</mapper>
