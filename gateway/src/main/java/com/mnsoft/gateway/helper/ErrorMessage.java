@@ -15,7 +15,7 @@ public enum ErrorMessage implements ExceptionMessage {
     private final int value;
     private final String message;
 
-    private ErrorMessage(int value, String message) {
+    ErrorMessage(int value, String message) {
         this.value = value;
         this.message = message;
     }
