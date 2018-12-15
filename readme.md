@@ -20,11 +20,27 @@
 - 支持服务异常重试，建议只开启GET的重试，且确保GET的幂等，否则建议关闭；
 
 ---
-## OAuth
-- 为了更好的掌控与易用，OAuth采用自研实现。
+## Gateway - OAuth  
+- Gateway中集成的OAuth2模块
+- 为了更简单易用，OAuth Server采用自研实现。
 - GrantType支持password、client_credentials、refresh_token。
 - Token支持延迟吊销、滑动过期和绝对过期。
 - 用户名密码验证支持直连数据库验证和调用远程服务验证。
+
+---
+## Gateway - ACL
+- Gateway中集成的ACL(访问控制列表)模块，对API进行权限控制。
+- 待实现
+
+---
+## Gateway - RateLimiting  
+- Gateway中集成的限流模块，对API进行流量控制。
+- 待实现
+
+---
+## Gateway - Other  
+- Gateway中的Log、Metrics、Monitor、Security、Canary等模块。
+- 待实现
 
 ---
 ## OAuth-Client
