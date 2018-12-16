@@ -26,6 +26,7 @@
 - GrantType支持password、client_credentials、refresh_token。
 - Token支持延迟吊销、滑动过期和绝对过期。
 - 用户名密码验证支持直连数据库验证和调用远程服务验证。
+- ![Password](https://ss0.bdstatic.com/70cFvHSh_Q1YnxGkpoWK1HF6hhy/it/
 
 ---
 ## Gateway - ACL
