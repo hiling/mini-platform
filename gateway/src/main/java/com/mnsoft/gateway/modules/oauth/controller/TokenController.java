@@ -65,26 +65,32 @@ public class TokenController {
             @RequestParam(defaultValue = "") String password,
             @RequestParam(name = "refresh_token", defaultValue = "") String refreshToken) {
 
-//        String clientId = request.getHeader("clientId");
-//        String clientSecret = request.getHeader("clientSecret");
+        // client_id & client_secret可以通过参数传递，也可以通过HTTP Header的Authorization传递
+        String clientId = request.getParameter("client_id");
+        String clientSecret = request.getParameter("client_secret");
 
-        String authorization = request.getHeader("Authorization");
-        if (authorization == null || !authorization.startsWith("Basic ")) {
-            throw new BusinessException(ErrorMessage.TOKEN_AUTHORIZATION_ERROR);
-        }
-        String clientId, clientSecret;
-        try {
-            String authDecode = new String(Base64Utils.decodeFromString(authorization.substring(6)));
-            String[] accounts = authDecode.split(":");
-            clientId = accounts[0];
-            clientSecret = accounts[1];
-        } catch (Exception e) {
-            throw new BusinessException(ErrorMessage.TOKEN_AUTHORIZATION_ERROR);
+        if (StringUtils.isEmpty(clientId)) {
+            String authorization = request.getHeader("Authorization");
+            if (authorization == null || !authorization.startsWith("Basic ")) {
+                throw new BusinessException(ErrorMessage.TOKEN_AUTHORIZATION_ERROR);
+            }
+
+            try {
+                String authDecode = new String(Base64Utils.decodeFromString(authorization.substring(6)));
+                String[] accounts = authDecode.split(":");
+                clientId = accounts[0];
+                //Pasword模式时，clientSecret是可选的。
+                if (accounts.length > 1) {
+                    clientSecret = accounts[1];
+                }
+            } catch (Exception e) {
+                throw new BusinessException(ErrorMessage.TOKEN_AUTHORIZATION_ERROR);
+            }
         }
 
         String accessIp = NetUtils.getIpAddress(request);
 
-        AccessToken accessToken = accessTokenService.createAccessToken(accessIp,clientId, clientSecret, grantType, username, password, refreshToken);
+        AccessToken accessToken = accessTokenService.createAccessToken(accessIp, clientId, clientSecret, grantType, username, password, refreshToken);
         if (accessToken != null) {
             return ResponseEntity.ok(accessToken);
         }

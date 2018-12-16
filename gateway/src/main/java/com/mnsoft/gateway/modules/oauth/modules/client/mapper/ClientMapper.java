@@ -17,7 +17,7 @@ public interface ClientMapper {
                          @Param("clientSecret") String clientSecret,
                          @Param("status") Integer status);
 
-    Client getForVerify(@Param("clientId") String clientId, @Param("clientSecret") String clientSecret);
+    Client getForVerify(@Param("clientId") String clientId);
 
     int refreshSecret(@Param("clientId") String clientId,
                       @Param("currentSecret") String currentSecret,

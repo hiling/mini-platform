@@ -6,11 +6,11 @@
 	select
 		`client_id` as clientId,
 		`grant_types` as grantTypes,
+		`client_secret` as clientSecret,
 		`ip_whitelist` as ipWhitelist,
 		`scope`
 	from oauth_client
 	where client_id = #{clientId}
-		and client_secret =  #{clientSecret}
 		and `status` = 1
 	</select>
 

@@ -67,6 +67,12 @@ public class AccessTokenServiceImpl implements AccessTokenService {
     @Value("${oauth.refresh-token.absolute-expiration:604800}")
     Integer refreshTokenAbsoluteExpiration;
 
+    /**
+     * Password模式时，clientSecret是否为必填项，默认false
+     */
+    @Value("${oauth.password.client-secret.required:false}")
+    Boolean clientSecretRequiredForPassword;
+
     public String getJwtToken(String accessToken) {
         if (StringUtils.isNotEmpty(accessToken)) {
             String jwtToken = stringRedisTemplate.opsForValue().get(RedisNamespaces.ACCESS_TOKEN + accessToken);
@@ -80,17 +86,10 @@ public class AccessTokenServiceImpl implements AccessTokenService {
 
     public AccessToken createAccessToken(String accessIp, String clientId, String clientSecret, String grantType, String username, String password, String refreshToken) {
 
-        GrantType type;
-        if (grantType.equals(GrantType.PASSWORD.toString())
-                || grantType.equals(GrantType.REFRESH_TOKEN.toString())
-                || grantType.equals(GrantType.CLIENT_CREDENTIALS.toString())) {
-            type = GrantType.typeOf(grantType);
-        } else {
-            throw new BusinessException(ErrorMessage.TOKEN_GRANT_TYPE_NOT_SUPPORTED);
-        }
+        GrantType type = GrantType.typeOf(grantType);
 
-        //验证Client&Secret是否正确
-        Client client = clientMapper.getForVerify(clientId, clientSecret);
+        //验证clientId & clientSecret是否正确, Password模式时，clientSecret是可选的；
+        Client client = clientMapper.getForVerify(clientId);
 
         if (client == null) {
             throw new BusinessException(ErrorMessage.TOKEN_CLIENT_ERROR);
@@ -106,11 +105,30 @@ public class AccessTokenServiceImpl implements AccessTokenService {
         AccessToken token = new AccessToken();
         LocalDateTime now = LocalDateTime.now();
 
-        //refresh_token模式
-        if (type == GrantType.REFRESH_TOKEN) {
+        if (type == GrantType.PASSWORD) {
+
+            if (clientSecretRequiredForPassword && !StringUtils.equals(client.getClientSecret(), clientSecret)) {
+                throw new BusinessException(ErrorMessage.TOKEN_CLIENT_ERROR);
+            }
+
+            //password模式，需要验证用户名密码
+            Account account = accountService.login(username, password);
+            if (account == null) {
+                throw new BusinessException(ErrorMessage.TOKEN_USER_ERROR);
+            }
+            refreshToken = UuidUtils.getUUID();
+        } else if (type == GrantType.CLIENT_CREDENTIALS) {
+            //客户端模式时，不需要userId
+            username = "";
+
+            if (!StringUtils.equals(client.getClientSecret(), clientSecret)) {
+                throw new BusinessException(ErrorMessage.TOKEN_CLIENT_ERROR);
+            }
+            refreshToken = UuidUtils.getUUID();
+        } else if (type == GrantType.REFRESH_TOKEN) {
 
             if (StringUtils.isEmpty(refreshToken)) {
-                throw new BusinessException(ErrorMessage.TOKEN_REFRESH_TOKEN_ERROR);
+                throw new BusinessException(ErrorMessage.TOKEN_REFRESH_TOKEN_REQUIRED);
             }
 
             //获取该refresh token的信息
@@ -143,24 +161,16 @@ public class AccessTokenServiceImpl implements AccessTokenService {
 
             username = refreshTokenFromDB.getUserId();
 
-        } else if (type == GrantType.PASSWORD) {
-            //password模式，需要验证用户名密码，且生成refresh token
-            Account account = accountService.login(username, password);
-            if (account == null) {
-                throw new BusinessException(ErrorMessage.TOKEN_USER_ERROR);
-            }
-            refreshToken = UuidUtils.getUUID();
         } else {
-            //客户端模式时，不需要userId
-            username = "";
-            refreshToken = UuidUtils.getUUID();
+            throw new BusinessException(ErrorMessage.TOKEN_GRANT_TYPE_NOT_SUPPORTED);
         }
 
         //创建Access Token(单机器的UUID的TPS在10万级别，随机数产生依赖与unix的/dev/random文件，因此增加线程不能提高生成效率)
         String accessToken = UuidUtils.getUUID();
 
         //生成jwtToken
-        String jwtToken = JwtUtils.createJavaWebToken(username, clientId, client.getScope(),
+        String jwtToken = JwtUtils.createJavaWebToken(
+                username, clientId, client.getScope(),
                 DateTimeUtils.localDateTimeToDate(now.plusSeconds(accessTokenExpiration)),
                 DateTimeUtils.localDateTimeToDate(now));
 
