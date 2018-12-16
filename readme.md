@@ -28,9 +28,12 @@
 - 用户名密码验证支持直连数据库验证和调用远程服务验证。
 - 密码模式授权，用于客户端与服务器之间的授权，流程如下：
 ![oauth-password-flow](https://raw.githubusercontent.com/hiling/mini-platform/master/.files/oauth-password-flow.png "密码模式授权流程")
+注：图例为三次请求，1.1-1.3为首次认证；2.1-2.5为通过Access Token访问后端资源；3.1-3.3为使用Refresh Token获取新的Access Token，可用于Access Token过期前刷新Token；
+红色字体是Password与Client授权方式不同的地方。
+
 - 客户端模式授权，用于服务器与服务器之间的授权，流程如下：
 ![oauth-client-flow](https://raw.githubusercontent.com/hiling/mini-platform/master/.files/oauth-client-flow.png "客户端模式授权流程")
-注：图例为三次请求，1.1~1.3为首次认证；2.1~2.5为通过Access Token访问后端资源；3.1~3.3为使用Refresh Token获取新的Access Token，可用于Access Token过期前刷新Token；红色字体是Password与Client授权方式不同的地方。
+
 - 微服务模式授权示例，是获取到Access Token后请求后端资源的流程细化，如下：
 ![oauth-multi-services-flow](https://raw.githubusercontent.com/hiling/mini-platform/master/.files/oauth-multi-services-flow.png "客户端模式授权流程")
 
