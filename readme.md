@@ -49,7 +49,7 @@
 
 ---
 ## Gateway - Other  
-- Gateway中的Log、Metrics、Monitor、Security、Canary等模块。
+- Gateway中的Log、Metrics、Trace、Monitor、Security、Canary等模块。
 - 待实现
 
 ---
@@ -59,7 +59,7 @@
 - 参考示例：[UserController.java](https://github.com/hiling/mini-platform/blob/master/modules/user/src/main/java/com/mnsoft/user/controller/UserController.java)
 
 ---
-## 其他技术介绍
+## 项目中使用的其他技术介绍
 - **Lombok** 是一种 Java™ 实用工具，可用来帮助开发人员消除 Java 的冗长，
 尤其是对于简单的 Java 对象（POJO）。它通过注解实现这一目的。
   - 官网地址：https://www.projectlombok.org/ 
@@ -80,7 +80,18 @@
 
 - **Druid** 是阿里巴巴数据库事业部出品，为监控而生的数据库连接池。
   - 项目地址：https://github.com/alibaba/druid
-
+  
+- **JMH** 是一个Java的微基准测试框架，精度可以精确到微秒级。
+  - 项目地址：http://openjdk.java.net/projects/code-tools/jmh/
+  - 官方示例：http://hg.openjdk.java.net/code-tools/jmh/file/tip/jmh-samples/src/main/java/org/openjdk/jmh/samples/
+  - 中文介绍：https://www.xncoding.com/2018/01/07/java/jmh.html
+  - 项目中OAuth基准测试代码
+  ![create_token_test](https://raw.githubusercontent.com/hiling/mini-platform/master/.files/create_token_test.png "基准测试代码")
+  注：测试代码：[UserApplicationTests.java](https://github.com/hiling/mini-platform/blob/master/modules/user/src/test/java/com/mnsoft/user/UserApplicationTests.java)
+  - 测试结果
+  ![create_token_test_result](https://raw.githubusercontent.com/hiling/mini-platform/master/.files/create_token_test_result.png "基准测试结果")
+  注：在开发环境测试，电脑配置2C(i5-6300U)/8G/SSD，本机MySQL，使用相关参数，未考虑DB缓存等影响。
+  
 - **Spring Boot Maven Plugin & Apache Maven Dependency Plugin** 可以将外部依赖jar与项目分离，
 解决发布包过大问题。部署时可以将外部依赖包先上传至服务器，启动时需要使用参数-Dloader.path="lib/"加载外部依赖的jar包，
 当依赖的外部jar包未更新时，不需要每次给服务器上传。

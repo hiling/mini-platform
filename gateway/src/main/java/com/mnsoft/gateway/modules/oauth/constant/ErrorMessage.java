@@ -25,7 +25,7 @@ public enum ErrorMessage implements ExceptionMessage {
 
     TOKEN_GRANT_TYPE_NOT_SUPPORTED(111001, "grant_type仅支持password,client_credentials和refresh_token。"),
     TOKEN_AUTHORIZATION_ERROR(111002, "Authorization信息错误。"),
-    TOKEN_CLIENT_ERROR(111003, "客户端编号或密钥错误。"),
+    TOKEN_CLIENT_ERROR(111003, "clientId或client_secret错误。"),
     TOKEN_USER_ERROR(111004, "用户名或密码错误。"),
     ACCESS_TOKEN_ERROR(111010, "access_token无效或已过期。"),
     TOKEN_REFRESH_TOKEN_REQUIRED(111005, "refresh_token不能为空。"),
