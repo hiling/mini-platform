@@ -18,10 +18,10 @@ import java.util.concurrent.TimeUnit;
 @Slf4j
 
 //基准测试类型：
-// Throughput: 整体吞吐量；
-// AverageTime: 调用的平均时间；
-// SampleTime: 随机取样，最后输出取样结果的分布
-// SingleShotTime: 以上模式都是默认一次 iteration 是 1s，唯有 SingleShotTime 是只运行一次。往往同时把 warmup 次数设为0，用于测试冷启动时的性能。
+// Throughput: 整体吞吐量，例如“1秒内可以执行多少次调用”；
+// AverageTime: 调用的平均时间，例如“每次调用平均耗时xxx毫秒”；
+// SampleTime: 随机取样，最后输出取样结果的分布，例如“99%的调用在xxx毫秒以内，99.99%的调用在xxx毫秒以内”
+// SingleShotTime: 以上模式都是默认一次iteration是1s，唯有SingleShotTime是只运行一次。往往同时把Warmup次数设为0，用于测试冷启动时的性能。
 // All(“all”, “All benchmark modes”);
 @BenchmarkMode(Mode.All)
 //预热轮数

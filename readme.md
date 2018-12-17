@@ -1,6 +1,6 @@
 # Mini-Platform轻量级微服务治理平台
 
-- Mini-Platform致力于打造更简洁易用的轻量级微服务治理平台，更易于使用与运维；
+- Mini-Platform致力于打造更简洁易用的轻量级微服务治理平台，更易于实施与运维；
 - 核心技术：SpringBoot、Spring Cloud、Apollo、OAuth2（自研）、MyBatis、Redis、MySQL；
 - 核心功能：服务注册与发现、服务网关、负载均衡、统一认证、配置中心、异常处理等；
 
@@ -25,7 +25,7 @@
 - 为了更简单易用，OAuth Server采用自研实现。
 - GrantType支持password、client_credentials、refresh_token。
 - Token支持延迟吊销、滑动过期和绝对过期。
-- 用户名密码验证支持直连数据库验证和调用远程服务验证。
+- 用户名密码验证支持直连用户中心数据库验证和调用远程服务验证两种方式。
 - 密码模式授权，用于客户端与服务器之间的授权，流程如下：
 ![oauth-password-flow](https://raw.githubusercontent.com/hiling/mini-platform/master/.files/oauth-password-flow.png "密码模式授权流程")
 注：图例为三次请求，1.1-1.3为首次认证；2.1-2.5为通过Access Token访问后端资源；3.1-3.3为使用Refresh Token获取新的Access Token，可用于Access Token过期前刷新Token；
@@ -49,7 +49,7 @@
 
 ---
 ## Gateway - Other  
-- Gateway中的Log、Metrics、Trace、Monitor、Security、Canary等模块。
+- Gateway中的Log、Metrics、Trace、Alert、Security、Canary等模块。
 - 待实现
 
 ---

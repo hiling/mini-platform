@@ -20,8 +20,7 @@ CREATE TABLE `oauth_client` (
 	PRIMARY KEY (`client_id`)
 )
 COLLATE='utf8_bin'
-ENGINE=InnoDB
-;
+ENGINE=InnoDB;
 
 CREATE TABLE `oauth_access_token` (
 	`id` BIGINT(20) NOT NULL AUTO_INCREMENT,
@@ -31,15 +30,13 @@ CREATE TABLE `oauth_access_token` (
 	`jwt_token` VARCHAR(500) NOT NULL DEFAULT '' COLLATE 'utf8_bin',
 	`refresh_token` VARCHAR(32) NOT NULL DEFAULT '' COLLATE 'utf8_bin',
 	`expires_in` INT(11) NOT NULL DEFAULT '0',
-	`create_time` DATETIME(3) NOT NULL DEFAULT '',
+	`create_time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (`id`),
 	INDEX `ix_client_id` (`client_id`),
 	INDEX `ix_access_token` (`access_token`)
 )
 COLLATE='utf8_bin'
-ENGINE=InnoDB
-AUTO_INCREMENT=43
-;
+ENGINE=InnoDB;
 
 CREATE TABLE `oauth_refresh_token` (
 	`id` BIGINT(20) NOT NULL AUTO_INCREMENT,
@@ -47,12 +44,10 @@ CREATE TABLE `oauth_refresh_token` (
 	`user_id` VARCHAR(16) NOT NULL COLLATE 'utf8_bin',
 	`refresh_token` CHAR(32) NOT NULL COLLATE 'utf8_bin',
 	`expires_in` INT(11) NOT NULL DEFAULT '0',
-	`create_time` DATETIME(3) NOT NULL DEFAULT '',
-	`last_used_time` DATETIME(3) NOT NULL DEFAULT '',
+	`create_time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+	`last_used_time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 	PRIMARY KEY (`id`),
 	INDEX `ix_refresh_token` (`refresh_token`)
 )
 COLLATE='utf8_bin'
-ENGINE=InnoDB
-AUTO_INCREMENT=36
-;
+ENGINE=InnoDB;
