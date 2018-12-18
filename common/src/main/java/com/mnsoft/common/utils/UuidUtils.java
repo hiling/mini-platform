@@ -1,6 +1,5 @@
 package com.mnsoft.common.utils;
 
-import org.apache.commons.lang.RandomStringUtils;
 import java.util.UUID;
 
 /**
