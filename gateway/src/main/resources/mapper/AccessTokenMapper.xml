@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.mnsoft.gateway.modules.oauth.mapper.AccessTokenMapper">
+<mapper namespace="com.github.hiling.gateway.modules.oauth.mapper.AccessTokenMapper">
 
     <select id="getRefreshToken" resultType="String">
         select refresh_token as refreshToken
@@ -20,7 +20,7 @@
         </foreach>
     </select>
 
-    <insert id="insert" parameterType="com.mnsoft.gateway.modules.oauth.model.AccessToken" keyProperty="id">
+    <insert id="insert" parameterType="com.github.hiling.gateway.modules.oauth.model.AccessToken" keyProperty="id">
         insert into oauth_access_token
         (
            `client_id`,

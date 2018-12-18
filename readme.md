@@ -56,7 +56,7 @@
 ## OAuth-Client
 - 使用OAuth的客户端使用；
 - 客户端引用后，只需要继承BaseController便可方便的获取用户信息；
-- 参考示例：[UserController.java](https://github.com/hiling/mini-platform/blob/master/modules/user/src/main/java/com/mnsoft/user/controller/UserController.java)
+- 参考示例：[UserController.java](https://github.com/hiling/mini-platform/blob/master/modules/user/src/main/java/com/github/hiling/user/controller/UserController.java)
 
 ---
 ## 项目中使用的其他技术介绍
@@ -87,7 +87,7 @@
   - 中文介绍：https://www.xncoding.com/2018/01/07/java/jmh.html
   - 项目中OAuth基准测试代码
   ![create_token_test](https://raw.githubusercontent.com/hiling/mini-platform/master/.files/create_token_test.png "基准测试代码")
-  注：测试代码：[UserApplicationTests.java](https://github.com/hiling/mini-platform/blob/master/modules/user/src/test/java/com/mnsoft/user/UserApplicationTests.java)
+  注：测试代码：[UserApplicationTests.java](https://github.com/hiling/mini-platform/blob/master/modules/user/src/test/java/com/github/hiling/user/UserApplicationTests.java)
   - 测试结果
   ![create_token_test_result](https://raw.githubusercontent.com/hiling/mini-platform/master/.files/create_token_test_result.png "基准测试结果")
   注：在开发环境测试，电脑配置2C(i5-6300U)/8G/SSD，本机MySQL，使用相关参数，未考虑DB缓存等影响。
