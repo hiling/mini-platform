@@ -16,11 +16,16 @@ public class BaseController {
     private HttpServletRequest request;
 
     public Boolean isLogin() {
-        return getUserId() != null;
+        return getClientId() != null;
     }
 
-    public String getUserId() {
-        return getByClaimsKey(JwtUtils.USER_ID_KEY);
+    public Long getUserId() {
+        String userId = getByClaimsKey(JwtUtils.USER_ID_KEY);
+        return userId == null ? 0 : Long.parseLong(userId);
+    }
+
+    public String getUserName() {
+        return getByClaimsKey(JwtUtils.USER_NAME_KEY);
     }
 
     public String getClientId() {
@@ -37,7 +42,10 @@ public class BaseController {
         Map<String, Object> claims = JwtUtils.parserJavaWebToken(jwtToken);
         if (claims != null) {
             UserInfo userInfo = new UserInfo();
-            userInfo.setUserId(claims.get(JwtUtils.USER_ID_KEY).toString());
+            Object userId = claims.get(JwtUtils.USER_ID_KEY);
+            Object userName = claims.get(JwtUtils.USER_NAME_KEY);
+            userInfo.setUserId(userId == null ? 0 : Long.parseLong(userId.toString()));
+            userInfo.setUserName(userName == null ? "" : userName.toString());
             userInfo.setClientId(claims.get(JwtUtils.CLIENT_ID_KEY).toString());
             userInfo.setScopeList(stringToList(claims.get(JwtUtils.SCOPE_KEY).toString()));
             return userInfo;
@@ -49,7 +57,8 @@ public class BaseController {
         String jwtToken = request.getHeader("jwtToken");
         Map<String, Object> claims = JwtUtils.parserJavaWebToken(jwtToken);
         if (claims != null) {
-            return claims.get(key).toString();
+            Object value = claims.get(key);
+            return value == null ? null : value.toString();
         }
         return null;
     }

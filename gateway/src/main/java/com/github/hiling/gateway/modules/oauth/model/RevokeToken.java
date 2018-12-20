@@ -14,6 +14,6 @@ import java.time.LocalDateTime;
 @Builder
 public class RevokeToken {
     String clientId;
-    String userId;
+    Long userId;
     LocalDateTime time;
 }

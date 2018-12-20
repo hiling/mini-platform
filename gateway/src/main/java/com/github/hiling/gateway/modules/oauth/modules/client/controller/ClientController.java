@@ -32,7 +32,7 @@ public class ClientController extends BaseController {
     @PostMapping()
     public ResponseEntity<Boolean> insert(Client client) {
         UserInfo userInfo = getUserInfo();
-        int newSecret = clientService.insert(client, userInfo.getUserId(), userInfo.getScopeList());
+        int newSecret = clientService.insert(client, userInfo.getUserName(), userInfo.getScopeList());
         if (newSecret == 0) {
             throw new BusinessException(ErrorMessage.UNKNOWN_ERROR);
             //return ResponseEntity.badRequest().build();
@@ -43,7 +43,7 @@ public class ClientController extends BaseController {
     @PutMapping("/secret")
     public ResponseEntity<String> refreshSecret(String clientId, String currentSecret) {
         UserInfo userInfo = getUserInfo();
-        String newSecret = clientService.refreshSecret(clientId, currentSecret, userInfo.getUserId(), userInfo.getScopeList());
+        String newSecret = clientService.refreshSecret(clientId, currentSecret, userInfo.getUserName(), userInfo.getScopeList());
         if (newSecret == null) {
             throw new BusinessException(ErrorMessage.CLIENT_REFRESH_SECRET_ERROR);
             //return ResponseEntity.badRequest().build();
@@ -54,7 +54,7 @@ public class ClientController extends BaseController {
     @PutMapping("/status")
     public ResponseEntity<Boolean> updateStatus(String clientId, Integer status) {
         UserInfo userInfo = getUserInfo();
-        Integer result = clientService.updateStatus(clientId, status, userInfo.getUserId(), userInfo.getScopeList());
+        Integer result = clientService.updateStatus(clientId, status, userInfo.getUserName(), userInfo.getScopeList());
         if (result == 0) {
             throw new BusinessException(ErrorMessage.CLIENT_REFRESH_SECRET_ERROR);
             //return ResponseEntity.badRequest().build();

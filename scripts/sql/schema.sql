@@ -25,7 +25,7 @@ ENGINE=InnoDB;
 CREATE TABLE `oauth_access_token` (
 	`id` BIGINT(20) NOT NULL AUTO_INCREMENT,
 	`client_id` VARCHAR(16) NOT NULL COLLATE 'utf8_bin',
-	`user_id` VARCHAR(16) NOT NULL DEFAULT '' COLLATE 'utf8_bin',
+	`user_id` BIGINT(20) NOT NULL,
 	`access_token` CHAR(32) NOT NULL COLLATE 'utf8_bin',
 	`jwt_token` VARCHAR(500) NOT NULL DEFAULT '' COLLATE 'utf8_bin',
 	`refresh_token` VARCHAR(32) NOT NULL DEFAULT '' COLLATE 'utf8_bin',
@@ -41,7 +41,7 @@ ENGINE=InnoDB;
 CREATE TABLE `oauth_refresh_token` (
 	`id` BIGINT(20) NOT NULL AUTO_INCREMENT,
 	`client_id` VARCHAR(16) NOT NULL COLLATE 'utf8_bin',
-	`user_id` VARCHAR(16) NOT NULL COLLATE 'utf8_bin',
+	`user_id` BIGINT(20) NOT NULL,
 	`refresh_token` CHAR(32) NOT NULL COLLATE 'utf8_bin',
 	`expires_in` INT(11) NOT NULL DEFAULT '0',
 	`create_time` DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

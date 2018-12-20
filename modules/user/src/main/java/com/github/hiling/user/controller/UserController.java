@@ -35,7 +35,7 @@ public class UserController extends BaseController {
 
         //OAuth Client示例
         Boolean isLogin = isLogin();
-        String loginUserId = getUserId();
+        Long loginUserId = getUserId();
         UserInfo userInfo = getUserInfo();
 
         //高可用测试
@@ -45,6 +45,7 @@ public class UserController extends BaseController {
                 + " Timeout: " + value + System.getProperty("line.separator", "\n")
                 + " is login: " + isLogin + System.getProperty("line.separator", "\n")
                 + " userId: " + loginUserId + System.getProperty("line.separator", "\n")
+                + " userName: " + userInfo.getUserName() + System.getProperty("line.separator", "\n")
                 + " clientId: " + userInfo.getClientId() + System.getProperty("line.separator", "\n");
     }
 

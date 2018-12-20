@@ -27,7 +27,7 @@ public class AccessToken {
     private String clientId;
 
     @JsonIgnore
-    private String userId;
+    private Long userId;
 
     private String accessToken;
 

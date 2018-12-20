@@ -15,7 +15,6 @@ import com.github.hiling.gateway.modules.oauth.task.AccessTokenRevokeThread;
 import com.github.hiling.gateway.modules.oauth.task.RefreshTokenRevokeThread;
 import com.github.hiling.common.utils.DateTimeUtils;
 import com.github.hiling.oauth.JwtUtils;
-import com.github.hiling.gateway.modules.oauth.model.*;
 import com.github.hiling.gateway.modules.oauth.service.AccessTokenService;
 import com.github.hiling.common.exception.BusinessException;
 import com.github.hiling.common.utils.UuidUtils;
@@ -88,7 +87,8 @@ public class AccessTokenServiceImpl implements AccessTokenService {
         return null;
     }
 
-    public AccessToken createAccessToken(String accessIp, String clientId, String clientSecret, String grantType, String username, String password, String refreshToken) {
+    public AccessToken createAccessToken(String accessIp, String clientId, String clientSecret, String grantType,
+                                         String userName, String password, String refreshToken) {
 
         GrantType type = GrantType.typeOf(grantType);
 
@@ -107,6 +107,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
         }
 
         AccessToken token = new AccessToken();
+        Long userId;
         LocalDateTime now = LocalDateTime.now();
 
         if (type == GrantType.PASSWORD) {
@@ -116,18 +117,18 @@ public class AccessTokenServiceImpl implements AccessTokenService {
             }
 
             //password模式，需要验证用户名密码
-            Account account = accountService.login(username, password);
+            Account account = accountService.login(userName, password);
             if (account == null) {
                 throw new BusinessException(ErrorMessage.TOKEN_USER_ERROR);
             }
+            userId = account.getUserId();
             refreshToken = UuidUtils.getUUID();
         } else if (type == GrantType.CLIENT_CREDENTIALS) {
-            //客户端模式时，不需要userId
-            username = "";
-
             if (!StringUtils.equals(client.getClientSecret(), clientSecret)) {
                 throw new BusinessException(ErrorMessage.TOKEN_CLIENT_ERROR);
             }
+            //客户端模式时，不需要userId
+            userId = 0L;
             refreshToken = UuidUtils.getUUID();
         } else if (type == GrantType.REFRESH_TOKEN) {
 
@@ -163,7 +164,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
             //使用refresh token模式时，需更新oauth_refresh_token表中的last_used_time字段
             refreshTokenMapper.updateLastUsedTimeById(refreshTokenFromDB.getId(), now);
 
-            username = refreshTokenFromDB.getUserId();
+            userId = refreshTokenFromDB.getUserId();
 
         } else {
             throw new BusinessException(ErrorMessage.TOKEN_GRANT_TYPE_NOT_SUPPORTED);
@@ -173,13 +174,13 @@ public class AccessTokenServiceImpl implements AccessTokenService {
         String accessToken = UuidUtils.getUUID();
 
         //生成jwtToken
-        String jwtToken = JwtUtils.createJavaWebToken(
-                username, clientId, client.getScope(),
+        String jwtToken = JwtUtils.createJavaWebToken(userId,
+                userName, clientId, client.getScope(),
                 DateTimeUtils.localDateTimeToDate(now.plusSeconds(accessTokenExpiration)),
                 DateTimeUtils.localDateTimeToDate(now));
 
         token.setClientId(clientId);
-        token.setUserId(username);
+        token.setUserId(userId);
         token.setAccessToken(accessToken);
         token.setJwtToken(jwtToken);
         token.setRefreshToken(refreshToken);
@@ -201,14 +202,14 @@ public class AccessTokenServiceImpl implements AccessTokenService {
                                 .setLastUsedTime(now));
 
                 //添加该授权信息插入到过期队列，有清除线程清除当前时间前的授权信息
-                RefreshTokenRevokeThread.addRefreshTokenToRevokeQueue(clientId, username, now);
+                RefreshTokenRevokeThread.addRefreshTokenToRevokeQueue(clientId, userId, now);
             }
 
             //缓存到Redis oat=OAuth2 Access Token / ort=OAuth2 Refresh Token
             stringRedisTemplate.opsForValue().set(RedisNamespaces.ACCESS_TOKEN + accessToken, jwtToken, accessTokenExpiration, TimeUnit.SECONDS);
 
             //添加该授权信息插入到过期队列，有清除线程清除当前时间前的授权信息
-            AccessTokenRevokeThread.addAccessTokenToRevokeQueue(clientId, username, now);
+            AccessTokenRevokeThread.addAccessTokenToRevokeQueue(clientId, userId, now);
 
             return token;
         }

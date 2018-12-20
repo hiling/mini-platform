@@ -61,7 +61,7 @@ public class AccessTokenRevokeThread extends TokenRevokeThread {
         this.maxRemoveCount = accessTokenMaxRemoveCount;
     }
 
-    public static boolean addAccessTokenToRevokeQueue(String clientId, String userId, LocalDateTime time) {
+    public static boolean addAccessTokenToRevokeQueue(String clientId, Long userId, LocalDateTime time) {
         log.debug("addAccessTokenToRevokeQueue({}, {},{})", clientId, userId, time);
         return revokeAccessTokenQueue.offer(RevokeToken.builder().clientId(clientId).userId(userId).time(time).build());
     }

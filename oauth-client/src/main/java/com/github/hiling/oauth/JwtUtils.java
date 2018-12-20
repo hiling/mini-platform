@@ -22,10 +22,17 @@ public class JwtUtils {
      */
     public static final String USER_ID_KEY = "sub";
 
+
     /**
      * 客户端编号：aud = Audience 接受JWT的一方
      */
     public static final String CLIENT_ID_KEY = "aud";
+
+    /**
+     * 用户名称, 自定义属性
+     */
+    public static final String USER_NAME_KEY = "unm";
+
 
     /**
      * 授权范围，自定义属性
@@ -45,17 +52,18 @@ public class JwtUtils {
     /**
      * 使用HS256签名算法和生成的signingKey最终的Token,claims中是有效载荷
      *
-     * @param userId     = sub JWT面向的用户 (User)
+     * @param userName     = sub JWT面向的用户 (User)
      * @param clientId   = aud 接受JWT的一方 （Client）
      * @param expiration = exp  过期时间
      * @param issuedAt   = iat  签发时间
      * @return
      */
-    public static String createJavaWebToken(String userId, String clientId, String scope,
+    public static String createJavaWebToken(Long userId, String userName, String clientId, String scope,
                                             Date expiration, Date issuedAt) {
 
         Claims claims = Jwts.claims();
         claims.put(USER_ID_KEY, userId);
+        claims.put(USER_NAME_KEY, userName);
         claims.put(CLIENT_ID_KEY, clientId);
         claims.put(SCOPE_KEY, scope);
 

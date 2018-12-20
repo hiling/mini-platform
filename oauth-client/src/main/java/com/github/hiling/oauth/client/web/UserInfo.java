@@ -6,16 +6,25 @@ import java.util.List;
  * Author by hiling, Email admin@mn-soft.com, Date on 12/14/2018.
  */
 public class UserInfo {
-    String userId;
+    Long userId;
+    String userName;
     String clientId;
     List<String> scopeList;
 
-    public String getUserId(){
+    public Long getUserId(){
         return userId;
     }
 
-    public void setUserId(String userId){
+    public void setUserId(Long userId){
         this.userId = userId;
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
     }
 
     public String getClientId(){

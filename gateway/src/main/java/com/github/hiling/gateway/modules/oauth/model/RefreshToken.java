@@ -16,7 +16,7 @@ public class RefreshToken {
 
     private String clientId;
 
-    private String userId;
+    private Long userId;
 
     private String refreshToken;
 
