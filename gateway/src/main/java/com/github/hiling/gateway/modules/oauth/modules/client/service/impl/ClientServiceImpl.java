@@ -25,7 +25,7 @@ public class ClientServiceImpl implements ClientService {
     @Autowired
     AccessTokenService accessTokenService;
 
-    @Value("${oauth.scope.client:oauth-client}")
+    @Value("${oauth.client.allow.scope:oauth-client}")
     String allowClient;
 
     public List<Client> getList(String clientId, String clientName, String clientSecret, Integer status, List<String> scope){

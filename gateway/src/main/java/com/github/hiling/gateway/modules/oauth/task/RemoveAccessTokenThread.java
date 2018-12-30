@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Author by hiling, Email admin@mn-soft.com, Date on 10/16/2018.
  */
 @Slf4j
-public class AccessTokenRevokeThread extends TokenRevokeThread {
+public class RemoveAccessTokenThread extends RemoveTokenThread {
 
     /**
      * 每执行一次清除过期Token后sleep的时间（秒），默认1秒
@@ -43,17 +43,17 @@ public class AccessTokenRevokeThread extends TokenRevokeThread {
      * 过期的Access Token队列（先进先出）
      * size()要遍历整个集合，很慢，避免使用
      */
-    private static ConcurrentLinkedQueue<RevokeToken> revokeAccessTokenQueue = new ConcurrentLinkedQueue<>();
+    private static ConcurrentLinkedQueue<RevokeToken> accessTokenQueue = new ConcurrentLinkedQueue<>();
 
     /**
      * 过期的Access Token队列（先进先出）
      * size()要遍历整个集合，很慢，避免使用
      */
     //private static ConcurrentLinkedQueue<RevokeToken> revokeTokens;
-    public AccessTokenRevokeThread(AccessTokenService accessTokenService,
+    public RemoveAccessTokenThread(AccessTokenService accessTokenService,
                                    StringRedisTemplate stringRedisTemplate) {
-        setName("AccessTokenRevokeThread");
-        this.revokeTokens = revokeAccessTokenQueue;
+        setName("RemoveAccessTokenThread");
+        this.revokeTokens = accessTokenQueue;
         this.accessTokenService = accessTokenService;
         this.stringRedisTemplate = stringRedisTemplate;
         this.loopWait = accessTokenLoopWait;
@@ -63,7 +63,7 @@ public class AccessTokenRevokeThread extends TokenRevokeThread {
 
     public static boolean addAccessTokenToRevokeQueue(String clientId, Long userId, LocalDateTime time) {
         log.debug("addAccessTokenToRevokeQueue({}, {},{})", clientId, userId, time);
-        return revokeAccessTokenQueue.offer(RevokeToken.builder().clientId(clientId).userId(userId).time(time).build());
+        return accessTokenQueue.offer(RevokeToken.builder().clientId(clientId).userId(userId).time(time).build());
     }
 
     @Override

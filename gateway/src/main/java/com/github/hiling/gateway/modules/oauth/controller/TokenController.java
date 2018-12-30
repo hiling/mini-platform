@@ -79,7 +79,7 @@ public class TokenController {
                 String authDecode = new String(Base64Utils.decodeFromString(authorization.substring(6)));
                 String[] accounts = authDecode.split(":");
                 clientId = accounts[0];
-                //Pasword模式时，clientSecret是可选的。
+                //Password模式时，clientId必填，clientSecret是可选的。
                 if (accounts.length > 1) {
                     clientSecret = accounts[1];
                 }

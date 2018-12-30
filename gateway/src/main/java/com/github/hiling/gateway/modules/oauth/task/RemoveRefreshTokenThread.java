@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Author by hiling, Email admin@mn-soft.com, Date on 10/16/2018.
  */
 @Slf4j
-public class RefreshTokenRevokeThread extends TokenRevokeThread {
+public class RemoveRefreshTokenThread extends RemoveTokenThread {
 
     /**
      * 每执行一次后sleep的时间（秒），默认1秒
@@ -40,11 +40,11 @@ public class RefreshTokenRevokeThread extends TokenRevokeThread {
     /**
      * 过期的Refresh Token队列
      */
-    private static ConcurrentLinkedQueue<RevokeToken> revokeRefreshTokenQueue = new ConcurrentLinkedQueue<>();
+    private static ConcurrentLinkedQueue<RevokeToken> refreshTokenQueue = new ConcurrentLinkedQueue<>();
 
-    public RefreshTokenRevokeThread(RefreshTokenService refreshTokenService) {
-        super.setName("RefreshTokenRevokeThread");
-        this.revokeTokens = revokeRefreshTokenQueue;
+    public RemoveRefreshTokenThread(RefreshTokenService refreshTokenService) {
+        super.setName("RemoveRefreshTokenThread");
+        this.revokeTokens = refreshTokenQueue;
         this.refreshTokenService = refreshTokenService;
         this.loopWait = refreshTokenLoopWait;
         this.reserveTime = refreshTokenReserveTime;
@@ -53,7 +53,7 @@ public class RefreshTokenRevokeThread extends TokenRevokeThread {
 
     public static boolean addRefreshTokenToRevokeQueue(String clientId, Long userId, LocalDateTime time) {
         log.debug("addRefreshTokenToRevokeQueue({}, {},{})",clientId,userId,time);
-        return revokeRefreshTokenQueue.offer(RevokeToken.builder().clientId(clientId).userId(userId).time(time).build());
+        return refreshTokenQueue.offer(RevokeToken.builder().clientId(clientId).userId(userId).time(time).build());
     }
 
     @Override

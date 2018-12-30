@@ -11,8 +11,8 @@ import com.github.hiling.gateway.modules.oauth.model.RefreshToken;
 import com.github.hiling.gateway.modules.oauth.model.RevokeToken;
 import com.github.hiling.gateway.modules.oauth.modules.client.mapper.ClientMapper;
 import com.github.hiling.gateway.modules.oauth.modules.client.model.Client;
-import com.github.hiling.gateway.modules.oauth.task.AccessTokenRevokeThread;
-import com.github.hiling.gateway.modules.oauth.task.RefreshTokenRevokeThread;
+import com.github.hiling.gateway.modules.oauth.task.RemoveAccessTokenThread;
+import com.github.hiling.gateway.modules.oauth.task.RemoveRefreshTokenThread;
 import com.github.hiling.common.utils.DateTimeUtils;
 import com.github.hiling.oauth.JwtUtils;
 import com.github.hiling.gateway.modules.oauth.service.AccessTokenService;
@@ -202,14 +202,14 @@ public class AccessTokenServiceImpl implements AccessTokenService {
                                 .setLastUsedTime(now));
 
                 //添加该授权信息插入到过期队列，有清除线程清除当前时间前的授权信息
-                RefreshTokenRevokeThread.addRefreshTokenToRevokeQueue(clientId, userId, now);
+                RemoveRefreshTokenThread.addRefreshTokenToRevokeQueue(clientId, userId, now);
             }
 
             //缓存到Redis oat=OAuth2 Access Token / ort=OAuth2 Refresh Token
             stringRedisTemplate.opsForValue().set(RedisNamespaces.ACCESS_TOKEN + accessToken, jwtToken, accessTokenExpiration, TimeUnit.SECONDS);
 
             //添加该授权信息插入到过期队列，有清除线程清除当前时间前的授权信息
-            AccessTokenRevokeThread.addAccessTokenToRevokeQueue(clientId, userId, now);
+            RemoveAccessTokenThread.addAccessTokenToRevokeQueue(clientId, userId, now);
 
             return token;
         }

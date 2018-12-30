@@ -2,6 +2,7 @@ package com.github.hiling.gateway.filter;
 
 import com.github.hiling.common.exception.BusinessException;
 import com.github.hiling.common.exception.ExceptionResult;
+import com.github.hiling.common.utils.StringUtils;
 import com.github.hiling.common.utils.json.JsonUtils;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
@@ -129,6 +130,6 @@ public class ErrorFilter extends ZuulFilter {
 
     private String getUri(HttpServletRequest request) {
         String queryString = request.getQueryString();
-        return request.getMethod() + ":" + request.getRequestURI() + (queryString.isEmpty() ? "" : ("?" + queryString));
+        return request.getMethod() + ":" + request.getRequestURI() + (StringUtils.isEmpty(queryString) ? "" : ("?" + queryString));
     }
 }

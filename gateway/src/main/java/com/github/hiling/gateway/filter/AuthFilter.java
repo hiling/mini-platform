@@ -44,6 +44,12 @@ public class AuthFilter extends ZuulFilter {
         HttpServletRequest request = ctx.getRequest();
 
         String uri = request.getRequestURI();
+
+        //忽略不需要授权的连接
+//        if (uri.startsWith("/url/")){
+//            return null;
+//        }
+
         String method = request.getMethod();
 
         log.debug("------------------->pre Request:{}:{}",method, uri);

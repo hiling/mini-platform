@@ -24,13 +24,13 @@ public class AccountServiceImpl implements AccountService {
     /**
      * 用户登陆类型，支持sql和url
      */
-    @Value("${user.login.type:sql}")
+    @Value("${oauth.user.login.type:sql}")
     String loginType;
 
     /**
      * 用户登陆的服务地址
      */
-    @Value("${user.login.url}")
+    @Value("${oauth.user.login.url}")
     String loginUrl;
 
     public Account login(String username, String password) {
@@ -46,7 +46,8 @@ public class AccountServiceImpl implements AccountService {
                 throw new BusinessException(ErrorMessage.USER_LOGIN_URL_EMPTY);
             }
 
-            String url = StringUtils.replaceOnceIgnoreCase(StringUtils.replaceOnceIgnoreCase(loginUrl, "{username}", username), "{password}", password);
+            String url = StringUtils.replaceOnceIgnoreCase(
+                    StringUtils.replaceOnceIgnoreCase(loginUrl, "{username}", username), "{password}", password);
 
             ResponseEntity<Account> account = restTemplate.getForEntity(url, Account.class);
             return account.getBody();
