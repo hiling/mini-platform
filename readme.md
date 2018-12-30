@@ -99,6 +99,4 @@
   - https://docs.spring.io/spring-boot/docs/current/maven-plugin/
   - http://maven.apache.org/components/plugins/maven-dependency-plugin/
 
-#### 欢迎Star和Fork，微信号：HilingWang，欢迎扫码交流！
-  ![wechat-qrcode](https://raw.githubusercontent.com/hiling/mini-platform/master/.files/wechat-qrcode.jpg "微信二维码")
- 
+#### 欢迎Star和Fork，微信号：HilingWang，欢迎交流！
