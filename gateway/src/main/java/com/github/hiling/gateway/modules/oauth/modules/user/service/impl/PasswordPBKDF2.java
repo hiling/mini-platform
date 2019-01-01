@@ -1,8 +1,9 @@
 package com.github.hiling.gateway.modules.oauth.modules.user.service.impl;
 
+import com.ctrip.framework.apollo.Config;
+import com.ctrip.framework.apollo.ConfigService;
 import com.github.hiling.common.utils.StringUtils;
 import com.github.hiling.gateway.modules.oauth.modules.user.service.PasswordHash;
-import org.springframework.beans.factory.annotation.Value;
 
 import javax.crypto.SecretKeyFactory;
 import javax.crypto.spec.PBEKeySpec;
@@ -19,24 +20,28 @@ import java.security.spec.KeySpec;
  */
 public class PasswordPBKDF2 implements PasswordHash {
 
+    protected PasswordPBKDF2() {
+        Config config = ConfigService.getAppConfig();
+        this.algorithm = config.getProperty("oauth.user.password.pbkdf2.algorithm", "PBKDF2WithHmacSHA1");
+        this.keyLength = config.getIntProperty("oauth.user.password.pbkdf2.keyLength", 128);
+        this.iterationCount = config.getIntProperty("oauth.user.password.pbkdf2.iterationCount", 1024);
+    }
+
     /**
      * 秘密密钥算法
      * 支持类型：AES、ARCFOUR、DES、DESede、PBEWith<digest>And<encryption>、PBEWith<prf>And<encryption>、PBKDF2With<prf>
      * 参考文档：https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#SecretKeyFactory
      */
-    @Value("${oauth.user.password.pbkdf2.algorithm:PBKDF2WithHmacSHA1}")
     String algorithm;
 
     /**
      * 导出的密钥长度
      */
-    @Value("${oauth.user.password.pbkdf2.keyLength:128}")
     int keyLength;
 
     /**
      * 迭代次数
      */
-    @Value("${oauth.user.password.pbkdf2.iterationCount:1024}")
     int iterationCount;
 
     public boolean validate(String password, String salt, String hashPassword) {
