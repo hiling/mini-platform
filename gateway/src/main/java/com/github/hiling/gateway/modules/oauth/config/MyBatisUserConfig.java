@@ -7,6 +7,7 @@ import org.mybatis.spring.mapper.MapperScannerConfigurer;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.jdbc.DataSourceBuilder;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
@@ -21,6 +22,7 @@ import javax.sql.DataSource;
 @MapperScan(basePackages =  "com.github.hiling.gateway.modules.oauth.modules.user.mapper", sqlSessionFactoryRef = "sqlSessionFactoryBeanForUser")
 public class MyBatisUserConfig {
 
+    @RefreshScope
     @Bean(name = "dataSourceUser")
     @ConfigurationProperties(prefix = "spring.datasource.user")
     public DataSource dataSourceUser() {

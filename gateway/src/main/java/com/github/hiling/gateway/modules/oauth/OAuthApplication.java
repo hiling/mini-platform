@@ -9,7 +9,7 @@ import org.springframework.web.client.RestTemplate;
  * Author by hiling, Email admin@mn-soft.com, Date on 12/16/2018.
  */
 @Component
-@PropertySource(value = "classpath:config/oauth.properties")
+@PropertySource(value = "classpath:oauth.properties")
 public class OAuthApplication {
     @Bean
     RestTemplate restTemplate() {

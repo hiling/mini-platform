@@ -8,10 +8,12 @@ import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
 import org.springframework.stereotype.Component;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 /**
  * Author by hiling, Email admin@mn-soft.com, Date on 10/15/2018.
@@ -38,6 +40,9 @@ public class AuthFilter extends ZuulFilter {
         return true;
     }
 
+    @Value("#{'${oauth.ignore.path}'.split(',')}")
+    private List<String> ignoreServiceId;
+
     @Override
     public Object run() {
         RequestContext ctx = RequestContext.getCurrentContext();
@@ -46,9 +51,9 @@ public class AuthFilter extends ZuulFilter {
         String uri = request.getRequestURI();
 
         //忽略不需要授权的连接
-//        if (uri.startsWith("/url/")){
-//            return null;
-//        }
+        if (ignoreServiceId.contains(uri.split("/")[1])){
+            return null;
+        }
 
         String method = request.getMethod();
 

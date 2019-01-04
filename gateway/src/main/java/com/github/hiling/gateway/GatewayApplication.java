@@ -11,7 +11,6 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableApolloConfig
-//@EnableAutoConfiguration
 @EnableZuulProxy
 @EnableEurekaClient
 @EnableDiscoveryClient
