@@ -3,7 +3,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>gateway</artifactId>
+    <artifactId>mini-platform-gateway</artifactId>
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
@@ -20,12 +20,12 @@
     <dependencies>
         <dependency>
             <groupId>com.github.hiling</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>mini-platform-common</artifactId>
             <version>${common.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.hiling</groupId>
-            <artifactId>oauth-client</artifactId>
+            <artifactId>mini-platform-oauth-client</artifactId>
             <version>${oauth-client.version}</version>
         </dependency>
         <dependency>

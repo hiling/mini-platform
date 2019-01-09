@@ -45,9 +45,12 @@ public class RemoteUriRedirectFilter extends ZuulFilter {
     public Object run() {
         try {
             RequestContext ctx = RequestContext.getCurrentContext();
+
             //url格式必须为 /link/key
             String mapKey = ctx.getRequest().getRequestURI().split("/")[2].toLowerCase();
+            log.debug("Local URI:{}",mapKey);
             String path = redirect.get(mapKey);
+            log.debug("Remote URI:{}",path);
             if (StringUtils.isNoneEmpty(path)) {
                 ctx.getResponse().sendRedirect(path);
             }

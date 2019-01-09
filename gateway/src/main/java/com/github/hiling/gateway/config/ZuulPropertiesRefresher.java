@@ -29,17 +29,18 @@ public class ZuulPropertiesRefresher implements ApplicationContextAware {
 
     @ApolloConfigChangeListener
     public void onChange(ConfigChangeEvent changeEvent) {
-        boolean zuulPropertiesChanged = false;
-        for (String changedKey : changeEvent.changedKeys()) {
-            if (changedKey.startsWith("zuul.") || changedKey.contains(".ribbon.listOfServers")) {
-                zuulPropertiesChanged = true;
-                break;
-            }
-        }
-
-        if (zuulPropertiesChanged) {
-            refreshZuulProperties(changeEvent);
-        }
+        refreshZuulProperties(changeEvent);
+//        boolean zuulPropertiesChanged = false;
+//        for (String changedKey : changeEvent.changedKeys()) {
+//            if (changedKey.startsWith("zuul.")||changedKey.startsWith("link.") || changedKey.contains(".ribbon.listOfServers")) {
+//                zuulPropertiesChanged = true;
+//                break;
+//            }
+//        }
+//
+//        if (zuulPropertiesChanged) {
+//            refreshZuulProperties(changeEvent);
+//        }
     }
 
     private void refreshZuulProperties(ConfigChangeEvent changeEvent) {

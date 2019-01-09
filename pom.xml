@@ -125,7 +125,7 @@
                         </goals>
                         <!--将依赖的jar包输出到lib目录-->
                         <configuration>
-                            <outputDirectory>${project.build.directory}/lib/</outputDirectory>
+                            <outputDirectory>${project.build.directory}/libs/</outputDirectory>
                         </configuration>
                     </execution>
                 </executions>
@@ -136,6 +136,13 @@
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <skipTests>true</skipTests>
                 </configuration>
             </plugin>
         </plugins>

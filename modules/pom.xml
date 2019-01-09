@@ -24,12 +24,12 @@
     <dependencies>
         <dependency>
             <groupId>com.github.hiling</groupId>
-            <artifactId>common</artifactId>
+            <artifactId>mini-platform-common</artifactId>
             <version>${common.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.hiling</groupId>
-            <artifactId>oauth-client</artifactId>
+            <artifactId>mini-platform-oauth-client</artifactId>
             <version>${oauth-client.version}</version>
         </dependency>
         <dependency>
