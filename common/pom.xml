@@ -8,7 +8,7 @@
     <version>0.0.1-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>common</name>
+    <name>MiniPlatform Common</name>
     <description>common</description>
 
     <parent>
@@ -31,23 +31,4 @@
             <scope>provided</scope>
         </dependency>
     </dependencies>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <configuration>
-                    <!--
-                    layout可控制Manifest文件设置的Main-Class，取值如下：
-                    JAR：即通常的可执行jar，Main-Class: org.springframework.boot.loader.JarLauncher
-                    WAR：即通常的可执行war，需要的servlet容器依赖位于WEB-INF/lib-provided，Main-Class: org.springframework.boot.loader.warLauncher
-                    ZIP：即DIR，类似于JAR，Main-Class: org.springframework.boot.loader.PropertiesLauncher
-                    MODULE：将所有的依赖库打包（scope为provided的除外），但是不打包Spring Boot的任何Launcher。
-                    NONE：将所有的依赖库打包，但是不打包Spring Boot的任何Launcher。
-                     -->
-                    <layout>NONE</layout>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
 </project>
