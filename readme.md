@@ -7,7 +7,7 @@
 ---
 ## Discovery
 - 采用Eureka做服务自动注册与发现；
-- 支持Apollo的MetaService，可以让Apollo共享该Eureka:
+- 支持Apollo的MetaService，可以让Apollo共享该Eureka；[配置说明](https://github.com/hiling/mini-platform/blob/master/discovery/readme.md)
 - 可按配置简单的进行高可用部署；
 
 ---
