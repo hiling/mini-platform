@@ -28,11 +28,13 @@ public class ClientServiceImpl implements ClientService {
     @Value("${oauth.client.allow.scope:oauth-client}")
     String allowClient;
 
+    @Override
     public List<Client> getList(String clientId, String clientName, String clientSecret, Integer status, List<String> scope){
         verifyAuthorization(scope);
         return clientMapper.getList(clientId,clientName,clientSecret,status);
     }
 
+    @Override
     public int insert(Client client, String loginUserId, List<String> scope) {
         verifyAuthorization(scope);
 
@@ -48,6 +50,7 @@ public class ClientServiceImpl implements ClientService {
         return clientMapper.insert(client);
     }
 
+    @Override
     public String refreshSecret(String clientId, String currentSecret, String loginUserId, List<String> scope) {
         verifyAuthorization(scope);
         String newSecret = UuidUtils.getUUID();
@@ -58,6 +61,7 @@ public class ClientServiceImpl implements ClientService {
         return null;
     }
 
+    @Override
     public int updateStatus(String clientId, Integer status, String loginUserId, List<String> scope) {
         verifyAuthorization(scope);
         return clientMapper.updateStatus(clientId, status, loginUserId);

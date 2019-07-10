@@ -8,6 +8,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
  */
 public class PasswordBCrypt implements PasswordHash {
 
+    @Override
     public boolean validate(String password, String salt, String hashPassword) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         //加密时使用

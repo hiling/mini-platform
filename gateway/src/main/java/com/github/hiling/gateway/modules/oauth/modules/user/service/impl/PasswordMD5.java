@@ -27,6 +27,7 @@ public class PasswordMD5 implements PasswordHash {
      */
     String algorithm;
 
+    @Override
     public boolean validate(String password, String salt, String hashPassword) {
         try {
 

@@ -16,15 +16,15 @@ import com.fasterxml.jackson.databind.SerializerProvider;
  */
 public class DateTimeSerializer extends JsonSerializer<Date> {
 
-    private static final String pattern = "yyyy-MM-dd HH:mm:ss";
+    private static final String PATTERN = "yyyy-MM-dd HH:mm:ss";
 
     @Override
     public void serialize(Date date, JsonGenerator jgen, SerializerProvider provider) {
         try {
-            DateFormat dateFormat = new SimpleDateFormat(pattern);
+            DateFormat dateFormat = new SimpleDateFormat(PATTERN);
             jgen.writeString(dateFormat.format(date));
         } catch (IOException e) {
-            throw new RuntimeException("Date转换json异常，格式：" + pattern);
+            throw new RuntimeException("Date转换json异常，格式：" + PATTERN);
         }
     }
 }

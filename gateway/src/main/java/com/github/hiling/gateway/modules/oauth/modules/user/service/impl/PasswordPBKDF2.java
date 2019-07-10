@@ -44,6 +44,7 @@ public class PasswordPBKDF2 implements PasswordHash {
      */
     int iterationCount;
 
+    @Override
     public boolean validate(String password, String salt, String hashPassword) {
         String encodedPassword = getPBKDF2(password, salt);
         return StringUtils.equals(hashPassword, encodedPassword);

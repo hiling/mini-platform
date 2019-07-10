@@ -76,6 +76,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
     @Value("${oauth.password.client-secret.required:false}")
     Boolean clientSecretRequiredForPassword;
 
+    @Override
     public String getJwtToken(String accessToken) {
         if (StringUtils.isNotEmpty(accessToken)) {
             String jwtToken = stringRedisTemplate.opsForValue().get(RedisNamespaces.ACCESS_TOKEN + accessToken);
@@ -87,6 +88,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
         return null;
     }
 
+    @Override
     public AccessToken createAccessToken(String accessIp, String clientId, String clientSecret, String grantType,
                                          String userName, String password, String refreshToken) {
 
@@ -216,6 +218,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
         return null;
     }
 
+    @Override
     public boolean deleteToken(String accessToken) {
         //移除缓存
         stringRedisTemplate.delete(RedisNamespaces.ACCESS_TOKEN + accessToken);
@@ -229,6 +232,7 @@ public class AccessTokenServiceImpl implements AccessTokenService {
         return true;
     }
 
+    @Override
     public List<String> getRevokeAccessToken(List<RevokeToken> list) {
         if (list.isEmpty()) {
             return Arrays.asList();
@@ -236,10 +240,12 @@ public class AccessTokenServiceImpl implements AccessTokenService {
         return accessTokenMapper.getRevokeAccessToken(list);
     }
 
+    @Override
     public void deleteExpiredAccessToken() {
         accessTokenMapper.deleteExpiredAccessToken();
     }
 
+    @Override
     public void batchDeleteByAccessToken(List<String> accessTokenList) {
         if (accessTokenList.isEmpty()) {
             return;

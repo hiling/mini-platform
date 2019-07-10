@@ -33,6 +33,7 @@ public class AccountServiceImpl implements AccountService {
     @Value("${oauth.user.login.url}")
     String loginUrl;
 
+    @Override
     public Account login(String username, String password) {
         if (StringUtils.isEmpty(username) || StringUtils.isEmpty(password)) {
             return null;

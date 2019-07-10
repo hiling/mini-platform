@@ -17,6 +17,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     @Resource
     private RefreshTokenMapper refreshTokenMapper;
 
+    @Override
     public List<String> getRevokeRefreshToken(List<RevokeToken> list){
         if (list.isEmpty()){
             return Arrays.asList();
@@ -24,6 +25,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         return refreshTokenMapper.getRevokeRefreshToken(list);
     }
 
+    @Override
    public void batchDeleteByRefreshToken(List<String> refreshTokenList){
         if (refreshTokenList.isEmpty()){
             return;
@@ -31,6 +33,7 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
         refreshTokenMapper.batchDeleteByRefreshToken(refreshTokenList);
     }
 
+    @Override
     public void deleteExpiredRefreshToken(){
         refreshTokenMapper.deleteExpiredRefreshToken();
     }

@@ -15,6 +15,7 @@ import java.util.Map;
 
 /**
  * Author by hiling, Email admin@mn-soft.com, Date on 10/15/2018.
+ * @author hiling
  */
 @Slf4j
 @Getter
@@ -27,7 +28,10 @@ public class RemoteUriRedirectFilter extends ZuulFilter {
         return FilterConstants.ROUTE_TYPE;
     }
 
-    //值来定义过滤器的执行顺序，数值越小优先级越高
+    /**
+     * 值来定义过滤器的执行顺序，数值越小优先级越高
+     * @return
+     */
     @Override
     public int filterOrder() {
         return FilterConstants.SEND_FORWARD_FILTER_ORDER - 1;

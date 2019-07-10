@@ -49,14 +49,17 @@ public enum ErrorMessage implements ExceptionMessage {
         this.message = message;
     }
 
+    @Override
     public int value() {
         return this.value;
     }
 
+    @Override
     public String getMessage() {
         return this.message;
     }
 
+    @Override
     public String toString() {
         return Integer.toString(this.value);
     }
