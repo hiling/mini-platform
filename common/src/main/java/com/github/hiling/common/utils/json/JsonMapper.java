@@ -156,7 +156,7 @@ public class JsonMapper {
     /**
      * 輸出JSONP格式數據.
      */
-    public String toJsonP(String functionName, Object object) {
+    public String toJsonp(String functionName, Object object) {
         return toJson(new JSONPObject(functionName, object));
     }
 

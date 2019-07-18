@@ -16,7 +16,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * Author by hiling, Email admin@mn-soft.com, Date on 10/16/2018.
  */
 @Slf4j
-public class RemoveAccessTokenThread extends RemoveTokenThread {
+public class RemoveAccessTokenThread extends BaseRemoveTokenThread {
 
     /**
      * 每执行一次清除过期Token后sleep的时间（秒），默认1秒

@@ -53,7 +53,7 @@ public class ClientServiceImpl implements ClientService {
     @Override
     public String refreshSecret(String clientId, String currentSecret, String loginUserId, List<String> scope) {
         verifyAuthorization(scope);
-        String newSecret = UuidUtils.getUUID();
+        String newSecret = UuidUtils.getUuid();
         int result = clientMapper.refreshSecret(clientId, currentSecret, newSecret, loginUserId);
         if (result > 0) {
             return newSecret;

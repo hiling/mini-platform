@@ -124,14 +124,14 @@ public class AccessTokenServiceImpl implements AccessTokenService {
                 throw new BusinessException(ErrorMessage.TOKEN_USER_ERROR);
             }
             userId = account.getUserId();
-            refreshToken = UuidUtils.getUUID();
+            refreshToken = UuidUtils.getUuid();
         } else if (type == GrantType.CLIENT_CREDENTIALS) {
             if (!StringUtils.equals(client.getClientSecret(), clientSecret)) {
                 throw new BusinessException(ErrorMessage.TOKEN_CLIENT_ERROR);
             }
             //客户端模式时，不需要userId
             userId = 0L;
-            refreshToken = UuidUtils.getUUID();
+            refreshToken = UuidUtils.getUuid();
         } else if (type == GrantType.REFRESH_TOKEN) {
 
             if (StringUtils.isEmpty(refreshToken)) {
@@ -139,41 +139,41 @@ public class AccessTokenServiceImpl implements AccessTokenService {
             }
 
             //获取该refresh token的信息
-            RefreshToken refreshTokenFromDB = refreshTokenMapper.getByRefreshToken(refreshToken);
+            RefreshToken refreshTokenFromDatabase = refreshTokenMapper.getByRefreshToken(refreshToken);
 
-            if (refreshTokenFromDB == null) {
+            if (refreshTokenFromDatabase == null) {
                 throw new BusinessException(ErrorMessage.TOKEN_REFRESH_TOKEN_ERROR);
             }
 
-            if (!StringUtils.equals(refreshTokenFromDB.getClientId(), clientId)) {
+            if (!StringUtils.equals(refreshTokenFromDatabase.getClientId(), clientId)) {
                 throw new BusinessException(ErrorMessage.TOKEN_REFRESH_CLIENT_ID_NOT_MATCH);
             }
 
             //判断refresh token是否过期
             //绝对过期
             if (refreshTokenAbsoluteExpiration > 0) {
-                if (refreshTokenFromDB.getCreateTime().plusSeconds(refreshTokenAbsoluteExpiration).isBefore(now)) {
+                if (refreshTokenFromDatabase.getCreateTime().plusSeconds(refreshTokenAbsoluteExpiration).isBefore(now)) {
                     throw new BusinessException(ErrorMessage.TOKEN_REFRESH_TOKEN_EXPIRATION);
                 }
             }
 
             //滑动过期
             if (refreshTokenSlidingExpiration > 0) {
-                if (refreshTokenFromDB.getLastUsedTime().plusSeconds(refreshTokenSlidingExpiration).isBefore(now)) {
+                if (refreshTokenFromDatabase.getLastUsedTime().plusSeconds(refreshTokenSlidingExpiration).isBefore(now)) {
                     throw new BusinessException(ErrorMessage.TOKEN_REFRESH_TOKEN_EXPIRATION);
                 }
             }
             //使用refresh token模式时，需更新oauth_refresh_token表中的last_used_time字段
-            refreshTokenMapper.updateLastUsedTimeById(refreshTokenFromDB.getId(), now);
+            refreshTokenMapper.updateLastUsedTimeById(refreshTokenFromDatabase.getId(), now);
 
-            userId = refreshTokenFromDB.getUserId();
+            userId = refreshTokenFromDatabase.getUserId();
 
         } else {
             throw new BusinessException(ErrorMessage.TOKEN_GRANT_TYPE_NOT_SUPPORTED);
         }
 
         //创建Access Token(单机器的UUID的TPS在10万级别，随机数产生依赖与unix的/dev/random文件，因此增加线程不能提高生成效率)
-        String accessToken = UuidUtils.getUUID();
+        String accessToken = UuidUtils.getUuid();
 
         //生成jwtToken
         String jwtToken = JwtUtils.createJavaWebToken(userId,

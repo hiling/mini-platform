@@ -46,11 +46,17 @@ public class PasswordPBKDF2 implements PasswordHash {
 
     @Override
     public boolean validate(String password, String salt, String hashPassword) {
-        String encodedPassword = getPBKDF2(password, salt);
+        String encodedPassword = getPbkdf2(password, salt);
         return StringUtils.equals(hashPassword, encodedPassword);
     }
 
-    private String getPBKDF2(String password, String salt) {
+    /**
+     * PBKDF2
+     * @param password
+     * @param salt
+     * @return
+     */
+    private String getPbkdf2(String password, String salt) {
         try {
             byte[] bytes = DatatypeConverter.parseHexBinary(salt);
             KeySpec spec = new PBEKeySpec(password.toCharArray(), bytes, iterationCount, keyLength);
