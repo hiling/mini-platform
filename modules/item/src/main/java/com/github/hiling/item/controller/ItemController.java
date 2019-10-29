@@ -22,7 +22,8 @@ public class ItemController {
      */
     @GetMapping("url")
     public String get(HttpServletRequest request) {
-        Config config = ConfigService.getAppConfig(); //config instance is singleton for each namespace and is never null
+        //config instance is singleton for each namespace and is never null
+        Config config = ConfigService.getAppConfig();
         String someKey = "timeout";
         String someDefaultValue = "100";
         String value = config.getProperty(someKey, someDefaultValue);

@@ -28,7 +28,8 @@ public class UserController extends BaseController {
     public String demo(HttpServletRequest request) {
 
         //Apollo配置中心示例
-        Config config = ConfigService.getAppConfig(); //config instance is singleton for each namespace and is never null
+        //config instance is singleton for each namespace and is never null
+        Config config = ConfigService.getAppConfig();
         String timeoutKey = "timeout";
         String timeoutDefaultValue = "100";
         String value = config.getProperty(timeoutKey, timeoutDefaultValue);
