@@ -1,10 +1,71 @@
 @startuml
-(*)  --> "check input"
-If "input is verbose" then
---> [Yes] "turn on verbosity"
---> "run command"
-else
---> "run command"
-Endif
--->(*)
+
+|客户端|
+start
+: 获取授权信息;
+note left
+    所需信息：
+    client_id,client_secret
+    grant_type,username,password
+end note
+
+|#AntiqueWhite|认证服务器|
+
+:创建AccessToken;
+note right
+    通过用户名密码等认证信息创建AccessToken；
+    创建成功说明认证信息正确，登陆成功；
+    ----
+    返回AccessToken；
+end note
+
+if (client_id是否为空) then (空)
+  :返回异常;
+else (非空)
+    if(请求IP是否在白名单) then (不存在)
+      : 返回异常;
+    else (存在)
+      if(grant_type是否有效) then (有效)
+        fork
+            :Password;
+            if(用户名密码是否正确) then (正确)
+                :获取userId;
+                :创建RefreshToken;
+            else (错误)
+                :返回异常;
+                end
+            endif
+        fork again
+            :Client;
+            :设置userId=0;
+            :创建RefreshToken;
+        fork again
+            :Refresh;
+            if(RefreshTken是否正确) then (正确)
+                :获取userId;
+                :更新RefreshToken的过期时间;
+            else (错误)
+                :返回异常;
+                end
+            endif
+        end fork
+        :创新AccessToken;
+        :创建JWT Token;
+        :存储Token信息到DB;
+        if(是否为Password或Client模式) then (是)
+            :存储RefreshToken到DB;
+            :添加RefreshToken到过期队列，到期清除;
+        endif
+        :添加AccessToken到Redis缓存;
+        :添加AccessToken到过期队列，到期后清除;
+        :返回AccessToken;
+       else (无效)
+            :返回异常;
+       endif
+    endif
+endif
+
+|客户端|
+:授权结束;
+stop
 @enduml

@@ -76,7 +76,7 @@ public class RemoveAccessTokenThread extends BaseRemoveTokenThread {
             accessTokenService.batchDeleteByAccessToken(revokeTokens);
 
             //删除缓存中被吊销的token
-            List<String> revokeTokenKeys = new ArrayList(revokeTokens.size());
+            List<String> revokeTokenKeys = new ArrayList<String>(revokeTokens.size());
             for (String token : revokeTokens) {
                 revokeTokenKeys.add(RedisNamespaces.ACCESS_TOKEN + token);
             }

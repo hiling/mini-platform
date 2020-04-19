@@ -84,7 +84,7 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
-                    <!--<mainClass>GatewayApplication</mainClass>-->
+                    <mainClass>com.github.hiling.gateway.GatewayApplication</mainClass>
                     <!--<layout>ZIP</layout>-->
                     <!--不打包所有jar包，启动时需要使用参数-Dloader.path="lib/"加载外部依赖的jar包-->
                     <includes>

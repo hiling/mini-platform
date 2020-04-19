@@ -52,7 +52,7 @@ public abstract class BaseRemoveTokenThread extends Thread {
     protected abstract void removeRevokeAndExpiredToken(ArrayList<RevokeToken> revokeList);
 
     protected ArrayList<RevokeToken> getRevokeToken() {
-        ArrayList<RevokeToken> expiredList = new ArrayList();
+        ArrayList<RevokeToken> expiredList = new ArrayList<RevokeToken>();
 
         try {
             for (int i = 0; i < this.maxRemoveCount; i++) {

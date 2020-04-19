@@ -1,6 +1,6 @@
 package com.github.hiling.user;
 
-import lombok.extern.slf4j.Slf4j;
+// import lombok.extern.slf4j.Slf4j;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.openjdk.jmh.annotations.*;
@@ -15,7 +15,7 @@ import java.util.concurrent.TimeUnit;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-@Slf4j
+// @Slf4j
 
 //基准测试类型：
 // Throughput: 整体吞吐量，例如“1秒内可以执行多少次调用”；

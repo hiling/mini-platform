@@ -47,7 +47,8 @@ public class UserController extends BaseController {
                 + " is login: " + isLogin + System.getProperty("line.separator", "\n")
                 + " userId: " + loginUserId + System.getProperty("line.separator", "\n")
                 + " userName: " + userInfo.getUserName() + System.getProperty("line.separator", "\n")
-                + " clientId: " + userInfo.getClientId() + System.getProperty("line.separator", "\n");
+                + " clientId: " + userInfo.getClientId() + System.getProperty("line.separator", "\n")
+                ;
     }
 
     @GetMapping("/{id}")
@@ -55,7 +56,6 @@ public class UserController extends BaseController {
         User user = mapper.selectById(id);
         if (user == null) {
             throw new BusinessException(110001, "用户不存在");
-            //return ResponseEntity.notFound().build();
         }
         return ResponseEntity.ok(user);
     }
