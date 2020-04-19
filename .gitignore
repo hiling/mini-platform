@@ -17,7 +17,7 @@ target/
 */target/
 
 # Development Properties
-*-dev.properties
+#*-dev.properties
 
 # Feature Acceptance Test Properties
 *-fat*.properties
