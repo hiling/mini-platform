@@ -1,0 +1,30 @@
+@startuml
+|客户端|
+start
+repeat
+: 获取AccessToken;
+
+|#AntiqueWhite|认证服务器|
+
+:验证AccessToken;
+note right
+    验证AccessToken是否**有效**；
+    有效时说明是正常登陆用户；
+    ----
+    当返回JWT时说明该AccessToken有效；
+end note
+
+if (Token是否为空) then (空)
+  :返回Null;
+else (非空)
+    if(在Redis中获取该Token) then (存在)
+      : 返回JWT Token;
+    else (不存在)
+      :返回Null;
+    endif
+endif
+|客户端|
+:授权结束;
+repeat while (重新授权?)
+stop
+@enduml
