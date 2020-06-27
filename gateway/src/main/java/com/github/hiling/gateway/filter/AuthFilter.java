@@ -1,18 +1,22 @@
 package com.github.hiling.gateway.filter;
 
+import com.github.hiling.common.constant.ServiceNames;
 import com.github.hiling.common.exception.BusinessException;
 import com.github.hiling.common.utils.StringUtils;
-import com.github.hiling.gateway.modules.oauth.constant.ErrorMessage;
-import com.github.hiling.gateway.modules.oauth.service.AccessTokenService;
 import com.netflix.zuul.ZuulFilter;
 import com.netflix.zuul.context.RequestContext;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.netflix.zuul.filters.support.FilterConstants;
+import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Component;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.Enumeration;
 import java.util.List;
 
 /**
@@ -22,14 +26,18 @@ import java.util.List;
 @Component
 public class AuthFilter extends ZuulFilter {
     @Autowired
-    AccessTokenService tokenService;
+    TokenFeignClient tokenService;
+    public static final String ACCESS_TOKEN_ERROR = "access_token无效或已过期。";
 
     @Override
     public String filterType() {
         return FilterConstants.PRE_TYPE;
     }
 
-    //int值来定义过滤器的执行顺序，数值越小优先级越高
+    /**
+     * int值来定义过滤器的执行顺序，数值越小优先级越高
+     * @return
+     */
     @Override
     public int filterOrder() {
         return 2;
@@ -40,7 +48,7 @@ public class AuthFilter extends ZuulFilter {
         return true;
     }
 
-    @Value("#{'${oauth.ignore.path}'.split(',')}")
+    @Value("#{'${auth.ignore.path}'.split(',')}")
     private List<String> ignoreServiceId;
 
     @Override
@@ -69,7 +77,7 @@ public class AuthFilter extends ZuulFilter {
         String accessToken = request.getParameter("access_token");
 
         if (StringUtils.isEmpty(accessToken)) {
-            throw new BusinessException(ErrorMessage.ACCESS_TOKEN_ERROR);
+            throw new BusinessException(ACCESS_TOKEN_ERROR);
         }
 
         try {
@@ -79,10 +87,16 @@ public class AuthFilter extends ZuulFilter {
         }
 
         if (StringUtils.isEmpty(jwtToken)) {
-            throw new BusinessException(ErrorMessage.ACCESS_TOKEN_ERROR);
+            throw new BusinessException(ACCESS_TOKEN_ERROR);
         }
         ctx.addZuulRequestHeader("jwtToken", jwtToken);
 
         return null;
+    }
+
+    @FeignClient(name = ServiceNames.AUTH_SERVICE)
+    public interface TokenFeignClient {
+        @RequestMapping(value = "token?access_token={access_token}", method = RequestMethod.GET)
+        String getJwtToken(@PathVariable("access_token") String accessToken);
     }
 }
