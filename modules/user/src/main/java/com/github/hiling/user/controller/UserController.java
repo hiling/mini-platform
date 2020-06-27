@@ -46,8 +46,8 @@ public class UserController extends BaseController {
                 + " Timeout: " + value + System.getProperty("line.separator", "\n")
                 + " is login: " + isLogin + System.getProperty("line.separator", "\n")
                 + " userId: " + loginUserId + System.getProperty("line.separator", "\n")
-                + " userName: " + userInfo.getUserName() + System.getProperty("line.separator", "\n")
-                + " clientId: " + userInfo.getClientId() + System.getProperty("line.separator", "\n")
+                + " userName: " + (userInfo == null ? "Null" : userInfo.getUserName()) + System.getProperty("line.separator", "\n")
+                + " clientId: " + (userInfo == null ? "Null" : userInfo.getClientId()) + System.getProperty("line.separator", "\n")
                 ;
     }
 

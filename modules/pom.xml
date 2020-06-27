@@ -76,6 +76,13 @@
             <scope>provided</scope>
         </dependency>
 
+        <!-- 支持热部署-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
@@ -83,6 +90,8 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <configuration>
+                    <!-- 热更新配置      -->
+                    <fork>true</fork>
                     <!--<mainClass>GatewayApplication</mainClass>-->
                     <!--<layout>ZIP</layout>-->
                     <!--不打包所有jar包，启动时需要使用参数-Dloader.path="lib/"加载外部依赖的jar包-->

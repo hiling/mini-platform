@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.github.hiling.auth.modules.client.mapper.ClientMapper">
+
+    <select id="getForVerify" resultType="com.github.hiling.auth.modules.client.model.Client">
+	select
+		`client_id` as clientId,
+		`grant_types` as grantTypes,
+		`client_secret` as clientSecret,
+		`ip_whitelist` as ipWhitelist,
+		`scope`
+	from oauth_client
+	where client_id = #{clientId}
+		and `status` = 1
+	</select>
+
+	<select id="getList" resultType="com.github.hiling.auth.modules.client.model.Client">
+	select
+		`client_id` as clientId,
+		`client_name` as clientName,
+		`grant_types` as grantTypes,
+		`ip_whitelist` as ipWhitelist,
+		`scope`,
+		`status`,
+		`create_user` as createUser,
+		`create_time` as createTime,
+		`update_user` as updateUser,
+		`update_time` as updateTime,
+		`remark`
+	from oauth_client
+		<where>
+			<if test="clientId != null">
+				client_id = #{clientId}
+			</if>
+			<if test="clientSecret != null">
+				client_secret = #{clientSecret}
+			</if>
+			<if test="clientName != null">
+				client_name = #{clientName}
+			</if>
+			<if test="status != null">
+				AND status = #{status}
+			</if>
+		</where>
+	</select>
+
+	<update id="refreshSecret">
+		update oauth_client
+		set client_secret = #{newSecret},
+			update_user = #{userId},
+			update_time = now()
+		where client_id = #{clientId}
+			and client_secret = #{currentSecret}
+	</update>
+
+	<update id="updateStatus">
+		update oauth_client
+		set `status` = #{status},
+			update_user = #{userId},
+			update_time = now()
+		where client_id = #{clientId}
+	</update>
+
+	<insert id="insert" parameterType="com.github.hiling.auth.modules.client.model.Client" keyProperty="client_id">
+        insert into oauth_client
+        (
+			`client_id`,
+			`client_name`,
+			`client_secret` ,
+			`grant_types`,
+			`ip_whitelist`,
+			`scope` ,
+			`status`,
+			`create_user`,
+			`create_time`,
+			`remark`
+        )
+        values
+        (
+            #{clientId},
+            #{clientName},
+            #{clientSecret},
+            #{grantTypes},
+            #{ipWhitelist},
+            #{scope},
+            #{status},
+            #{createUser},
+            now(),
+            #{remark}
+        )
+    </insert>
+</mapper>

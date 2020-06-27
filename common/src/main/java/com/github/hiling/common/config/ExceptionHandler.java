@@ -3,6 +3,7 @@ package com.github.hiling.common.config;
 import com.github.hiling.common.exception.BusinessException;
 import com.github.hiling.common.exception.ExceptionResult;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -88,16 +89,16 @@ public class ExceptionHandler {
 
     private String getUri(HttpServletRequest request) {
         String queryString = request.getQueryString();
-        return request.getMethod() + ":" + request.getRequestURI() + (queryString.isEmpty() ? "" : ("?" + queryString));
+        return request.getMethod() + ":" + request.getRequestURI() + (StringUtils.isEmpty(queryString) ? "" : ("?" + queryString));
     }
 
     private void writeLog(String uri, String message, String stackTrace) {
         StringBuilder error = new StringBuilder();
-        error.append(System.getProperty("line.separator") + "Error:" + System.getProperty("line.separator"));
-        error.append("URI:" + uri + System.getProperty("line.separator"));
-        error.append("Message:" + message + System.getProperty("line.separator"));
-        error.append("StackTrace:" + stackTrace + System.getProperty("line.separator"));
-        error.append("Time:" + LocalDateTime.now().toString() + System.getProperty("line.separator"));
+        error.append(System.getProperty("line.separator")).append("Error:").append(System.getProperty("line.separator"));
+        error.append("URI:").append(uri).append(System.getProperty("line.separator"));
+        error.append("Message:").append(message).append(System.getProperty("line.separator"));
+        error.append("StackTrace:").append(stackTrace).append(System.getProperty("line.separator"));
+        error.append("Time:").append(LocalDateTime.now().toString()).append(System.getProperty("line.separator"));
         log.error(error.toString());
     }
 }
