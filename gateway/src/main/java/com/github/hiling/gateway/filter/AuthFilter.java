@@ -48,8 +48,8 @@ public class AuthFilter extends ZuulFilter {
         return true;
     }
 
-    @Value("#{'${auth.ignore.path}'.split(',')}")
-    private List<String> ignoreServiceId;
+    @Value("#{'${auth.ignore.path-prefix}'.split(',')}")
+    private List<String> authIgnorePaths;
 
     @Override
     public Object run() {
@@ -59,8 +59,11 @@ public class AuthFilter extends ZuulFilter {
         String uri = request.getRequestURI();
 
         //忽略不需要授权的连接
-        if (ignoreServiceId.contains(uri.split("/")[1])){
-            return null;
+        int pathCount = authIgnorePaths.size();
+        for (int i = 0; i < pathCount; i++) {
+            if (uri.startsWith(authIgnorePaths.get(i))) {
+                return null;
+            }
         }
 
         String method = request.getMethod();
