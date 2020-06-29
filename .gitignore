@@ -1,4 +1,5 @@
 target/
+wsl_share/
 
 ### STS ###
 .apt_generated

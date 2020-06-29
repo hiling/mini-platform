@@ -42,13 +42,4 @@ public class MyBatisOAuthConfig {
         factory.setMapperLocations(resolver.getResources("classpath:mapper/*.xml"));
         return factory.getObject();
     }
-
-    @Bean
-    @Primary
-    public MapperScannerConfigurer mapperScannerConfigurer() {
-        MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
-        mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactoryBeanForOAuth");
-        mapperScannerConfigurer.setBasePackage("com.github.hiling.auth.mapper");
-        return mapperScannerConfigurer;
-    }
 }
