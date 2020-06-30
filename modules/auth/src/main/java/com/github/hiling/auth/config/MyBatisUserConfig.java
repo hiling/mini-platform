@@ -39,12 +39,4 @@ public class MyBatisUserConfig {
         factory.setMapperLocations(resolver.getResources("classpath:mapper/*.xml"));
         return factory.getObject();
     }
-
-    @Bean
-    public MapperScannerConfigurer mapperScannerConfigurer() {
-        MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
-        mapperScannerConfigurer.setSqlSessionFactoryBeanName("sqlSessionFactoryBeanForUser");
-        mapperScannerConfigurer.setBasePackage("com.github.hiling.auth.modules.user.mapper");
-        return mapperScannerConfigurer;
-    }
 }

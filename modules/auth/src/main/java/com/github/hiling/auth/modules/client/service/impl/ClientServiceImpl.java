@@ -68,7 +68,7 @@ public class ClientServiceImpl implements ClientService {
     }
 
     private void verifyAuthorization(List<String> scope){
-        if (!scope.contains(allowClient)) {
+        if (scope == null || !scope.contains(allowClient)) {
             throw new BusinessException(ErrorMessage.UNAUTHORIZED_ERROR);
         }
     }

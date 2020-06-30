@@ -7,7 +7,7 @@ import org.springframework.context.annotation.PropertySource;
 import org.springframework.web.client.RestTemplate;
 
 @SpringBootApplication
-@PropertySource(value = "classpath:oauth.properties")
+@PropertySource(value = "classpath:oauth-${spring.profiles.active}.properties")
 public class AuthApplication {
 
 	public static void main(String[] args) {
