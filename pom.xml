@@ -20,6 +20,7 @@
 
     <modules>
         <module>common</module>
+        <module>admin</module>
         <module>discovery</module>
         <module>gateway</module>
         <module>modules</module>
@@ -90,10 +91,6 @@
     <build>
         <plugins>
             <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-            </plugin>
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <configuration>
@@ -120,6 +117,9 @@
             <id>dev</id>
             <properties>
                 <profileActive>dev</profileActive>
+                <mysql-url>127.0.0.1:3306</mysql-url>
+                <redis-host>127.0.0.1</redis-host>
+                <redis-port>6379</redis-port>
                 <apollo-meta-service-url>http://discovery-dev:8761</apollo-meta-service-url>
                 <eureka-service-url>http://discovery-dev:8761/eureka/</eureka-service-url>
             </properties>
@@ -131,6 +131,20 @@
             <id>uat</id>
             <properties>
                 <profileActive>uat</profileActive>
+                <mysql-url>127.0.0.1:3306</mysql-url>
+                <redis-host>127.0.0.1</redis-host>
+                <redis-port>6379</redis-port>
+                <apollo-meta-service-url>http://discovery-uat:8761</apollo-meta-service-url>
+                <eureka-service-url>http://discovery-uat:8761/eureka/</eureka-service-url>
+            </properties>
+            <activation>
+                <activeByDefault>false</activeByDefault>
+            </activation>
+        </profile>
+        <profile>
+            <id>prd</id>
+            <properties>
+                <profileActive>prd</profileActive>
                 <apollo-meta-service-url>http://discovery-8761:8761,http://discovery-8762:8762,http://discovery-8763:8763
                 </apollo-meta-service-url>
                 <eureka-service-url>

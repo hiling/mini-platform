@@ -49,7 +49,6 @@ public class RemoveAccessTokenThread extends BaseRemoveTokenThread {
      * 过期的Access Token队列（先进先出）
      * size()要遍历整个集合，很慢，避免使用
      */
-    //private static ConcurrentLinkedQueue<RevokeToken> revokeTokens;
     public RemoveAccessTokenThread(AccessTokenService accessTokenService,
                                    StringRedisTemplate stringRedisTemplate) {
         setName("RemoveAccessTokenThread");

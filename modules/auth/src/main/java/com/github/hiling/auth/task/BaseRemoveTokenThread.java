@@ -56,7 +56,9 @@ public abstract class BaseRemoveTokenThread extends Thread {
 
         try {
             for (int i = 0; i < this.maxRemoveCount; i++) {
-                RevokeToken token = this.revokeTokens.peek(); //查询最早一个
+
+                //查询最早一个
+                RevokeToken token = this.revokeTokens.peek();
                 //没有Token或是最近几秒内的token，则不再执行（由于是队列，先进先出，下一个token在该token后插入，因此肯定也在5秒内）。revoke
                 if (token == null) {
                     log.debug("{}: 准备清除：token is null！", this.getName());
