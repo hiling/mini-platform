@@ -11,7 +11,7 @@
 	<groupId>com.github.hiling</groupId>
 	<artifactId>admin</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>admin</name>
+	<name>MiniPlatform Admin</name>
 	<description>Spring Boot Admin Server</description>
 
 	<dependencies>
@@ -61,4 +61,12 @@
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+		</plugins>
+	</build>
 </project>
