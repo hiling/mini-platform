@@ -2,6 +2,8 @@ package com.github.hiling.item.controller;
 
 import com.ctrip.framework.apollo.Config;
 import com.ctrip.framework.apollo.ConfigService;
+import com.github.hiling.common.utils.StringUtils;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,6 +19,17 @@ import java.util.List;
 @RestController
 @RequestMapping("/item")
 public class ItemController {
+
+    @Value("${aaa:default_aaa}")
+    private String getAaa;
+
+    @Value("${common:default}")
+    private String getCommon;
+
+    @GetMapping("config")
+    public String getConfig() {
+        return getAaa + " - "+ getCommon;
+    }
 
     /**
      * 测试高可用
