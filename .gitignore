@@ -21,12 +21,15 @@ wsl_share/
 #*-dev.properties
 
 # Feature Acceptance Test Properties
+*-fat*.yaml
 *-fat*.properties
 
 # User Acceptance Test Properties
+*-uat*.yaml
 *-uat*.properties
 
 # Production Properties
+*-prd*.yaml
 *-prd*.properties
 
 ### NetBeans ###
@@ -36,3 +39,4 @@ nbbuild/
 dist/
 nbdist/
 .nb-gradle/
+
