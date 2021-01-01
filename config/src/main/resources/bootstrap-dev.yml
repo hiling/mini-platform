@@ -1,3 +1,0 @@
-#密钥必须在bootstrap中配置
-encrypt:
-  key: hiling

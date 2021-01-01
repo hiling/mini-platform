@@ -42,7 +42,7 @@
             "name": "Discovery-1",
             "request": "launch",
             "mainClass": "com.github.hiling.discovery.DiscoveryApplication",
-            "projectName": "mini-platform-discovery",
+            "projectName": "mini-discovery",
             "vmArgs": ["-Dspring.profiles.active=discovery1"]
         },
         {
@@ -50,7 +50,7 @@
             "name": "Gateway-Dev",
             "request": "launch",
             "mainClass": "com.github.hiling.gateway.GatewayApplication",
-            "projectName": "mini-platform-gateway",
+            "projectName": "mini-gateway",
             "vmArgs": "-Dspring.profiles.active=dev"
         },
         {

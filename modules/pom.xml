@@ -17,20 +17,20 @@
     </parent>
 
     <modules>
-        <module>auth</module>
-        <module>user</module>
-        <module>item</module>
+        <module>mini-auth</module>
+        <module>mini-user</module>
+        <module>mini-item</module>
     </modules>
 
     <dependencies>
         <dependency>
             <groupId>com.github.hiling</groupId>
-            <artifactId>mini-platform-common</artifactId>
+            <artifactId>mini-common</artifactId>
             <version>${common.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.hiling</groupId>
-            <artifactId>mini-platform-oauth-client</artifactId>
+            <artifactId>mini-oauth-client</artifactId>
             <version>${oauth-client.version}</version>
         </dependency>
         <dependency>

@@ -1,0 +1,3 @@
+# bootstrap优先于application加载，因此密钥需要在bootstrap中配置
+encrypt:
+  key: hiling
