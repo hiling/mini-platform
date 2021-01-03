@@ -79,12 +79,18 @@
   - 项目地址：https://github.com/rzwitserloot/lombok
   - 中文介绍：https://blog.csdn.net/motui/article/details/79012846
 
+- **Swagger** 是一款RESTFUL接口的文档在线自动生成+功能测试功能软件。
+  项目中集成Swagger3，访问地址：http://localhost:8085/swagger-ui/index.html
+  - 官网地址：https://swagger.io/
+
 - **MyBatis-Plus**（简称 MP）是一个 MyBatis 的增强工具，
 在 MyBatis 的基础上只做增强不做改变，为简化开发、提高效率而生。
    - 官网地址：http://mp.baomidou.com/
    - 项目地址：https://github.com/baomidou/mybatis-plus
   
-- **Prometheus** 是一套开源的新一代Metrics系统监控报警框架，是CNCF中重要的一员，它将所有信息都存储为时间序列数据；因此实现一种Profiling监控方式，实时分析系统运行的状态、执行时间、调用次数等，以找到系统的热点，为性能优化提供依据。可对核心业务指标、应用指标、系统指标等做高效的监控，可与Grafana结合打造出优秀的监控平台。
+- **Prometheus** 是一套开源的新一代Metrics系统监控报警框架，是CNCF中重要的一员，它将所有信息都存储为时间序列数据；因此实现一种Profiling监控方式，
+  实时分析系统运行的状态、执行时间、调用次数等，以找到系统的热点，为性能优化提供依据。
+  可对核心业务指标、应用指标、系统指标等做高效的监控，可与Grafana结合打造出优秀的监控平台。
    - 官网地址：https://prometheus.io/
    - 项目地址：https://github.com/prometheus
 
