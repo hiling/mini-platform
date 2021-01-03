@@ -1,8 +1,10 @@
 package com.github.hiling.common.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -16,46 +18,27 @@ import java.util.regex.Pattern;
  * @version 1.0
  * @date 2020/11/24 6:32 PM
  */
+@Slf4j
 public class AddressUtils {
-    private static final Logger logger = LoggerFactory.getLogger(AddressUtils.class);
+
     private static final String LOCALHOST_IP = "127.0.0.1";
     private static final String EMPTY_IP = "0.0.0.0";
     private static final Pattern IP_PATTERN = Pattern.compile("[0-9]{1,3}(\\.[0-9]{1,3}){3,}");
 
-    public AddressUtils() {
-    }
-
     public static boolean isAvailablePort(int port) {
-        ServerSocket ss = null;
-
-        boolean var3;
-        try {
-            ss = new ServerSocket(port);
-            ss.bind((SocketAddress)null);
-            boolean var2 = true;
-            return var2;
-        } catch (IOException var13) {
-            var3 = false;
-        } finally {
-            if (ss != null) {
-                try {
-                    ss.close();
-                } catch (IOException var12) {
-                }
-            }
-
+        try (ServerSocket ss = new ServerSocket(port)) {
+            ss.bind(null);
+            return true;
+        } catch (IOException e) {
+            return false;
         }
-
-        return var3;
     }
 
     private static boolean isValidHostAddress(InetAddress address) {
-        if (address != null && !address.isLoopbackAddress()) {
-            String name = address.getHostAddress();
-            return name != null && !"0.0.0.0".equals(name) && !"127.0.0.1".equals(name) && IP_PATTERN.matcher(name).matches();
-        } else {
-            return false;
-        }
+        if (address == null || address.isLoopbackAddress()) return false;
+        String name = address.getHostAddress();
+        return (name != null && !EMPTY_IP.equals(name) && !LOCALHOST_IP.equals(name) && IP_PATTERN.matcher(name)
+                .matches());
     }
 
     public static String getHostIp() {
@@ -69,37 +52,69 @@ public class AddressUtils {
     }
 
     public static InetAddress getHostAddress() {
-        Object localAddress = null;
-
+        InetAddress localAddress = null;
         try {
             Enumeration<NetworkInterface> interfaces = NetworkInterface.getNetworkInterfaces();
             if (interfaces != null) {
-                while(interfaces.hasMoreElements()) {
+                while (interfaces.hasMoreElements()) {
                     try {
-                        NetworkInterface network = (NetworkInterface)interfaces.nextElement();
+                        NetworkInterface network = interfaces.nextElement();
                         Enumeration<InetAddress> addresses = network.getInetAddresses();
                         if (addresses != null) {
-                            while(addresses.hasMoreElements()) {
+                            while (addresses.hasMoreElements()) {
                                 try {
-                                    InetAddress address = (InetAddress)addresses.nextElement();
+                                    InetAddress address = addresses.nextElement();
                                     if (isValidHostAddress(address)) {
                                         return address;
                                     }
-                                } catch (Throwable var5) {
-                                    logger.warn("Failed to retriving network card ip address. cause:" + var5.getMessage());
+                                } catch (Throwable e) {
+                                    log.warn("Failed to retriving network card ip address. cause:" + e.getMessage());
                                 }
                             }
                         }
-                    } catch (Throwable var6) {
-                        logger.warn("Failed to retriving network card ip address. cause:" + var6.getMessage());
+                    } catch (Throwable e) {
+                        log.warn("Failed to retriving network card ip address. cause:" + e.getMessage());
                     }
                 }
             }
-        } catch (Throwable var7) {
-            logger.warn("Failed to retriving network card ip address. cause:" + var7.getMessage());
+        } catch (Throwable e) {
+            log.warn("Failed to retriving network card ip address. cause:" + e.getMessage());
         }
+        log.error("Could not get local host ip address, will use 127.0.0.1 instead.");
+        return localAddress;
+    }
 
-        logger.error("Could not get local host ip address, will use 127.0.0.1 instead.");
-        return (InetAddress)localAddress;
+    public static String getHttpRequestIp(HttpServletRequest request) {
+
+        String xFor = request.getHeader("X-Forwarded-For");
+        if (org.apache.commons.lang3.StringUtils.isNotEmpty(xFor) && !"unKnown".equalsIgnoreCase(xFor)) {
+            //多次反向代理后会有多个ip值，第一个ip才是真实ip
+            int index = xFor.indexOf(",");
+            if (index != -1) {
+                return xFor.substring(0, index);
+            } else {
+                return xFor;
+            }
+        }
+        xFor = request.getHeader("X-Real-IP");
+        if (org.apache.commons.lang3.StringUtils.isNotEmpty(xFor) && !"unKnown".equalsIgnoreCase(xFor)) {
+            return xFor;
+        }
+        if (org.apache.commons.lang3.StringUtils.isBlank(xFor) || "unknown".equalsIgnoreCase(xFor)) {
+            xFor = request.getHeader("Proxy-Client-IP");
+        }
+        if (org.apache.commons.lang3.StringUtils.isBlank(xFor) || "unknown".equalsIgnoreCase(xFor)) {
+            xFor = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if (org.apache.commons.lang3.StringUtils.isBlank(xFor) || "unknown".equalsIgnoreCase(xFor)) {
+            xFor = request.getHeader("HTTP_CLIENT_IP");
+        }
+        if (org.apache.commons.lang3.StringUtils.isBlank(xFor) || "unknown".equalsIgnoreCase(xFor)) {
+            xFor = request.getHeader("HTTP_X_FORWARDED_FOR");
+        }
+        if (StringUtils.isBlank(xFor) || "unknown".equalsIgnoreCase(xFor)) {
+            xFor = request.getRemoteAddr();
+        }
+        return xFor;
     }
 }

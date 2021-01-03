@@ -13,3 +13,9 @@ eureka:
         name: ${spring.security.user.name}
         password: ${spring.security.user.password}
 
+#  钉钉通知
+notifier:
+  webhook:
+    webhookUrl:
+      - "https://oapi.dingtalk.com/robot/send?access_token=xxx"
+    adminServerUrl: "http://127.0.0.1:8769"
