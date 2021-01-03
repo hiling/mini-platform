@@ -1,40 +1,48 @@
-# Mini-Platform轻量级微服务治理平台
+# Mini-Platform轻量级微服务平台
 
 - Mini-Platform致力于打造更简洁易用的轻量级微服务治理平台，更易于实施与运维；
-- 核心技术：SpringBoot、Spring Cloud、Apollo、OAuth2（自研）、MyBatis、Redis、MySQL；
+- 核心技术：SpringBoot、Spring Cloud、OAuth2（自研）、MyBatis、Redis、MySQL；
 - 核心功能：服务注册与发现、服务网关、负载均衡、统一认证、配置中心、异常处理等；
 
 ---
-## Discovery
-- 采用Eureka做服务自动注册与发现；
-- 支持Apollo的MetaService，可以让Apollo共享该Eureka；[配置说明](https://github.com/hiling/mini-platform/blob/master/discovery/readme.md)
-- 可按配置简单的进行高可用部署；
+## mini-config - 配置中心
+- 采用Spring Cloud Config作为统一的配置中心
 
 ---
-## Gateway
+## mini-discovery - 注册中心
+- 采用Eureka做服务自动注册与发现；
+- 可按配置简单的进行高可用部署；
+
+
+---
+## mini-gateway - API网关
 - 采用Zuul做服务网关；
-- 支持Apollo进行动态路由配置:
-- 支持基于service-id的动态路由策略，支持负载均衡，支持服务的**自动**注册与发现，当服务地址变化后**无需手动配置**，当后端服务引入SpringCloud时可选用；
+- 支持基于service-id的动态路由策略，支持负载均衡，支持服务的**自动**注册与发现，当服务地址变化后**无需手动配置**，当后端服务引入Eureka client时可选用；
 - 支持基于url的动态路由策略，支持负载均衡，支持服务的**手动**注册与发现，当服务地址变化后**需要手动配置**，当后端服务基于传统HTTP调用时可选用；
 - 支持基于默认url的动态路由策略，不支持负载均衡，后端服务需要单独处理负载均衡（如Nginx），支持服务的**手动**注册与发现，配置简单，可在测试中使用；
 - 支持服务异常重试，建议只开启GET的重试，且确保GET的幂等，否则建议关闭；
 
 ---
-## OAuth Server
+## mini-admin - 监控中心
+- 采用Spring Boot Admin作为统一的监控中心
+- 集成钉钉告警
+
+---
+## mini-auth - 授权中心
 - 为了更简单易用，OAuth Server采用自研实现。
 - GrantType支持password、client_credentials、refresh_token。
 - Token支持延迟吊销、滑动过期和绝对过期。
 - 用户名密码验证支持直连用户中心数据库验证和调用远程服务验证两种方式。
 - 密码模式授权，用于客户端与服务器之间的授权，流程如下：
-![oauth-password-flow](https://raw.githubusercontent.com/hiling/mini-platform/master/.files/oauth-password-flow.png "密码模式授权流程")
+![oauth-password-flow](https://raw.githubusercontent.com/hiling/mini-platform/master/docs/images/oauth-password-flow.png "密码模式授权流程")
 注：图例为三次请求，1.1-1.3为首次认证；2.1-2.5为通过Access Token访问后端资源；3.1-3.3为使用Refresh Token获取新的Access Token，可用于Access Token过期前刷新Token；
 红色字体是Password与Client授权方式不同的地方。
 
 - 客户端模式授权，用于服务器与服务器之间的授权，流程如下：
-![oauth-client-flow](https://raw.githubusercontent.com/hiling/mini-platform/master/.files/oauth-client-flow.png "客户端模式授权流程")
+![oauth-client-flow](https://raw.githubusercontent.com/hiling/mini-platform/master/docs/images/oauth-client-flow.png "客户端模式授权流程")
 
 - 微服务模式授权示例，是获取到Access Token后请求后端资源的流程细化，如下：
-![oauth-multi-services-flow](https://raw.githubusercontent.com/hiling/mini-platform/master/.files/oauth-multi-services-flow.png "客户端模式授权流程")
+![oauth-multi-services-flow](https://raw.githubusercontent.com/hiling/mini-platform/master/docs/images/oauth-multi-services-flow.png "客户端模式授权流程")
 
 ---
 ## Gateway - ACL
@@ -85,10 +93,10 @@
   - 官方示例：http://hg.openjdk.java.net/code-tools/jmh/file/tip/jmh-samples/src/main/java/org/openjdk/jmh/samples/
   - 中文介绍：https://www.xncoding.com/2018/01/07/java/jmh.html
   - 项目中OAuth基准测试代码
-  ![create_token_test](https://raw.githubusercontent.com/hiling/mini-platform/master/.files/create_token_test.png "基准测试代码")
+  ![create_token_test](https://raw.githubusercontent.com/hiling/mini-platform/master/docs/images/create_token_test.png "基准测试代码")
   注：测试代码：[UserApplicationTests.java](https://github.com/hiling/mini-platform/blob/master/modules/user/src/test/java/com/github/hiling/user/UserApplicationTests.java)
   - 测试结果
-  ![create_token_test_result](https://raw.githubusercontent.com/hiling/mini-platform/master/.files/create_token_test_result.png "基准测试结果")
+  ![create_token_test_result](https://raw.githubusercontent.com/hiling/mini-platform/master/docs/images/create_token_test_result.png "基准测试结果")
   注：在开发环境测试，电脑配置2C(i5-6300U)/8G/SSD，本机MySQL，使用相关参数，未考虑DB缓存等影响。
   
 - **Spring Boot Maven Plugin & Apache Maven Dependency Plugin** 可以将外部依赖jar与项目分离，

@@ -1,0 +1,34 @@
+eureka:
+  client:
+    service-url:
+      # 指定Eureka Server地址，多个用逗号隔开
+      defaultZone: http://127.0.0.1:8761/eureka/
+    # 表示将自身注册到eureka服务器
+    register-with-eureka: true
+    # 启用从EurekaServer上获取注册信息
+    fetch-registry: true
+    # 刷新本地缓存时间，默认30s
+    registry-fetch-interval-seconds: 5
+    # Eureka 服务端连接空闲关闭时间，默认30
+    eureka-connection-idle-timeout-seconds: 30
+    # 连接 Eureka Server 的超时时间，默认5秒
+    eureka-server-connect-timeout-seconds: 5
+    # 读取 Eureka Server 信息的超时时间，默认8秒
+    eureka-server-read-timeout-seconds: 8
+    # 从Eureka 客户端到所有Eureka服务端的连接总数，默认200
+    eureka-server-total-connections: 200
+    # 从Eureka客户端到每个Eureka服务主机的连接总数，默认50
+    eureka-server-total-connections-per-host: 50
+
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}
+    # 服务刷新时间，每隔这个时间会主动向Eureka Server发起心跳一次，默认30s
+    lease-renewal-interval-in-seconds: 5
+    # 服务过期时间，超过这个时间没有接收到心跳，EurekaServer剔除这个实例
+    # 注意：EurekaServer一定要设置eureka.server.eviction-interval-timer-in-ms否则这个配置无效，这个配置一般为服务刷新时间配置的三倍
+    # 默认90s
+    lease-expiration-duration-in-seconds: 15
+
+# Eureka客户端Ribbon刷新时间，默认30s
+ribbon:
+  ServerListRefreshInterval: 5000

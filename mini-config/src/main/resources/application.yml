@@ -1,0 +1,31 @@
+server:
+  port: 8763
+spring:
+  application:
+    name: mini-config
+  profiles:
+    active: native
+
+#刷新时，关闭安全验证
+management:
+  security:
+    enabled: false
+
+---
+# 如果使用本地文件，profiles.active需要是native，且searchLocations不能使用通配符
+spring:
+  profiles: native
+  cloud:
+    config:
+      server:
+        native:
+          #申明本地配置文件的存放位置
+          searchLocations: /Users/hiling/IdeaProjects/mini-platform/mini-config/config-repo,/Users/hiling/IdeaProjects/mini-platform/mini-config/config-common
+
+# 配置中心注册到eureka的目的是为了admin可以正常监控，其他服务通过url访问配置中心，配置中心需要通过nginx做负载均衡
+eureka:
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:8761/eureka/
+  instance:
+    instance-id: ${spring.cloud.client.ip-address}:${server.port}

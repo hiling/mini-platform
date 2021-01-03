@@ -1,0 +1,33 @@
+server:
+  port: 8761
+
+eureka:
+  environment: dev
+  #### Eureka Server 配置 ####
+  server:
+    # 测试环境关闭自我保护机制，生产环境建议开启，
+    # Eureka Server会统计15分钟之内心跳失败的比例低于一定比例(默认85%)将触发保护机制，不剔除服务提供者，如果关闭服务注册中心将不可用的实例正确剔除
+    enable-self-preservation: false
+    # 开启自我保护的阈值，默认0.85
+    renewal-percent-threshold: 0.5
+
+    # EurekaServer定时把数据从ReadWriteMap更新到ReadOnlyMap中，服务调用者再缓存到本地，三个缓存点都有延迟；
+    # EurekaServer刷新ReadOnlyMap的时间，默认0；
+    response-cache-update-interval-ms: 30000
+
+    # EurekaServer中ReadWriteMap的过期时间（过期后会从Registry中重新读取注册信息，
+    # ReadWriteMap是Guava Cache，Registry是ConcurrentHashMap）, 默认180
+    response-cache-auto-expiration-in-seconds: 180
+
+    # 启用EurekaServer主动失效检测间隔为30s，默认为0（不启用）
+    # 每个服务提供者会发送自己服务过期时间上去，EurekaServer会定时检查每个服务过期时间和上次心跳时间，
+    # 如果在过期时间内没有收到过任何一次心跳，同时没有处于保护模式下，则会将这个实例从ReadWriteMap中去掉。
+    eviction-interval-timer-in-ms: 30000
+  client:
+    # 表示将自身注册到eureka服务器
+    register-with-eureka: false
+    # 启用从EurekaServer上获取注册信息
+    fetch-registry: false
+
+
+

@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <artifactId>mini-discovery</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+
+    <name>MiniDiscovery</name>
+    <description>service registry and discovery</description>
+
+    <parent>
+        <groupId>com.github.hiling</groupId>
+        <artifactId>mini-platform</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+            <exclusions>
+                <exclusion>
+                    <artifactId>spring-cloud-starter-netflix-archaius</artifactId>
+                    <groupId>org.springframework.cloud</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+                    <groupId>org.springframework.cloud</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>ribbon-eureka</artifactId>
+                    <groupId>com.netflix.ribbon</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>aws-java-sdk-core</artifactId>
+                    <groupId>com.amazonaws</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>aws-java-sdk-ec2</artifactId>
+                    <groupId>com.amazonaws</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>aws-java-sdk-autoscaling</artifactId>
+                    <groupId>com.amazonaws</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>aws-java-sdk-sts</artifactId>
+                    <groupId>com.amazonaws</groupId>
+                </exclusion>
+                <exclusion>
+                    <artifactId>aws-java-sdk-route53</artifactId>
+                    <groupId>com.amazonaws</groupId>
+                </exclusion>
+                <!-- duplicated with spring-security-core -->
+                <exclusion>
+                    <groupId>org.springframework.security</groupId>
+                    <artifactId>spring-security-crypto</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+    </dependencies>   
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+        </plugins>
+    </build>
+</project>

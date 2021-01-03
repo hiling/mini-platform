@@ -1,0 +1,62 @@
+
+spring:
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    # 通过connectProperties属性来打开mergeSql功能；慢SQL记录
+    connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+    # 初始化大小，最小，最大
+    initialSize: 5
+    minIdle: 1
+    maxActive: 50
+
+    # 配置获取连接等待超时的时间
+    maxWait: 60000
+    # 配置一个连接在池中最小生存的时间，单位是毫秒
+    minEvictableIdleTimeMillis: 300000
+
+    # 打开PSCache，并且指定每个连接上PSCache的大小
+    poolPreparedStatements: false
+
+    # 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒
+    timeBetweenEvictionRunsMillis: 60000
+
+    # 合并多个DruidDataSource的监控数据
+    useGlobalDataSourceStat: true
+
+    validationQuery: SELECT 1 FROM DUAL
+    testOnBorrow: false
+    testOnReturn: false
+    testWhileIdle: true
+
+    # 配置监控统计拦截的filters，去掉后监控界面sql无法统计，'wall'用于防火墙
+    filters: stat,wall,log4j
+
+    # StatViewServlet配置，说明请参考Druid Wiki，配置_StatViewServlet配置
+    stat-view-servlet:
+      allow: 127.0.0.1
+      enabled: true
+      login-password: admin
+      login-username: admin
+      reset-enable: false
+      url-pattern: /druid/*
+    web-stat-filter:
+      enabled: true
+      exclusions: '*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*'
+      url-pattern: /*
+    filter:
+      # 配置StatFilter
+      stat:
+        db-type: mysql
+        log-slow-sql: true
+        slow-sql-millis: 5000
+      # 配置WallFilter
+      wall:
+        config:
+          delete-allow: false
+          drop-table-allow: false
+        db-type: mysql
+        enabled: true
+
+
+
