@@ -1,0 +1,13 @@
+#线程数默认为200，开发环境不需要这么高，节省内存
+server:
+  tomcat:
+    max-threads: 5
+
+management:
+  endpoint:
+    health:
+      show-details: ALWAYS
+  endpoints:
+    web:
+      exposure:
+        include: '*'

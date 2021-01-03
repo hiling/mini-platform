@@ -22,7 +22,7 @@ import java.util.Map;
 @Setter
 @Component
 @ConfigurationProperties("link")
-public class RemoteUriRedirectFilter extends ZuulFilter {
+public class UriRedirectFilter extends ZuulFilter {
     @Override
     public String filterType() {
         return FilterConstants.ROUTE_TYPE;

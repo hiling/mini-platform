@@ -1,8 +1,5 @@
 package com.github.hiling.item.controller;
 
-import com.ctrip.framework.apollo.Config;
-import com.ctrip.framework.apollo.ConfigService;
-import com.github.hiling.common.utils.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -39,15 +36,10 @@ public class ItemController {
      */
     @GetMapping("url")
     public String get(HttpServletRequest request) {
-        //config instance is singleton for each namespace and is never null
-        Config config = ConfigService.getAppConfig();
-        String someKey = "timeout";
-        String someDefaultValue = "100";
-        String value = config.getProperty(someKey, someDefaultValue);
+
 
         return ">>>>>" + "Host:" + request.getRemoteHost() + "  Port: 【" + request.getServerPort()
-                + "】 Path:" + request.getRequestURI()
-                + " Timeout: " + value;
+                + "】 Path:" + request.getRequestURI();
     }
 
     @GetMapping("oom/{id}")

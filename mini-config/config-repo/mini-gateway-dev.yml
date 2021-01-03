@@ -1,0 +1,79 @@
+server:
+  port: 8000
+
+spring:
+  redis:
+    database: 1
+
+ribbon:
+  # 当eureka.enabled=true时，是基于eureka的service-id的动态路由策略，支持负载均衡，支持服务的自动注册与发现，后端服务需集成eureka client
+  # 当eureka.enabled=false时，zuul有两种路由策略：
+  # 1、通过ribbon的负载均衡跳转到后端url，如：user-service.ribbon.listOfServers=http://192.168.10:8001,http://192.168.11:8001
+  # 2、直接跳转至指定url，如：zuul.routes.user.url=http://localhost:8030 ，如果后端需要负载均衡，可以使用Nginx等
+  eureka:
+    enabled: true
+  #连接超时, 默认2000
+  ConnectTimeout: 6000
+  #响应超时, 默认5000
+  ReadTimeout: 30000
+  #最大连接数
+  MaxTotalHttpConnections: 200
+  #每个host的最大连接数
+  MaxHttpConnectionsPerHost: 50
+  #是否所有操作执行重试, 默认值为false, 只重试`GET`请求，*********要确保所有的get方法都幂等；***********
+  OkToRetryOnAllOperations: false
+  #何种响应状态码进行重试
+  retryableStatusCodes: 502,503,504,509
+  #同一实例上的最大重试次数, 默认值为0. 不包括首次调用
+  MaxAutoRetries: 0
+  #重试其他实例的最大重试次数, 不包括第一次选的实例. 默认为1
+  MaxAutoRetriesNextServer: 1
+
+
+zuul:
+  #禁用默认的SendErrorFilter
+  SendErrorFilter:
+    error:
+      disable: true
+    #如果路由转发请求发生超时(连接超时或处理超时), 只要超时时间的设置小于Hystrix的命令超时时间,
+    # 那么它就会自动发起重试. 默认为false. 或者对指定响应状态码进行重试
+    # 可以通过service-id关闭某个服务的重试，如：zuul.routes.item-service.retryable = false
+    retryable: true
+  routes:
+    # user service
+    user:
+      path: /user/**
+      service-id: user-service
+      #不过滤path,即zuul的地址/user/{id}，后端服务地址也为/user/{id}，如果是默认true，则过滤后，后端请求地址就成了/{id}
+      strip-prefix: false
+    item:
+      path: /item/**
+      service-id: item-service
+      strip-prefix: false
+    auth:
+      path: /auth/**
+      service-id: auth-service
+      #zuul默认不会将请求头传递下去，因此，通过设置sensitiveHeaders敏感信息头，让配置以外的其他请求头传递下去
+      #如sensitiveHeaders=cookie，表示只过滤cookie，其他的如Authorization等可以传递下去
+      sensitive-headers: cookie
+    # 设置远程URL跳转路由，该路由不指向后端服务，而是自定义过滤器通过下面list.redirect的配置跳转到指定的url
+    link:
+      path: /link/**
+      service-id: link
+      # url无实际用途，只是避免zuul路由报错
+      url: http://localhost:8000
+
+# 设置远程URL地址，用Map实现，最后一段为map的key，也是link后的路径，值为map的value，也是要跳转的远程URL
+# 如：当path是/link/hiling时，跳转到https://github.com/hiling
+link:
+  redirect:
+    hiling: https://github.com/hiling
+    mini: https://github.com/hiling/mini-platform
+
+# OAuth忽略验证的地址，多个用逗号分隔，需要以"/"开头；
+# 下面配置可忽略 /auth/token**和/link/**地址；
+auth:
+  ignore:
+    path-prefix: /auth/token,/link/
+
+

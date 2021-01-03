@@ -1,0 +1,18 @@
+spring:
+  application:
+    name: mini-gateway
+  profiles:
+    active: dev
+
+---
+# 如果使用本地文件，profiles.active需要是native，且searchLocations不能使用通配符
+spring:
+  profiles: dev
+  cloud:
+    config:
+      label: master
+      # 对应的是配置文件规则中的{application}部分，多个用逗号隔开
+      # 网关注册到注册中心是为了统一监控，网关通过nginx做负载均衡
+      name: mini-gateway,common,common-redis,common-discovery
+      profile: dev  #对应的是配置文件规则中的{profile}部分，多个用逗号隔开
+      uri: http://127.0.0.1:8763/  #配置中心的地址

@@ -1,5 +1,5 @@
 server:
-  port: 8089
+  port: 8088
 
 spring:
   datasource:
@@ -12,5 +12,5 @@ swagger:
   enable: true
   application-name: ${spring.application.name}
   application-version: 1.0
-  application-description: 商品服务
+  application-description: 用户服务
   try-host: http://127.0.0.1:${server.port}

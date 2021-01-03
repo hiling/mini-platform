@@ -1,8 +1,6 @@
 package com.github.hiling.user.controller;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
-import com.ctrip.framework.apollo.Config;
-import com.ctrip.framework.apollo.ConfigService;
 import com.github.hiling.common.exception.BusinessException;
 import com.github.hiling.oauth.client.web.BaseController;
 import com.github.hiling.oauth.client.web.UserInfo;
@@ -27,12 +25,6 @@ public class UserController extends BaseController {
     @GetMapping("/demo")
     public String demo(HttpServletRequest request) {
 
-        //Apollo配置中心示例
-        //config instance is singleton for each namespace and is never null
-        Config config = ConfigService.getAppConfig();
-        String timeoutKey = "timeout";
-        String timeoutDefaultValue = "100";
-        String value = config.getProperty(timeoutKey, timeoutDefaultValue);
 
         //OAuth Client示例
         Boolean isLogin = isLogin();
@@ -43,7 +35,6 @@ public class UserController extends BaseController {
         String path = request.getRemoteHost() + ":" + request.getServerPort();
 
         return " Path:" + path + System.getProperty("line.separator", "\n")
-                + " Timeout: " + value + System.getProperty("line.separator", "\n")
                 + " is login: " + isLogin + System.getProperty("line.separator", "\n")
                 + " userId: " + loginUserId + System.getProperty("line.separator", "\n")
                 + " userName: " + (userInfo == null ? "Null" : userInfo.getUserName()) + System.getProperty("line.separator", "\n")

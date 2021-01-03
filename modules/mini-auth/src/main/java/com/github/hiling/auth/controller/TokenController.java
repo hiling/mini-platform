@@ -4,6 +4,9 @@ import com.github.hiling.auth.constant.ErrorMessage;
 import com.github.hiling.auth.model.AccessToken;
 import com.github.hiling.auth.service.AccessTokenService;
 import com.github.hiling.common.exception.BusinessException;
+import com.github.hiling.common.utils.AddressUtils;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.apache.commons.lang.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -11,13 +14,11 @@ import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 
-import com.github.hiling.common.utils.NetUtils;
-
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @RestController
 @RequestMapping("/token")
+@Api(value = "Token")
 public class TokenController {
 
     @Autowired
@@ -34,6 +35,7 @@ public class TokenController {
      * @return 返回jwtToken，如果token不存在或已过期，返回Null
      */
     @GetMapping()
+    @ApiOperation(value = "验证 Account Token (introspect)", notes = "返回jwtToken，如果token不存在或已过期，返回Null")
     public ResponseEntity<String> getToken(@RequestParam(name = "access_token") String accessToken) {
         //如果没有找到，返回token过期或token非法，客户端需要通过refreshToken重新来获取accessToken
         String jwtToken = accessTokenService.getJwtToken(accessToken);
@@ -57,6 +59,7 @@ public class TokenController {
      * @return
      */
     @PostMapping()
+    @ApiOperation(value = "获取 AccessToken,暂不支持scope")
     public ResponseEntity<AccessToken> postToken(
 //            @RequestHeader("client_id") String clientId,
 //            @RequestHeader("client_secret") String clientSecret,
@@ -89,7 +92,7 @@ public class TokenController {
             }
         }
 
-        String accessIp = NetUtils.getIpAddress(request);
+        String accessIp = AddressUtils.getHttpRequestIp(request);
 
         AccessToken accessToken = accessTokenService.createAccessToken(accessIp, clientId, clientSecret, grantType, username, password, refreshToken);
         if (accessToken != null) {

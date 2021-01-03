@@ -1,0 +1,15 @@
+server:
+  port: 8769
+spring:
+  security:
+    user:
+      name: admin
+      password: hiling
+
+eureka:
+  instance:
+    metadata-map:
+      user:
+        name: ${spring.security.user.name}
+        password: ${spring.security.user.password}
+

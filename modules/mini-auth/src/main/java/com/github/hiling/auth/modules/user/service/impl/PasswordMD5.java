@@ -1,12 +1,9 @@
 package com.github.hiling.auth.modules.user.service.impl;
 
-import com.ctrip.framework.apollo.Config;
-import com.ctrip.framework.apollo.ConfigService;
 import com.github.hiling.common.utils.StringUtils;
 import com.github.hiling.auth.modules.user.service.PasswordHash;
+import org.springframework.beans.factory.annotation.Value;
 
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
@@ -16,17 +13,13 @@ import java.security.NoSuchAlgorithmException;
  */
 public class PasswordMD5 implements PasswordHash {
 
-    protected PasswordMD5() {
-        Config config = ConfigService.getAppConfig();
-        this.algorithm = config.getProperty("oauth.user.password.md5.algorithm", "MD5");
-    }
-
     /**
      * 秘密密钥算法
      * 支持类型：MD2、MD5、SHA-1、SHA-224、SHA-256、SHA-384、SHA-512
      * 参考文档：https://docs.oracle.com/javase/8/docs/technotes/guides/security/StandardNames.html#MessageDigest
      */
-    String algorithm;
+    @Value("${oauth.user.password.md5.algorithm:MD5}")
+    private String algorithm;
 
     @Override
     public boolean validate(String password, String salt, String hashPassword) {

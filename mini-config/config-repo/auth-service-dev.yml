@@ -1,0 +1,107 @@
+server:
+  port: 8085
+
+spring:
+  redis:
+    database: 4
+  datasource:
+    url: jdbc:mysql://127.0.0.1/mini_api_dev?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
+    username: root
+    password: hiling11
+    # OAuth数据库地址配置
+    oauth:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://127.0.0.1/mini_oauth_dev?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+      username: root
+      password: hiling11
+      minimumIdle: 1
+      maximumPoolSize: 4
+      idleTimeout: 60000
+      maxLifetime: 120000
+    # Client数据库地址配置
+    client:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://127.0.0.1/mini_oauth_dev?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+      username: root
+      password: hiling11
+      minimumIdle: 1
+      maximumPoolSize: 4
+      idleTimeout: 60000
+      maxLifetime: 120000
+    # User数据库地址配置
+    user:
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      jdbc-url: jdbc:mysql://127.0.0.1/mini_api_dev?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&useSSL=false&allowPublicKeyRetrieval=true
+      username: root
+      password: hiling11
+      readOnly: true #只读链接
+      minimumIdle: 1
+      maximumPoolSize: 4
+      idleTimeout: 60000
+      maxLifetime: 120000
+
+###OAuth配置###
+
+oauth:
+  ##Password模式配置##
+  # 当Password时，clientSecret是否必须验证
+  password:
+    client-secret:
+      required: false
+  ##AccessToken##
+  #accessToken过期时间(秒)默认2小时(每次生成accessToken时重新生成jwtToken，因此，jwtToken过期时间与accessToken过期时间相同)
+  access-token:
+    expiration: 3600
+    remove-expired:
+      #每执行一次清除过期Token后sleep的时间（秒），默认1秒
+      loop-wait: 10
+      #每次移除过期数据时，保留最近几秒的数据，默认5秒,，避免当客户端同时发起获取token和刷新token的请求时，先执行了刷新token，导致获取token失败。
+      reserve-time: 5
+      #每次移除的最多客户&用户数，避免单次处理数据过多导致数据库性能压力，默认1000条
+      max-remove-count: 1000
+  ##RefreshToken##
+  #refreshToken过期设置，单位为秒
+  #场景示例：
+  # 1、滑动过期=0，绝对过期=0，表示永不过期。
+  # 2、滑动过期=1天，绝对过期=0天，表示1天内没有调用后过期。
+  # 3、滑动过期=0，绝对过期=1天，表示不管是否有调用，总是1天后过期。
+  # 4、滑动过期=1天，绝对过期=7天，表示1天内没有调用后过期，最多缓存7天。
+  refresh-token:
+    #refreshToken滑动过期时间(秒) 默认1天
+    sliding-expiration: 7200
+    #refreshToken绝对过期时间(秒) 默认7天
+    absolute-expiration: 86400
+    remove-expired:
+      loop-wait: 10
+      max-remove-count: 1000
+      reserve-time: 5
+  # 当OAuth的grant_type=password时，验证username、password的方式，支持：url和sql；
+  # 当为url时，使用外部服务验证用户名密码的正确性，需要配置url地址；
+  # 当为sql时，直接使用配置的sql脚本验证，需同时配置sql脚本和数据库链接字符串
+  user:
+    login:
+      type: sql
+      # 验证用户名密码的服务地址，参数支持{username}和{password}
+      url: http://127.0.0.1:8088/user?username={username}&password={password}
+      # 验证用户名密码的sql脚本
+      # 支持的列为：userId, username, password, scope，salt（密码加盐，如果为固定值，可以如 'mini' as salt，BCrypt算法时不需要）
+      # 如果DB中的列表名不一致时，请使用as重命名，如：id as userId
+      # 查询参数为：#{username}，但Properties中“#”号为特殊字符，程序中会自动给“{”前添加“#”号，因此只需要输入{username}即可
+      sql: select id as userId, username, password, salt from user where username={username}
+    # 密码加密方式：支持none(明文)，md5、bcrypt、pbkdf2
+    password:
+      hash:
+        type: none
+  # 允许操作client模块的scope，即：当某client的scope包含oauth-client时，可操作client模块
+  client:
+    allow:
+      scope: oauth-client
+
+swagger:
+  enable: true
+  application-name: ${spring.application.name}
+  application-version: 1.0
+  application-description: 用户服务
+  try-host: http://127.0.0.1:${server.port}
+
+

@@ -4,6 +4,7 @@ package com.github.hiling.common.web;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -18,7 +19,7 @@ import java.time.LocalDateTime;
 @RequestMapping("/common/demo")
 public class DemoController {
 
-    @RequestMapping
+    @GetMapping
     @ResponseBody
     public ResponseEntity<String> error(HttpServletRequest request) {
         return new ResponseEntity<>("Demo:"+ LocalDateTime.now(), HttpStatus.OK);

@@ -1,26 +1,34 @@
-# Mini-Platform轻量级微服务治理平台
+# Mini-Platform轻量级微服务平台
 
 - Mini-Platform致力于打造更简洁易用的轻量级微服务治理平台，更易于实施与运维；
-- 核心技术：SpringBoot、Spring Cloud、Apollo、OAuth2（自研）、MyBatis、Redis、MySQL；
+- 核心技术：SpringBoot、Spring Cloud、OAuth2（自研）、MyBatis、Redis、MySQL；
 - 核心功能：服务注册与发现、服务网关、负载均衡、统一认证、配置中心、异常处理等；
 
 ---
-## Discovery
-- 采用Eureka做服务自动注册与发现；
-- 支持Apollo的MetaService，可以让Apollo共享该Eureka；[配置说明](https://github.com/hiling/mini-platform/blob/master/discovery/readme.md)
-- 可按配置简单的进行高可用部署；
+## mini-config - 配置中心
+- 采用Spring Cloud Config作为统一的配置中心
 
 ---
-## Gateway
+## mini-discovery - 注册中心
+- 采用Eureka做服务自动注册与发现；
+- 可按配置简单的进行高可用部署；
+
+
+---
+## mini-gateway - API网关
 - 采用Zuul做服务网关；
-- 支持Apollo进行动态路由配置:
-- 支持基于service-id的动态路由策略，支持负载均衡，支持服务的**自动**注册与发现，当服务地址变化后**无需手动配置**，当后端服务引入SpringCloud时可选用；
+- 支持基于service-id的动态路由策略，支持负载均衡，支持服务的**自动**注册与发现，当服务地址变化后**无需手动配置**，当后端服务引入Eureka client时可选用；
 - 支持基于url的动态路由策略，支持负载均衡，支持服务的**手动**注册与发现，当服务地址变化后**需要手动配置**，当后端服务基于传统HTTP调用时可选用；
 - 支持基于默认url的动态路由策略，不支持负载均衡，后端服务需要单独处理负载均衡（如Nginx），支持服务的**手动**注册与发现，配置简单，可在测试中使用；
 - 支持服务异常重试，建议只开启GET的重试，且确保GET的幂等，否则建议关闭；
 
 ---
-## OAuth Server
+## mini-admin - 监控中心
+- 采用Spring Boot Admin作为统一的监控中心
+- 集成钉钉告警
+
+---
+## mini-auth - 授权中心
 - 为了更简单易用，OAuth Server采用自研实现。
 - GrantType支持password、client_credentials、refresh_token。
 - Token支持延迟吊销、滑动过期和绝对过期。

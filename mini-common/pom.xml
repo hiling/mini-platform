@@ -4,13 +4,6 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>mini-common</artifactId>
-    <version>0.0.3-SNAPSHOT</version>
-    <packaging>jar</packaging>
-
-    <name>MiniCommon</name>
-    <description>common</description>
-
     <parent>
         <artifactId>mini-platform</artifactId>
         <groupId>com.github.hiling</groupId>
@@ -18,17 +11,16 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
+    <artifactId>mini-common</artifactId>
+    <version>0.0.4-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <name>MiniCommon</name>
+    <description>common</description>
+
     <dependencies>
-        <!-- lombok集成，提供编码效率 -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <version>${lombok.version}</version>
-            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
