@@ -40,15 +40,15 @@
 - Token支持延迟吊销、滑动过期和绝对过期。
 - 用户名密码验证支持直连用户中心数据库验证和调用远程服务验证两种方式。
 - 密码模式授权，用于客户端与服务器之间的授权，流程如下：
-![oauth-password-flow](https://raw.githubusercontent.com/hiling/mini-platform/master/docs/images/oauth-password-flow.png "密码模式授权流程")
+![oauth-password-flow](./docs/images/oauth-password-flow.png "密码模式授权流程")
 注：图例为三次请求，1.1-1.3为首次认证；2.1-2.5为通过Access Token访问后端资源；3.1-3.3为使用Refresh Token获取新的Access Token，可用于Access Token过期前刷新Token；
 红色字体是Password与Client授权方式不同的地方。
 
 - 客户端模式授权，用于服务器与服务器之间的授权，流程如下：
-![oauth-client-flow](https://raw.githubusercontent.com/hiling/mini-platform/master/docs/images/oauth-client-flow.png "客户端模式授权流程")
+![oauth-client-flow](./docs/images/oauth-client-flow.png "客户端模式授权流程")
 
 - 微服务模式授权示例，是获取到Access Token后请求后端资源的流程细化，如下：
-![oauth-multi-services-flow](https://raw.githubusercontent.com/hiling/mini-platform/master/docs/images/oauth-multi-services-flow.png "客户端模式授权流程")
+![oauth-multi-services-flow](./docs/images/oauth-multi-services-flow.png "客户端模式授权流程")
 
 ---
 ## Gateway - ACL
@@ -83,10 +83,7 @@
 在 MyBatis 的基础上只做增强不做改变，为简化开发、提高效率而生。
    - 官网地址：http://mp.baomidou.com/
    - 项目地址：https://github.com/baomidou/mybatis-plus
-   
-- **Apollo**（阿波罗）是携程框架部门研发的分布式配置中心，能够集中化管理应用不同环境、不同集群的配置，配置修改后能够实时推送到应用端，并且具备规范的权限、流程治理等特性，适用于微服务配置管理场景。 
-  - 项目地址：https://github.com/ctripcorp/apollo
-
+  
 - **Prometheus** 是一套开源的新一代Metrics系统监控报警框架，是CNCF中重要的一员，它将所有信息都存储为时间序列数据；因此实现一种Profiling监控方式，实时分析系统运行的状态、执行时间、调用次数等，以找到系统的热点，为性能优化提供依据。可对核心业务指标、应用指标、系统指标等做高效的监控，可与Grafana结合打造出优秀的监控平台。
    - 官网地址：https://prometheus.io/
    - 项目地址：https://github.com/prometheus
@@ -99,10 +96,10 @@
   - 官方示例：http://hg.openjdk.java.net/code-tools/jmh/file/tip/jmh-samples/src/main/java/org/openjdk/jmh/samples/
   - 中文介绍：https://www.xncoding.com/2018/01/07/java/jmh.html
   - 项目中OAuth基准测试代码
-  ![create_token_test](https://raw.githubusercontent.com/hiling/mini-platform/master/docs/images/create_token_test.png "基准测试代码")
+  ![create_token_test](./docs/images/create_token_test.png "基准测试代码")
   注：测试代码：[UserApplicationTests.java](https://github.com/hiling/mini-platform/blob/master/modules/user/src/test/java/com/github/hiling/user/UserApplicationTests.java)
   - 测试结果
-  ![create_token_test_result](https://raw.githubusercontent.com/hiling/mini-platform/master/docs/images/create_token_test_result.png "基准测试结果")
+  ![create_token_test_result](./docs/images/create_token_test_result.png "基准测试结果")
   注：在开发环境测试，电脑配置2C(i5-6300U)/8G/SSD，本机MySQL，使用相关参数，未考虑DB缓存等影响。
   
 - **Spring Boot Maven Plugin & Apache Maven Dependency Plugin** 可以将外部依赖jar与项目分离，
