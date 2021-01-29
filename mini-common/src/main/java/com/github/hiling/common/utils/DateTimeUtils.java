@@ -60,6 +60,7 @@ public class DateTimeUtils extends DateUtils {
 
     /**
      * 将localDateTime 按照一定的格式转换成String
+     * @param pattern 如：yyyy-MM-dd
      */
     public static String localDateTimeFormat(LocalDateTime localDateTime, String pattern) {
         return localDateTime.format(DateTimeFormatter.ofPattern(pattern));
@@ -77,6 +78,14 @@ public class DateTimeUtils extends DateUtils {
      */
     public static LocalDateTime localDateTimeParse(String time, String pattern) {
         return LocalDateTime.parse(time, DateTimeFormatter.ofPattern(pattern));
+    }
+
+    /**
+     * 将String 按照pattern 转换成Date
+     */
+    public static Date dateParse(String date, String pattern) {
+        LocalDateTime localDateTime = localDateTimeParse(date, pattern);
+        return localDateTimeToDate(localDateTime);
     }
 
     /**
