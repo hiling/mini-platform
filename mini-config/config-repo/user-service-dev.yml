@@ -7,6 +7,14 @@ spring:
     url: jdbc:mysql://127.0.0.1/mini_api_dev?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai&allowPublicKeyRetrieval=true
     username: root
     password: hiling11
+  #配置rabbitMq 服务器
+  rabbitmq:
+    host: 172.16.164.2
+    port: 5672
+    username: hiling
+    password: 123456
+    #虚拟host 可以不设置,使用server默认host
+    virtual-host: /
 
 swagger:
   enable: true
