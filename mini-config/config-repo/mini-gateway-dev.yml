@@ -74,6 +74,6 @@ link:
 # 下面配置可忽略 /auth/token**和/link/**地址；
 auth:
   ignore:
-    path-prefix: /auth/token,/link/
+    path-prefix: /auth/token,/link/,/item/
 
 

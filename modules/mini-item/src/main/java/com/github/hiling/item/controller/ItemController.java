@@ -1,8 +1,13 @@
 package com.github.hiling.item.controller;
 
+import com.netflix.discovery.DiscoveryClient;
+import com.netflix.discovery.DiscoveryManager;
+import lombok.Data;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -40,13 +45,24 @@ public class ItemController {
     @GetMapping("url")
     public String get(HttpServletRequest request) {
 
-
         return ">>>>>" + "Host:" + request.getRemoteHost() + "  Port: 【" + request.getServerPort()
                 + "】 Path:" + request.getRequestURI();
     }
 
+    @GetMapping("users")
+    public ResponseEntity<List<UserBean>> getUsers(HttpServletRequest request) {
+        List<UserBean> users = new ArrayList<UserBean>();
+        for (int i = 0; i < 10; i++) {
+            users.add(new UserBean("name1_" + String.valueOf(i), i));
+        }
+        ResponseEntity<List<UserBean>> responseEntity=new ResponseEntity<>(users,HttpStatus.OK);
+
+        return responseEntity;
+    }
+
     @GetMapping("oom/{id}")
     public String testOOM(@PathVariable Integer id) {
+
         List<UserBean> users = new ArrayList<UserBean>();
 
         for (int i = 0; i < id; i++) {
@@ -55,6 +71,7 @@ public class ItemController {
         return "OK";
     }
 
+    @Data
     public class UserBean {
         String name;
         int age;
