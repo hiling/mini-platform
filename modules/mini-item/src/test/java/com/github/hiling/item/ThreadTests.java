@@ -12,7 +12,7 @@ import java.util.concurrent.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ItemApplicationTests {
+public class ThreadTests {
 
     @Test
     public void contextLoads() {
